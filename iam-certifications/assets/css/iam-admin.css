@@ -1,0 +1,483 @@
+/**
+ * Styles de l'écran d'administration des certifications.
+ */
+
+.iam-cert-metabox .iam-cert-row {
+	margin: 0 0 16px;
+}
+
+.iam-cert-metabox .iam-cert-row label {
+	display: block;
+	margin-bottom: 4px;
+}
+
+.iam-cert-metabox .description {
+	display: block;
+	margin-top: 4px;
+	color: #646970;
+	font-style: italic;
+}
+
+.iam-cert-metabox h4 {
+	margin: 8px 0 4px;
+	font-size: 14px;
+}
+
+.iam-cert-metabox hr {
+	margin: 20px 0;
+	border: 0;
+	border-top: 1px solid #dcdcde;
+}
+
+.iam-cert-kpis {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 10px;
+}
+
+.iam-cert-kpi-row {
+	display: flex;
+	gap: 8px;
+}
+
+.iam-cert-kpi-row input {
+	flex: 1;
+	min-width: 0;
+}
+
+.iam-cert-kpi-row input:first-child {
+	max-width: 90px;
+}
+
+@media (max-width: 782px) {
+	.iam-cert-kpis {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* Répéteur de modules */
+.iam-modules__list {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	margin: 12px 0;
+}
+
+.iam-module {
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+	padding: 12px;
+	background: #fff;
+}
+
+.iam-module__head {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 8px;
+}
+
+.iam-module__drag {
+	color: #a7aaad;
+	cursor: default;
+	user-select: none;
+	font-size: 14px;
+	letter-spacing: -2px;
+}
+
+.iam-module__titre {
+	flex: 1;
+	font-weight: 600;
+}
+
+.iam-module__remove {
+	color: #b32d2e;
+	text-decoration: none;
+	font-size: 20px;
+	line-height: 1;
+	cursor: pointer;
+	padding: 0 4px;
+}
+
+.iam-module__remove:hover {
+	color: #8a2424;
+}
+
+/* Interface d'admin dédiée */
+.iam-cert-admin-grid {
+	display: grid;
+	grid-template-columns: 1fr 300px;
+	gap: 20px;
+	align-items: start;
+	margin-top: 16px;
+}
+
+.iam-cert-admin-main {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+	padding: 18px;
+}
+
+.iam-cert-admin-main .title {
+	margin: 24px 0 8px;
+	padding-top: 16px;
+	border-top: 1px solid #f0f0f1;
+}
+
+.iam-cert-admin-side {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.iam-cert-box {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+	padding: 14px;
+}
+
+.iam-cert-box h3 {
+	margin: 0 0 10px;
+	font-size: 13px;
+	text-transform: uppercase;
+	letter-spacing: .04em;
+	color: #50575e;
+}
+
+.iam-thumb-preview {
+	min-height: 40px;
+	margin-bottom: 8px;
+}
+
+.iam-thumb-preview img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 4px;
+	display: block;
+}
+
+@media (max-width: 782px) {
+	.iam-cert-admin-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* Assistant à étapes (formulaire) */
+.iam-cert-wizard {
+	max-width: 860px;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+	padding: 0;
+	margin-top: 16px;
+	overflow: hidden;
+}
+
+.iam-wiz-nav {
+	display: flex;
+	flex-wrap: wrap;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	border-bottom: 1px solid #dcdcde;
+	background: #f6f7f7;
+}
+
+.iam-wiz-nav li {
+	flex: 1 1 auto;
+	margin: 0;
+}
+
+.iam-wiz-tab {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	width: 100%;
+	background: transparent;
+	border: 0;
+	border-bottom: 3px solid transparent;
+	padding: 12px 14px;
+	font: inherit;
+	color: #50575e;
+	cursor: pointer;
+	text-align: left;
+}
+
+.iam-wiz-tab .iam-wiz-num {
+	display: grid;
+	place-items: center;
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	background: #dcdcde;
+	color: #50575e;
+	font-size: 12px;
+	font-weight: 700;
+	flex: 0 0 auto;
+}
+
+.iam-wiz-tab.is-active {
+	color: #1d2327;
+	font-weight: 600;
+	border-bottom-color: #2271b1;
+	background: #fff;
+}
+
+.iam-wiz-tab.is-active .iam-wiz-num {
+	background: #2271b1;
+	color: #fff;
+}
+
+.iam-wiz-tab.is-done .iam-wiz-num {
+	background: #0a7d33;
+	color: #fff;
+}
+
+.iam-step {
+	display: none;
+	padding: 20px;
+}
+
+.iam-step.is-active {
+	display: block;
+}
+
+.iam-cert-cols {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+	align-items: start;
+}
+
+.iam-wiz-foot {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 14px 20px;
+	border-top: 1px solid #dcdcde;
+	background: #f6f7f7;
+	position: sticky;
+	bottom: 0;
+}
+
+.iam-wiz-status {
+	color: #50575e;
+	font-size: 13px;
+}
+
+.iam-wiz-next,
+.iam-wiz-save {
+	margin-left: auto;
+}
+
+@media (max-width: 782px) {
+	.iam-wiz-tab .iam-wiz-lbl { display: none; }
+	.iam-cert-cols { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+ * Thème « soft / premium » du formulaire en étapes (surcharge)
+ * ======================================================================== */
+.iam-cert-admin {
+	--g: #0B5D3B;
+	--g-d: #093f28;
+	--lime: #E4FF57;
+	--cream: #FCFAF7;
+	--beige: #EDE8DE;
+	--ink: #12352A;
+	--soft: #5F6E67;
+	--line: #e8e3d7;
+	-webkit-font-smoothing: antialiased;
+}
+
+.iam-cert-admin h1 { color: var(--ink); font-weight: 700; }
+
+.iam-cert-wizard {
+	max-width: 940px;
+	background: #fff;
+	border: 1px solid var(--line);
+	border-radius: 22px;
+	box-shadow: 0 24px 60px rgba(9, 63, 40, .09);
+	overflow: hidden;
+	margin-top: 18px;
+}
+
+/* Stepper */
+.iam-cert-wizard .iam-wiz-nav {
+	display: flex;
+	gap: 0;
+	list-style: none;
+	margin: 0;
+	padding: 26px 30px 14px;
+	background: linear-gradient(180deg, #fbfaf6, #fff);
+	border-bottom: 1px solid var(--line);
+}
+.iam-cert-wizard .iam-wiz-nav li { flex: 1; position: relative; margin: 0; }
+.iam-cert-wizard .iam-wiz-nav li:not(:last-child)::after {
+	content: "";
+	position: absolute;
+	top: 20px;
+	left: 50%;
+	width: 100%;
+	height: 2px;
+	background: var(--line);
+	z-index: 0;
+}
+.iam-cert-wizard .iam-wiz-nav li:has(.iam-wiz-tab.is-done)::after,
+.iam-cert-wizard .iam-wiz-nav li:has(.iam-wiz-tab.is-active)::after { background: var(--g); }
+
+.iam-cert-wizard .iam-wiz-tab {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: 8px;
+	width: 100%;
+	background: 0;
+	border: 0;
+	padding: 0 6px;
+	color: var(--soft);
+	cursor: pointer;
+}
+.iam-cert-wizard .iam-wiz-num {
+	position: relative;
+	z-index: 1;
+	display: grid;
+	place-items: center;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background: #fff;
+	border: 2px solid var(--line);
+	color: var(--soft);
+	font-size: 14px;
+	font-weight: 700;
+	transition: transform .25s ease, background .25s ease, border-color .25s ease, color .25s ease;
+}
+.iam-cert-wizard .iam-wiz-lbl { font-size: 12px; line-height: 1.25; max-width: 120px; }
+.iam-cert-wizard .iam-wiz-tab.is-active { color: var(--ink); font-weight: 600; }
+.iam-cert-wizard .iam-wiz-tab.is-active .iam-wiz-num {
+	background: var(--g); border-color: var(--g); color: #fff; transform: scale(1.08);
+	box-shadow: 0 8px 18px rgba(11, 93, 59, .28);
+}
+.iam-cert-wizard .iam-wiz-tab.is-done .iam-wiz-num { background: var(--lime); border-color: var(--g); color: var(--g); }
+
+/* Barre de progression */
+.iam-wiz-progress { height: 4px; background: var(--beige); }
+.iam-wiz-progress span {
+	display: block; height: 100%; width: 25%;
+	background: linear-gradient(90deg, var(--g), #1a8d5c);
+	border-radius: 0 4px 4px 0;
+	transition: width .45s cubic-bezier(.4, 0, .2, 1);
+}
+
+/* Étapes */
+.iam-cert-wizard .iam-step { padding: 30px 34px; }
+.iam-cert-wizard .iam-cert-row { margin: 0 0 18px; }
+.iam-cert-wizard .iam-cert-row label,
+.iam-cert-wizard .iam-cert-box h3 { color: var(--ink); }
+.iam-cert-wizard .iam-cert-row label strong { font-weight: 600; }
+.iam-cert-wizard .description { color: var(--soft); font-style: normal; }
+
+/* Champs */
+.iam-cert-wizard input[type="text"],
+.iam-cert-wizard input[type="number"],
+.iam-cert-wizard textarea,
+.iam-cert-wizard select {
+	width: 100%;
+	padding: 11px 14px;
+	border: 1px solid var(--line);
+	border-radius: 12px;
+	background: #fcfcfa;
+	font-size: 14px;
+	color: var(--ink);
+	box-shadow: none;
+	transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.iam-cert-wizard input[type="text"]:focus,
+.iam-cert-wizard input[type="number"]:focus,
+.iam-cert-wizard textarea:focus,
+.iam-cert-wizard select:focus {
+	border-color: var(--g);
+	background: #fff;
+	box-shadow: 0 0 0 3px rgba(11, 93, 59, .14);
+	outline: 0;
+}
+
+/* Encadrés (étape 4) */
+.iam-cert-wizard .iam-cert-box {
+	background: #fbfaf6;
+	border: 1px solid var(--line);
+	border-radius: 16px;
+	padding: 18px;
+}
+.iam-cert-wizard .iam-cert-box h3 {
+	color: var(--g);
+	border: 0;
+	padding: 0;
+	margin: 0 0 10px;
+}
+.iam-cert-wizard .iam-thumb-preview img { border-radius: 10px; }
+
+/* Modules */
+.iam-cert-wizard .iam-module {
+	border: 1px solid var(--line);
+	border-radius: 16px;
+	background: #fbfaf6;
+	padding: 16px;
+}
+.iam-cert-wizard .iam-modules__add,
+.iam-cert-wizard #iam_thumb_btn,
+.iam-cert-wizard .iam-cert-box .button {
+	border-radius: 999px;
+	border: 1px solid var(--g);
+	background: #fff;
+	color: var(--g);
+	font-weight: 600;
+	padding: 7px 16px;
+	height: auto;
+}
+.iam-cert-wizard .iam-modules__add:hover,
+.iam-cert-wizard #iam_thumb_btn:hover { background: var(--g); color: #fff; }
+
+/* Pied */
+.iam-cert-wizard .iam-wiz-foot {
+	padding: 18px 34px;
+	background: linear-gradient(0deg, #fbfaf6, #fff);
+	border-top: 1px solid var(--line);
+}
+.iam-cert-wizard .iam-wiz-status { color: var(--soft); font-weight: 500; }
+.iam-cert-wizard .iam-wiz-foot .button {
+	border-radius: 999px;
+	padding: 9px 24px;
+	height: auto;
+	font-weight: 600;
+	border-width: 1px;
+}
+.iam-cert-wizard .iam-wiz-prev {
+	background: #fff;
+	border-color: var(--line);
+	color: var(--ink);
+}
+.iam-cert-wizard .iam-wiz-next,
+.iam-cert-wizard .iam-wiz-save {
+	background: var(--g) !important;
+	border-color: var(--g-d) !important;
+	color: #fff !important;
+	box-shadow: 0 8px 20px rgba(11, 93, 59, .26);
+}
+.iam-cert-wizard .iam-wiz-next:hover,
+.iam-cert-wizard .iam-wiz-save:hover { background: var(--g-d) !important; }
+
+/* Liste : conteneur un peu plus doux */
+.iam-cert-admin .wp-list-table { border-radius: 14px; overflow: hidden; }
+
+@media (max-width: 782px) {
+	.iam-cert-wizard .iam-wiz-lbl { display: none; }
+	.iam-cert-wizard .iam-step { padding: 22px 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+	.iam-cert-wizard * { transition: none !important; }
+}
