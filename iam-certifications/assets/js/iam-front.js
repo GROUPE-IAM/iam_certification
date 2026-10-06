@@ -1,6 +1,7 @@
 /**
  * IAM Certifications — interactions front.
  * - Filtre par domaine (barre de boutons) : masque/affiche les cartes côté client.
+ * - Page de détail : blocs dépliables, fenêtre vidéo, barre d'action mobile.
  */
 (function () {
 	'use strict';
@@ -61,9 +62,125 @@
 		});
 	}
 
+	/**
+	 * Blocs dépliables. Sans JS ils restent ouverts (contenu toujours lisible) :
+	 * on les replie ici, puis chaque clic ouvre / ferme son bloc.
+	 */
+	function initAccordions() {
+		document.querySelectorAll('.iam-acc').forEach(function (acc) {
+			var btn = acc.querySelector('.iam-acc__btn');
+			if (!btn) {
+				return;
+			}
+			acc.classList.add('is-collapsed');
+			btn.setAttribute('aria-expanded', 'false');
+
+			btn.addEventListener('click', function () {
+				var open = btn.getAttribute('aria-expanded') === 'true';
+				btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+				acc.classList.toggle('is-collapsed', open);
+			});
+		});
+
+		// Lien direct vers un bloc (ex. #iam-acc-programme) : on l'ouvre.
+		if (window.location.hash) {
+			var target = document.getElementById(window.location.hash.slice(1));
+			var acc = target && target.closest ? target.closest('.iam-acc') : null;
+			if (acc) {
+				acc.classList.remove('is-collapsed');
+				acc.querySelector('.iam-acc__btn').setAttribute('aria-expanded', 'true');
+			}
+		}
+	}
+
+	/**
+	 * Fenêtre vidéo : l'iframe n'est créée qu'à l'ouverture (page plus légère)
+	 * et détruite à la fermeture (la vidéo s'arrête).
+	 */
+	function initVideo() {
+		var dialog = document.querySelector('.iam-cert-video');
+		var openBtn = document.querySelector('[data-iam-video-open]');
+		if (!dialog || !openBtn) {
+			return;
+		}
+		var frame = dialog.querySelector('.iam-cert-video__frame');
+		var tpl = dialog.querySelector('.iam-cert-video__tpl');
+		var closeBtn = dialog.querySelector('[data-iam-video-close]');
+
+		function open() {
+			frame.innerHTML = tpl ? tpl.innerHTML : '';
+			var video = frame.querySelector('video');
+			if (typeof dialog.showModal === 'function') {
+				dialog.showModal();
+			} else {
+				dialog.setAttribute('open', '');
+			}
+			if (video) {
+				video.play().catch(function () {});
+			}
+		}
+
+		function close() {
+			if (typeof dialog.close === 'function') {
+				dialog.close();
+			} else {
+				dialog.removeAttribute('open');
+			}
+		}
+
+		openBtn.addEventListener('click', open);
+		if (closeBtn) {
+			closeBtn.addEventListener('click', close);
+		}
+		// Clic sur le fond sombre = fermeture.
+		dialog.addEventListener('click', function (e) {
+			if (e.target === dialog) {
+				close();
+			}
+		});
+		dialog.addEventListener('close', function () {
+			frame.innerHTML = '';
+			openBtn.focus();
+		});
+	}
+
+	/**
+	 * Barre « Candidater » fixée en bas sur mobile : visible une fois le hero
+	 * dépassé, masquée quand le formulaire est à l'écran.
+	 */
+	function initStickyBar() {
+		var bar = document.querySelector('.iam-cert-stickybar');
+		var hero = document.querySelector('.iam-cert-hero');
+		var form = document.getElementById('iam-cert-candidature');
+		if (!bar || !hero || !form || !('IntersectionObserver' in window)) {
+			return;
+		}
+		bar.hidden = false;
+
+		var heroVisible = true;
+		var formVisible = false;
+
+		function update() {
+			bar.classList.toggle('is-shown', !heroVisible && !formVisible);
+		}
+
+		new IntersectionObserver(function (entries) {
+			heroVisible = entries[0].isIntersecting;
+			update();
+		}).observe(hero);
+
+		new IntersectionObserver(function (entries) {
+			formVisible = entries[0].isIntersecting;
+			update();
+		}, { rootMargin: '0px 0px -20% 0px' }).observe(form);
+	}
+
 	function init() {
 		document.querySelectorAll('.iam-cert').forEach(initFilters);
 		initFormBridge();
+		initAccordions();
+		initVideo();
+		initStickyBar();
 	}
 
 	if (document.readyState === 'loading') {

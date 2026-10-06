@@ -112,7 +112,7 @@ function iam_cert_counts( $post_id ) {
  */
 function iam_cert_cta_label( $post_id ) {
 	$cta = get_post_meta( $post_id, '_iam_cta_texte', true );
-	return $cta ? $cta : __( 'Demander une information', 'iam-certifications' );
+	return $cta ? $cta : __( 'Candidater', 'iam-certifications' );
 }
 
 /**
@@ -254,7 +254,190 @@ function iam_cert_icon( $name ) {
 		'arrow' => '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
 		'mail'  => '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
 		'phone' => '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+		'play'     => '<svg viewBox="0 0 24 24" width="34" height="34" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>',
+		'download' => '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>',
+		'calendar' => '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>',
+		'close'    => '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+		'check'    => '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
 	);
 
 	return isset( $icons[ $name ] ) ? $icons[ $name ] : '';
+}
+
+/* =========================================================================
+ * Champs d'administration (partagés : écran maison + metabox classique)
+ * ====================================================================== */
+
+/**
+ * Affiche une ligne de champ d'administration selon son type.
+ * Types : text, number, textarea, list (textarea « une entrée par ligne »),
+ * url, media (URL + bouton médiathèque).
+ *
+ * @param string $key   Clé meta (sert aussi d'id / name).
+ * @param array  $args  Réglages du champ (label, type, desc, media).
+ * @param string $value Valeur courante.
+ * @return void
+ */
+function iam_cert_render_field_row( $key, $args, $value ) {
+	$type  = isset( $args['type'] ) ? $args['type'] : 'text';
+	$value = is_string( $value ) ? $value : '';
+
+	echo '<div class="iam-cert-row iam-cert-row--' . esc_attr( $type ) . '">';
+	printf( '<label for="%1$s"><strong>%2$s</strong></label>', esc_attr( $key ), esc_html( $args['label'] ) );
+
+	switch ( $type ) {
+		case 'textarea':
+		case 'list':
+			printf(
+				'<textarea id="%1$s" name="%1$s" rows="%2$d" class="widefat">%3$s</textarea>',
+				esc_attr( $key ),
+				'list' === $type ? 5 : 3,
+				esc_textarea( $value )
+			);
+			break;
+
+		case 'media':
+			echo '<span class="iam-media-field">';
+			printf( '<input type="url" id="%1$s" name="%1$s" class="widefat" value="%2$s" placeholder="https://">', esc_attr( $key ), esc_attr( $value ) );
+			printf(
+				'<button type="button" class="button iam-media-pick" data-target="%1$s" data-library="%2$s">%3$s</button>',
+				esc_attr( $key ),
+				esc_attr( isset( $args['media'] ) ? $args['media'] : '' ),
+				esc_html__( 'Médiathèque', 'iam-certifications' )
+			);
+			echo '</span>';
+			break;
+
+		default:
+			printf(
+				'<input type="%1$s" id="%2$s" name="%2$s" class="widefat" value="%3$s"%4$s>',
+				esc_attr( in_array( $type, array( 'number', 'url' ), true ) ? $type : 'text' ),
+				esc_attr( $key ),
+				esc_attr( $value ),
+				'url' === $type ? ' placeholder="https://"' : ''
+			);
+	}
+
+	if ( ! empty( $args['desc'] ) ) {
+		printf( '<span class="description">%s</span>', esc_html( $args['desc'] ) );
+	}
+	echo '</div>';
+}
+
+/* =========================================================================
+ * Aides d'affichage pour la page de détail
+ * ====================================================================== */
+
+/**
+ * Découpe un texte « une entrée par ligne » en tableau propre.
+ * Les puces saisies à la main (-, •, *) sont retirées.
+ *
+ * @param string $text Texte brut.
+ * @return string[]
+ */
+function iam_cert_lines( $text ) {
+	if ( ! is_string( $text ) || '' === trim( $text ) ) {
+		return array();
+	}
+	$lines = preg_split( '/\r\n|\r|\n/', $text );
+	$lines = array_map(
+		function ( $l ) {
+			return trim( preg_replace( '/^\s*(?:[-*•·]|\d+[.)])\s*/u', '', $l ) );
+		},
+		$lines
+	);
+	return array_values( array_filter( $lines, 'strlen' ) );
+}
+
+/**
+ * Rend une liste à puces (ou un paragraphe si une seule entrée).
+ *
+ * @param string $text  Texte « une entrée par ligne ».
+ * @param string $class Classe CSS de la liste.
+ * @return string HTML.
+ */
+function iam_cert_list_html( $text, $class = 'iam-cert-list' ) {
+	$lines = iam_cert_lines( $text );
+	if ( ! $lines ) {
+		return '';
+	}
+	if ( 1 === count( $lines ) ) {
+		return '<p class="' . esc_attr( $class ) . '__single">' . esc_html( $lines[0] ) . '</p>';
+	}
+	$html = '<ul class="' . esc_attr( $class ) . '">';
+	foreach ( $lines as $line ) {
+		$html .= '<li>' . esc_html( $line ) . '</li>';
+	}
+	return $html . '</ul>';
+}
+
+/**
+ * Code d'intégration de la vidéo de présentation.
+ * YouTube / Vimeo via oEmbed (WordPress), fichier vidéo via <video>.
+ *
+ * @param string $url URL de la vidéo.
+ * @return string HTML (vide si l'URL n'est pas exploitable).
+ */
+function iam_cert_video_embed( $url ) {
+	if ( ! $url ) {
+		return '';
+	}
+
+	if ( preg_match( '/\.(mp4|webm|ogg)(\?.*)?$/i', $url ) ) {
+		return sprintf( '<video src="%s" controls playsinline preload="none"></video>', esc_url( $url ) );
+	}
+
+	$embed = wp_oembed_get( $url, array( 'width' => 1280 ) );
+	if ( ! $embed ) {
+		return '';
+	}
+
+	// Lecture automatique à l'ouverture de la fenêtre (YouTube / Vimeo).
+	return preg_replace_callback(
+		'/src="([^"]+)"/',
+		function ( $m ) {
+			$src = html_entity_decode( $m[1] );
+			$src = add_query_arg( array( 'autoplay' => 1, 'rel' => 0 ), $src );
+			return 'src="' . esc_url( $src ) . '" allow="autoplay; fullscreen; picture-in-picture"';
+		},
+		$embed,
+		1
+	);
+}
+
+/**
+ * Bloc dépliable (accordéon) coloré, accessible au clavier.
+ * Sans JavaScript, le contenu reste visible (amélioration progressive).
+ *
+ * @param string $id      Identifiant unique.
+ * @param string $title   Titre affiché.
+ * @param string $content HTML du contenu (déjà échappé).
+ * @param string $tone    « green » ou « lime ».
+ * @param string $meta    Petite info sous le titre (optionnel).
+ * @return string HTML.
+ */
+function iam_cert_accordion( $id, $title, $content, $tone = 'green', $meta = '' ) {
+	$id = sanitize_html_class( $id );
+	ob_start();
+	?>
+	<div class="iam-acc iam-acc--<?php echo esc_attr( $tone ); ?>">
+		<h3 class="iam-acc__heading">
+			<button type="button" class="iam-acc__btn" id="<?php echo esc_attr( $id ); ?>-btn" aria-expanded="true" aria-controls="<?php echo esc_attr( $id ); ?>">
+				<span class="iam-acc__label">
+					<span class="iam-acc__title"><?php echo esc_html( $title ); ?></span>
+					<?php if ( $meta ) : ?>
+						<span class="iam-acc__meta"><?php echo esc_html( $meta ); ?></span>
+					<?php endif; ?>
+				</span>
+				<span class="iam-acc__icon" aria-hidden="true"></span>
+			</button>
+		</h3>
+		<div class="iam-acc__panel" id="<?php echo esc_attr( $id ); ?>" role="region" aria-labelledby="<?php echo esc_attr( $id ); ?>-btn">
+			<div class="iam-acc__inner">
+				<div class="iam-acc__content"><?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- contenu échappé en amont. ?></div>
+			</div>
+		</div>
+	</div>
+	<?php
+	return ob_get_clean();
 }

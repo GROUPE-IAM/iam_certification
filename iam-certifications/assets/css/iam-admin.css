@@ -481,3 +481,34 @@
 @media (prefers-reduced-motion: reduce) {
 	.iam-cert-wizard * { transition: none !important; }
 }
+
+/* --------------------------------------------------------------------------
+ * v1.1 : champs Médiathèque, listes « une entrée par ligne »
+ * ------------------------------------------------------------------------ */
+.iam-cert-row {
+	margin: 0 0 18px;
+}
+.iam-cert-row > label {
+	display: block;
+	margin-bottom: 6px;
+}
+.iam-cert-row .description {
+	display: block;
+	margin-top: 4px;
+}
+.iam-media-field {
+	display: flex;
+	gap: 8px;
+	align-items: stretch;
+}
+.iam-media-field input {
+	flex: 1;
+	min-width: 0;
+}
+.iam-media-field .button {
+	flex: 0 0 auto;
+}
+.iam-cert-row--list textarea {
+	font-family: inherit;
+	line-height: 1.5;
+}

@@ -39,65 +39,27 @@
 		});
 	}
 
-	/* Compteur animé sur un libellé « 11 modules », « 55 heures »… */
-	function countUp(el) {
-		var m = el.textContent.trim().match(/^(\d+)(.*)$/);
-		if (!m) {
-			return;
-		}
-		var target = parseInt(m[1], 10);
-		var suffix = m[2];
-		var obj = { v: 0 };
-		gsap.to(obj, {
-			v: target,
-			duration: 1,
-			ease: 'power1.out',
-			onUpdate: function () {
-				el.textContent = Math.round(obj.v) + suffix;
-			},
-			scrollTrigger: st(el, 'top 92%')
-		});
-	}
-
-	/* Fiche détail : hero orchestré + révélations au scroll. */
+	/*
+	 * Fiche détail : une seule entrée orchestrée, celle du hero.
+	 * Le reste de la page apparaît normalement (pas d'effet à chaque section).
+	 */
 	function animateSingle() {
 		var hero = document.querySelector('.iam-cert-hero');
-		if (hero) {
-			var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-			tl.from('.iam-cert-hero__badge', { opacity: 0, y: 16, duration: 0.5 })
-				.from('.iam-cert-hero__title', { opacity: 0, y: 22, duration: 0.6 }, '-=0.3')
-				.from('.iam-cert-hero__sub', { opacity: 0, y: 16, duration: 0.5 }, '-=0.4')
-				.from('.iam-cert-chip', { opacity: 0, y: 12, duration: 0.4, stagger: 0.06 }, '-=0.3')
-				.from('.iam-cert-hero .iam-cert-btn--lg', { opacity: 0, y: 12, duration: 0.4 }, '-=0.2')
-				.from('.iam-cert-hero__media', { opacity: 0, scale: 0.96, duration: 0.7 }, '-=0.75');
+		if (!hero) {
+			return;
 		}
-
-		document.querySelectorAll('.iam-cert-chip').forEach(countUp);
-
-		var mods = document.querySelectorAll('.iam-cert-module');
-		if (mods.length) {
-			gsap.from(mods, {
-				opacity: 0,
-				y: 24,
-				duration: 0.5,
-				ease: 'power2.out',
-				stagger: 0.06,
-				scrollTrigger: st('.iam-cert-modules', 'top 80%')
-			});
+		var q = function (sel) {
+			return hero.querySelectorAll(sel);
+		};
+		var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+		if (q('.iam-cert-hero__bg').length) {
+			tl.from(q('.iam-cert-hero__bg'), { scale: 1.06, duration: 1.6, ease: 'power2.out' }, 0);
 		}
-
-		document.querySelectorAll('.iam-cert-sec').forEach(function (sec) {
-			if (sec.classList.contains('iam-cert-programme')) {
-				return;
-			}
-			gsap.from(sec, {
-				opacity: 0,
-				y: 20,
-				duration: 0.6,
-				ease: 'power2.out',
-				scrollTrigger: st(sec)
-			});
-		});
+		tl.from(q('.iam-cert-hero__badge'), { opacity: 0, y: 14, duration: 0.5 }, 0.1)
+			.from(q('.iam-cert-hero__title'), { opacity: 0, y: 24, duration: 0.7 }, 0.2)
+			.from(q('.iam-cert-hero__sub'), { opacity: 0, y: 16, duration: 0.6 }, 0.4)
+			.from(q('.iam-cert-chip'), { opacity: 0, y: 10, duration: 0.4, stagger: 0.05 }, 0.55)
+			.from(q('.iam-cert-hero__aside > *'), { opacity: 0, y: 18, duration: 0.6, stagger: 0.12 }, 0.5);
 	}
 
 	function init() {
