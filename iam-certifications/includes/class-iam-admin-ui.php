@@ -227,7 +227,11 @@ class IAM_Cert_Admin_UI {
 		$this->notice();
 		?>
 		<div class="wrap iam-cert-admin">
-			<h1><?php echo $id ? esc_html__( 'Modifier la certification', 'iam-certifications' ) : esc_html__( 'Ajouter une certification', 'iam-certifications' ); ?></h1>
+			<h1 class="wp-heading-inline"><?php echo $id ? esc_html__( 'Modifier la certification', 'iam-certifications' ) : esc_html__( 'Ajouter une certification', 'iam-certifications' ); ?></h1>
+			<?php if ( $id ) : ?>
+				<a href="<?php echo esc_url( get_permalink( $id ) ); ?>" class="page-title-action" target="_blank" rel="noopener"><?php esc_html_e( 'Voir la page', 'iam-certifications' ); ?></a>
+			<?php endif; ?>
+			<hr class="wp-header-end">
 
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="iam-cert-form-admin">
 				<input type="hidden" name="action" value="iam_cert_save">
@@ -237,36 +241,19 @@ class IAM_Cert_Admin_UI {
 				<?php
 				$statut   = $post ? $post->post_status : 'publish';
 				$fields   = IAM_Cert_Metaboxes::fields();
-				$step_of  = array(
-					'_iam_hero'         => 1,
-					'_iam_duree_heures' => 1,
-					'_iam_duree_texte'  => 1,
-					'_iam_niveau'       => 1,
-					'_iam_format'       => 1,
-					'_iam_public'       => 2,
-					'_iam_prerequis'    => 2,
-					'_iam_evaluation'   => 2,
-					'_iam_cta_texte'    => 2,
-				);
 				$labels   = array(
 					__( 'Infos générales', 'iam-certifications' ),
 					__( 'Contenu & public', 'iam-certifications' ),
 					__( 'Programme', 'iam-certifications' ),
+					__( 'Médias & liens', 'iam-certifications' ),
 					__( 'Classement & publication', 'iam-certifications' ),
 				);
-				$render_row = function ( $key, $args ) use ( $meta ) {
-					$value = $meta( $key );
-					echo '<p class="iam-cert-row">';
-					printf( '<label for="%1$s"><strong>%2$s</strong></label>', esc_attr( $key ), esc_html( $args['label'] ) );
-					if ( 'textarea' === $args['type'] ) {
-						printf( '<textarea id="%1$s" name="%1$s" rows="3" class="widefat">%2$s</textarea>', esc_attr( $key ), esc_textarea( $value ) );
-					} else {
-						printf( '<input type="%1$s" id="%2$s" name="%2$s" class="widefat" value="%3$s">', esc_attr( $args['type'] ), esc_attr( $key ), esc_attr( $value ) );
+				$render_step = function ( $step ) use ( $fields, $meta ) {
+					foreach ( $fields as $key => $args ) {
+						if ( (int) ( $args['step'] ?? 0 ) === $step ) {
+							iam_cert_render_field_row( $key, $args, $meta( $key ) );
+						}
 					}
-					if ( ! empty( $args['desc'] ) ) {
-						printf( '<span class="description">%s</span>', esc_html( $args['desc'] ) );
-					}
-					echo '</p>';
 				};
 				?>
 				<div class="iam-cert-wizard" id="iam-cert-wizard">
@@ -288,16 +275,12 @@ class IAM_Cert_Admin_UI {
 							<label for="iam_titre"><strong><?php esc_html_e( 'Titre', 'iam-certifications' ); ?></strong></label>
 							<input type="text" id="iam_titre" name="titre" class="widefat" required value="<?php echo esc_attr( $titre ); ?>">
 						</p>
-						<?php foreach ( $fields as $key => $args ) : ?>
-							<?php if ( 1 === ( $step_of[ $key ] ?? 0 ) ) { $render_row( $key, $args ); } ?>
-						<?php endforeach; ?>
+						<?php $render_step( 1 ); ?>
 					</section>
 
 					<!-- Étape 2 : Contenu & public -->
 					<section class="iam-step" data-step="1">
-						<?php foreach ( $fields as $key => $args ) : ?>
-							<?php if ( 2 === ( $step_of[ $key ] ?? 0 ) ) { $render_row( $key, $args ); } ?>
-						<?php endforeach; ?>
+						<?php $render_step( 2 ); ?>
 					</section>
 
 					<!-- Étape 3 : Programme -->
@@ -320,8 +303,14 @@ class IAM_Cert_Admin_UI {
 						</div>
 					</section>
 
-					<!-- Étape 4 : Classement & publication -->
+					<!-- Étape 4 : Médias & liens -->
 					<section class="iam-step" data-step="3">
+						<p class="description"><?php esc_html_e( 'Tous ces éléments sont optionnels : un bouton ou un bloc dont le champ est vide n’apparaît pas sur la page.', 'iam-certifications' ); ?></p>
+						<?php $render_step( 4 ); ?>
+					</section>
+
+					<!-- Étape 5 : Classement & publication -->
+					<section class="iam-step" data-step="4">
 						<div class="iam-cert-cols">
 							<div class="iam-cert-box">
 								<h3><?php esc_html_e( 'Domaine', 'iam-certifications' ); ?></h3>
@@ -382,7 +371,7 @@ class IAM_Cert_Admin_UI {
 
 					<div class="iam-wiz-foot">
 						<button type="button" class="button iam-wiz-prev"><?php esc_html_e( '← Précédent', 'iam-certifications' ); ?></button>
-						<span class="iam-wiz-status" data-total="4"></span>
+						<span class="iam-wiz-status" data-total="5"></span>
 						<button type="button" class="button iam-wiz-next"><?php esc_html_e( 'Suivant →', 'iam-certifications' ); ?></button>
 						<button type="submit" class="button button-primary button-large iam-wiz-save"><?php echo $id ? esc_html__( 'Mettre à jour', 'iam-certifications' ) : esc_html__( 'Créer la certification', 'iam-certifications' ); ?></button>
 					</div>
@@ -457,14 +446,7 @@ class IAM_Cert_Admin_UI {
 
 		// Champs simples.
 		foreach ( IAM_Cert_Metaboxes::fields() as $key => $args ) {
-			$raw = isset( $_POST[ $key ] ) ? wp_unslash( $_POST[ $key ] ) : '';
-			if ( 'textarea' === $args['type'] ) {
-				$value = sanitize_textarea_field( $raw );
-			} elseif ( 'number' === $args['type'] ) {
-				$value = '' === $raw ? '' : (string) absint( $raw );
-			} else {
-				$value = sanitize_text_field( $raw );
-			}
+			$value = IAM_Cert_Metaboxes::sanitize( isset( $_POST[ $key ] ) ? wp_unslash( $_POST[ $key ] ) : '', $args ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
 			update_post_meta( $id, $key, $value );
 		}
 

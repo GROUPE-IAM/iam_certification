@@ -82,6 +82,36 @@
 		}
 	}
 
+	// Champs « Médiathèque » génériques (brochure, dossier, image secondaire) :
+	// le bouton ouvre la médiathèque et recopie l'URL du fichier choisi.
+	function initMediaFields() {
+		if (typeof wp === 'undefined' || !wp.media) {
+			return;
+		}
+		document.addEventListener('click', function (e) {
+			var btn = e.target.closest('.iam-media-pick');
+			if (!btn) {
+				return;
+			}
+			e.preventDefault();
+			var input = document.getElementById(btn.getAttribute('data-target'));
+			var lib = btn.getAttribute('data-library');
+			var opts = { title: btn.textContent, multiple: false };
+			if (lib) {
+				opts.library = { type: lib };
+			}
+			var frame = wp.media(opts);
+			frame.on('select', function () {
+				var att = frame.state().get('selection').first().toJSON();
+				if (input) {
+					input.value = att.url;
+					input.dispatchEvent(new Event('change'));
+				}
+			});
+			frame.open();
+		});
+	}
+
 	// Assistant à étapes du formulaire d'édition.
 	function initWizard() {
 		var wiz = document.getElementById('iam-cert-wizard');
@@ -136,6 +166,7 @@
 	function boot() {
 		init();
 		initImage();
+		initMediaFields();
 		initWizard();
 	}
 

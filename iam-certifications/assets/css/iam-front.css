@@ -325,320 +325,9 @@
 	color: var(--ckd-ink-soft);
 	padding: 30px;
 }
-/* ==========================================================================
- * Page de détail (landing)
- * ======================================================================== */
-.iam-cert-single {
-	max-width: 1080px;
-	margin: 0 auto;
-	padding: 0 16px 72px;
-}
-
-/* Hero */
-.iam-cert-hero {
-	padding: 40px 0 8px;
-}
-
-.iam-cert-hero__inner {
-	display: grid;
-	grid-template-columns: 1.05fr .95fr;
-	gap: 40px;
-	align-items: center;
-}
-
-.iam-cert-hero__badge {
-	display: inline-block;
-	background: var(--ckd-badge);
-	color: var(--ckd-ink);
-	font-size: .76rem;
-	font-weight: 700;
-	letter-spacing: .02em;
-	padding: 6px 14px;
-	border-radius: 999px;
-	margin-bottom: 16px;
-}
-
-.iam-cert-hero__title {
-	font-family: var(--ckd-serif);
-	color: var(--ckd-accent);
-	font-size: clamp(1.9rem, 4vw, 2.9rem);
-	line-height: 1.12;
-	margin: 0 0 12px;
-}
-
-.iam-cert-hero__sub {
-	font-size: 1.08rem;
-	color: var(--ckd-ink-soft);
-	line-height: 1.55;
-	margin: 0 0 20px;
-}
-
-.iam-cert-hero__media {
-	position: relative;
-	aspect-ratio: 4 / 3;
-	border-radius: var(--ckd-radius);
-	overflow: hidden;
-	background: var(--ckd-bg);
-	max-width: 100%;
-}
-
-.iam-cert-hero__img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	display: block;
-	position: absolute;
-	inset: 0;
-}
-
-/* Puces KPI du hero */
-.iam-cert-chips {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 8px;
-	list-style: none;
-	margin: 0 0 26px;
-	padding: 0;
-}
-
-.iam-cert-chip {
-	background: var(--ckd-card);
-	border: 1px solid var(--ckd-line);
-	color: var(--ckd-ink);
-	border-radius: 999px;
-	padding: 7px 15px;
-	font-size: .85rem;
-	font-weight: 600;
-}
-
-.iam-cert-btn--lg {
-	font-size: 1rem;
-	padding: 14px 26px;
-}
-
-/* Sections génériques */
-.iam-cert-sec {
-	margin-top: 48px;
-}
-
-.iam-cert-h2 {
-	font-family: var(--ckd-serif);
-	color: var(--ckd-accent);
-	font-size: clamp(1.5rem, 3vw, 2rem);
-	margin: 0 0 6px;
-}
-
-.iam-cert-h3 {
-	font-family: var(--ckd-serif);
-	color: var(--ckd-ink);
-	font-size: 1.15rem;
-	margin: 0 0 8px;
-}
-
-.iam-cert-sec__meta {
-	text-transform: uppercase;
-	letter-spacing: .1em;
-	font-size: .78rem;
-	color: var(--ckd-ink-soft);
-	margin: 0 0 24px;
-}
-
-/* Programme : grille de modules */
-.iam-cert-modules {
-	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
-	gap: 18px;
-}
-
-.iam-cert-module {
-	display: flex;
-	gap: 16px;
-	background: var(--ckd-card);
-	border: 1px solid var(--ckd-line);
-	border-radius: var(--ckd-radius);
-	padding: 20px;
-}
-
-.iam-cert-module__num {
-	font-family: var(--ckd-serif);
-	font-size: 1.5rem;
-	font-weight: 700;
-	color: var(--ckd-badge);
-	-webkit-text-stroke: 1px var(--ckd-accent);
-	line-height: 1;
-	flex: 0 0 auto;
-	font-variant-numeric: tabular-nums;
-}
-
-.iam-cert-module__title {
-	font-family: var(--ckd-serif);
-	color: var(--ckd-ink);
-	font-size: 1.08rem;
-	line-height: 1.25;
-	margin: 0 0 6px;
-}
-
-.iam-cert-module__count {
-	display: inline-block;
-	font-size: .74rem;
-	text-transform: uppercase;
-	letter-spacing: .08em;
-	color: var(--ckd-accent);
-	margin-bottom: 8px;
-}
-
-.iam-cert-module__lecons {
-	margin: 0;
-	padding-left: 18px;
-	color: var(--ckd-ink-soft);
-	font-size: .92rem;
-	line-height: 1.5;
-}
-
-.iam-cert-module__lecons li {
-	margin: 2px 0;
-}
-
-/* Évaluation & prose */
-.iam-cert-eval p,
-.iam-cert-prose {
-	color: var(--ckd-ink);
-	line-height: 1.65;
-	font-size: 1rem;
-	max-width: 70ch;
-}
-
-.iam-cert-prose > * + * {
-	margin-top: 1em;
-}
-
-/* Récap + public/prérequis/outils */
-.iam-cert-facts {
-	display: grid;
-	grid-template-columns: minmax(240px, .8fr) 1.2fr;
-	gap: 36px;
-	align-items: start;
-}
-
-.iam-cert-recap {
-	width: 100%;
-	border-collapse: collapse;
-	background: var(--ckd-card);
-	border: 1px solid var(--ckd-line);
-	border-radius: var(--ckd-radius);
-	overflow: hidden;
-}
-
-.iam-cert-recap th,
-.iam-cert-recap td {
-	text-align: left;
-	padding: 12px 16px;
-	border-bottom: 1px solid var(--ckd-line);
-	font-size: .92rem;
-}
-
-.iam-cert-recap tr:last-child th,
-.iam-cert-recap tr:last-child td {
-	border-bottom: 0;
-}
-
-.iam-cert-recap th {
-	color: var(--ckd-ink-soft);
-	font-weight: 600;
-	width: 45%;
-}
-
-.iam-cert-recap td {
-	color: var(--ckd-ink);
-	font-weight: 700;
-}
-
-.iam-cert-facts__text {
-	display: flex;
-	flex-direction: column;
-	gap: 24px;
-}
-
-.iam-cert-fact p {
-	margin: 0;
-	color: var(--ckd-ink-soft);
-	line-height: 1.55;
-}
-
-.iam-cert-outils__list .iam-cert-card__tool {
-	font-size: .82rem;
-	padding: 5px 12px;
-}
-
-/* Candidature : carte centrée avec le formulaire */
-.iam-cert-apply__card {
-	background: var(--ckd-card);
-	border: 1px solid var(--ckd-line);
-	border-radius: var(--ckd-radius);
-	padding: 32px;
-	max-width: 720px;
-	margin: 0 auto;
-}
-
-.iam-cert-apply__intro {
-	color: var(--ckd-ink-soft);
-	font-size: .95rem;
-	line-height: 1.55;
-	margin: 4px 0 22px;
-}
-
-.iam-cert-form-fallback {
-	color: var(--ckd-ink-soft);
-	font-size: .95rem;
-}
-
-/* Contact direct */
-.iam-cert-contact {
-	margin-top: 24px;
-	padding-top: 20px;
-	border-top: 1px solid var(--ckd-line);
-}
-
-.iam-cert-contact__title {
-	font-weight: 600;
-	color: var(--ckd-ink);
-	margin: 0 0 10px;
-	font-size: .9rem;
-}
-
-.iam-cert-contact__line {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	margin: 0 0 8px;
-	font-size: .95rem;
-}
-
-.iam-cert-contact__line a {
-	color: var(--ckd-accent);
-	text-decoration: none;
-	word-break: break-word;
-}
-
-.iam-cert-contact__line a:hover {
-	text-decoration: underline;
-}
-
-/* Responsive landing */
-@media (max-width: 900px) {
-	.iam-cert-hero__inner,
-	.iam-cert-modules,
-	.iam-cert-facts {
-		grid-template-columns: 1fr;
-		gap: 24px;
-	}
-	.iam-cert-hero__media {
-		order: -1;
-	}
-}
 
 /* ==========================================================================
- * Finitions UI/UX
+ * Finitions communes (cartes, focus, sélection)
  * ======================================================================== */
 .iam-cert ::selection { background: var(--ckd-badge); color: var(--ckd-ink); }
 
@@ -648,7 +337,6 @@
 	border-radius: 10px;
 }
 
-/* Carte : ombre plus douce + média avec léger voile dégradé */
 .iam-cert-card {
 	box-shadow: 0 1px 2px rgba(18, 53, 42, .04);
 }
@@ -662,67 +350,803 @@
 	background: linear-gradient(180deg, transparent 55%, rgba(9, 40, 27, .28));
 	pointer-events: none;
 }
-
-/* Puces KPI interactives */
-.iam-cert-chip {
-	transition: transform .15s ease, border-color .15s ease, background .15s ease;
-}
-.iam-cert-chip:hover {
-	transform: translateY(-2px);
-	border-color: var(--ckd-accent);
-}
-
-/* Module : barre d'accent + survol */
-.iam-cert-module {
-	position: relative;
-	transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-}
-.iam-cert-module::before {
-	content: "";
-	position: absolute;
-	left: 0;
-	top: 16px;
-	bottom: 16px;
-	width: 3px;
-	border-radius: 3px;
-	background: var(--ckd-badge);
-	opacity: 0;
-	transition: opacity .18s ease;
-}
-.iam-cert-module:hover {
-	transform: translateY(-3px);
-	border-color: var(--ckd-accent);
-	box-shadow: 0 12px 26px rgba(9, 63, 40, .12);
-}
-.iam-cert-module:hover::before { opacity: 1; }
-
-/* Hero média : cadre subtil */
-.iam-cert-hero__media {
-	box-shadow: 0 24px 50px rgba(9, 63, 40, .18);
-}
-.iam-cert-hero__media::after {
-	content: "";
-	position: absolute;
-	inset: 0;
-	border-radius: var(--ckd-radius);
-	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .18);
-	pointer-events: none;
-}
-
-/* Bouton : ombre portée au survol */
-.iam-cert-btn {
+.iam-cert-grid .iam-cert-btn {
 	box-shadow: 0 6px 16px rgba(11, 93, 59, .22);
 }
-.iam-cert-btn:hover {
+.iam-cert-grid .iam-cert-btn:hover {
 	box-shadow: 0 10px 24px rgba(11, 93, 59, .30);
 }
 
-/* Lignes du récap : survol */
-.iam-cert-recap tbody tr {
-	transition: background .15s ease;
+/* ==========================================================================
+ * Page de détail (landing)
+ * Bandes pleine largeur : hero, bandes 2 colonnes avec blocs dépliables
+ * colorés, bandeau de téléchargement, candidature.
+ * ======================================================================== */
+
+/* Empêche le défilement horizontal causé par les bandes pleine largeur. */
+body.single-certification {
+	overflow-x: clip;
 }
-.iam-cert-recap tbody tr:hover {
-	background: color-mix(in srgb, var(--ckd-badge) 22%, transparent);
+
+.iam-cert-single {
+	--acc-pad-x: clamp(24px, 4vw, 64px);
+	--acc-pad-y: clamp(32px, 4vw, 56px);
+	--lime-hover: #d4f03a;
+	font-size: 1rem;
+	line-height: 1.6;
+}
+
+/* Bandes en pleine largeur, quelle que soit la largeur du conteneur du thème. */
+.iam-cert-hero,
+.iam-cert-band,
+.iam-cert-downloads,
+.iam-cert-apply {
+	width: 100vw;
+	margin-inline: calc(50% - 50vw);
+}
+
+.iam-cert-wrap {
+	width: 100%;
+	max-width: 1240px;
+	margin-inline: auto;
+	padding-inline: clamp(20px, 5vw, 64px);
+}
+
+.iam-cert-h2 {
+	font-family: var(--ckd-serif);
+	color: var(--ckd-accent);
+	font-size: clamp(1.8rem, 3vw, 2.6rem);
+	line-height: 1.15;
+	margin: 0 0 24px;
+}
+
+.iam-cert-h3 {
+	font-family: var(--ckd-sans);
+	font-weight: 700;
+	color: var(--ckd-ink);
+	font-size: 1.05rem;
+	margin: 32px 0 8px;
+}
+
+/* --------------------------------------------------------------------------
+ * Boutons de la landing
+ * ------------------------------------------------------------------------ */
+.iam-cert-single .iam-cert-btn {
+	justify-content: center;
+	font-size: 1rem;
+	font-weight: 600;
+	padding: 16px 30px;
+	border-width: 2px;
+	box-shadow: none;
+	transition: background .18s ease, color .18s ease, border-color .18s ease;
+}
+.iam-cert-single .iam-cert-btn:hover {
+	transform: none;
+}
+
+.iam-cert-btn--primary,
+.iam-cert-single .iam-cert-btn--primary {
+	background: var(--ckd-badge);
+	border-color: var(--ckd-badge);
+	color: var(--ckd-ink);
+}
+.iam-cert-single .iam-cert-btn--primary:hover {
+	background: #fff;
+	border-color: #fff;
+	color: var(--ckd-ink);
+}
+
+.iam-cert-single .iam-cert-btn--ghost {
+	background: transparent;
+	border-color: rgba(255, 255, 255, .75);
+	color: #fff;
+}
+.iam-cert-single .iam-cert-btn--ghost:hover {
+	background: #fff;
+	border-color: #fff;
+	color: var(--ckd-ink);
+}
+
+/* --------------------------------------------------------------------------
+ * 1. Hero
+ * ------------------------------------------------------------------------ */
+.iam-cert-hero {
+	position: relative;
+	isolation: isolate;
+	display: flex;
+	align-items: center;
+	min-height: min(86vh, 760px);
+	padding-block: clamp(64px, 9vw, 120px);
+	background: var(--ckd-accent-fonce);
+	color: #fff;
+	overflow: hidden;
+}
+
+.iam-cert-hero__bg {
+	position: absolute;
+	inset: 0;
+	z-index: -2;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	max-width: none;
+}
+
+/* Voile vert : assure la lisibilité du texte quelle que soit la photo. */
+.iam-cert-hero.has-image::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	background: linear-gradient(100deg, rgba(9, 40, 27, .94) 0%, rgba(9, 40, 27, .84) 48%, rgba(9, 40, 27, .55) 100%);
+}
+
+.iam-cert-hero__inner {
+	display: grid;
+	grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+	gap: clamp(36px, 6vw, 88px);
+	align-items: center;
+}
+
+.iam-cert-hero__badge {
+	display: inline-block;
+	margin: 0 0 20px;
+	padding: 6px 14px;
+	border-radius: 999px;
+	background: var(--ckd-badge);
+	color: var(--ckd-ink);
+	font-size: .82rem;
+	font-weight: 700;
+}
+
+.iam-cert-hero__title {
+	font-family: var(--ckd-serif);
+	font-size: clamp(2.3rem, 5.2vw, 4.3rem);
+	font-weight: 700;
+	line-height: 1.06;
+	color: #fff;
+	margin: 0 0 24px;
+	max-width: 18ch;
+	text-wrap: balance;
+}
+
+.iam-cert-hero__sub {
+	max-width: 58ch;
+	font-size: clamp(1.05rem, 1.35vw, 1.22rem);
+	line-height: 1.65;
+	color: rgba(255, 255, 255, .9);
+}
+.iam-cert-hero__sub p {
+	margin: 0 0 14px;
+}
+
+.iam-cert-single .iam-cert-chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	list-style: none;
+	margin: 26px 0 0;
+	padding: 0;
+}
+.iam-cert-single .iam-cert-chip {
+	background: transparent;
+	border: 1px solid rgba(255, 255, 255, .38);
+	color: #fff;
+	border-radius: 999px;
+	padding: 7px 15px;
+	font-size: .88rem;
+	font-weight: 600;
+}
+
+.iam-cert-hero__aside {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 36px;
+}
+
+/* Bouton vidéo */
+.iam-cert-play {
+	appearance: none;
+	background: none;
+	border: 0;
+	padding: 0;
+	color: #fff;
+	font: inherit;
+	cursor: pointer;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 18px;
+}
+.iam-cert-play__circle {
+	display: grid;
+	place-items: center;
+	width: clamp(96px, 9vw, 132px);
+	aspect-ratio: 1;
+	border-radius: 50%;
+	border: 3px solid #fff;
+	padding-left: 6px;
+	transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+.iam-cert-play__circle svg {
+	width: 40%;
+	height: 40%;
+}
+.iam-cert-play__label {
+	font-size: 1.1rem;
+	font-weight: 500;
+}
+.iam-cert-play:hover .iam-cert-play__circle {
+	background: var(--ckd-badge);
+	border-color: var(--ckd-badge);
+	color: var(--ckd-ink);
+}
+.iam-cert-play:focus-visible {
+	outline: none;
+}
+.iam-cert-play:focus-visible .iam-cert-play__circle {
+	outline: 3px solid var(--ckd-badge);
+	outline-offset: 5px;
+}
+
+.iam-cert-hero__ctas {
+	display: grid;
+	gap: 12px;
+	width: 100%;
+	max-width: 340px;
+}
+
+.iam-cert-single .iam-cert-hero :focus-visible,
+.iam-cert-downloads :focus-visible,
+.iam-cert-stickybar :focus-visible {
+	outline-color: var(--ckd-badge);
+}
+
+/* Fenêtre vidéo */
+.iam-cert-video {
+	width: min(1100px, 92vw);
+	max-width: none;
+	padding: 0;
+	border: 0;
+	background: #000;
+	overflow: visible;
+}
+.iam-cert-video::backdrop {
+	background: rgba(4, 20, 13, .86);
+}
+.iam-cert-video__frame {
+	aspect-ratio: 16 / 9;
+}
+.iam-cert-video__frame iframe,
+.iam-cert-video__frame video {
+	display: block;
+	width: 100%;
+	height: 100%;
+	border: 0;
+}
+.iam-cert-video__close {
+	position: absolute;
+	top: -52px;
+	right: 0;
+	display: grid;
+	place-items: center;
+	width: 44px;
+	height: 44px;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, .12);
+	color: #fff;
+	cursor: pointer;
+}
+.iam-cert-video__close:hover {
+	background: var(--ckd-badge);
+	color: var(--ckd-ink);
+}
+
+/* --------------------------------------------------------------------------
+ * Bandes 2 colonnes
+ * ------------------------------------------------------------------------ */
+.iam-cert-band {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	background: var(--ckd-bg);
+}
+
+.iam-cert-band__text {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: clamp(48px, 7vw, 104px) clamp(24px, 6vw, 96px);
+}
+.iam-cert-band__text-inner {
+	width: 100%;
+	max-width: 540px;
+}
+
+.iam-cert-band__p {
+	margin: 0;
+	color: var(--ckd-ink);
+	font-size: 1.08rem;
+	line-height: 1.65;
+	max-width: 60ch;
+}
+
+/* Listes à puces des bandes */
+.iam-cert-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	gap: 12px;
+}
+.iam-cert-list li {
+	position: relative;
+	padding-left: 26px;
+	font-size: 1.1rem;
+	line-height: 1.5;
+	color: var(--ckd-ink);
+}
+.iam-cert-list li::before {
+	content: "";
+	position: absolute;
+	left: 2px;
+	top: .55em;
+	width: 9px;
+	height: 9px;
+	border-radius: 50%;
+	background: var(--ckd-accent);
+}
+.iam-cert-list__single {
+	margin: 0;
+	font-size: 1.1rem;
+	line-height: 1.6;
+}
+
+/* Colonne de blocs dépliables */
+.iam-cert-band__stack {
+	display: flex;
+	flex-direction: column;
+}
+
+/* Image (bande « débouchés ») */
+.iam-cert-band__media {
+	position: relative;
+	min-height: clamp(300px, 34vw, 560px);
+	background: var(--ckd-accent);
+}
+.iam-cert-band__media img {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	max-width: none;
+	object-fit: cover;
+}
+.iam-cert-band__media-fallback {
+	position: absolute;
+	inset: 0;
+	background:
+		radial-gradient(circle at 30% 70%, rgba(228, 255, 87, .28) 0 18%, transparent 19%),
+		var(--ckd-accent);
+}
+
+/* Outils */
+.iam-cert-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.iam-cert-tags li {
+	padding: 6px 14px;
+	border-radius: 999px;
+	border: 1px solid var(--ckd-accent);
+	color: var(--ckd-accent);
+	font-size: .9rem;
+	font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+ * Blocs dépliables (accordéons)
+ * ------------------------------------------------------------------------ */
+.iam-acc {
+	--acc-line: rgba(255, 255, 255, .22);
+	--acc-mark: var(--ckd-badge);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	flex: 1 0 auto;
+	min-height: clamp(160px, 15vw, 230px);
+}
+.iam-acc--green {
+	background: var(--ckd-accent);
+	color: #fff;
+}
+.iam-acc--lime {
+	--acc-line: rgba(18, 53, 42, .2);
+	--acc-mark: var(--ckd-accent);
+	background: var(--ckd-badge);
+	color: var(--ckd-ink);
+}
+.iam-acc:not(.is-collapsed) {
+	justify-content: flex-start;
+}
+
+.iam-acc__heading {
+	margin: 0;
+	font: inherit;
+	color: inherit;
+}
+
+.iam-acc__btn {
+	appearance: none;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 24px;
+	width: 100%;
+	margin: 0;
+	padding: var(--acc-pad-y) var(--acc-pad-x);
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+	transition: background .18s ease;
+}
+.iam-acc--green .iam-acc__btn:hover { background: var(--ckd-accent-fonce); }
+.iam-acc--lime .iam-acc__btn:hover { background: var(--lime-hover); }
+.iam-cert .iam-acc__btn:focus-visible {
+	outline: 3px solid currentColor;
+	outline-offset: -10px;
+	border-radius: 0;
+}
+
+.iam-acc__title {
+	display: block;
+	font-size: clamp(1.45rem, 2.3vw, 2.15rem);
+	font-weight: 600;
+	line-height: 1.15;
+}
+.iam-acc__meta {
+	display: block;
+	margin-top: 6px;
+	font-size: .95rem;
+	font-weight: 500;
+	opacity: .78;
+}
+
+/* Icône « + » qui pivote en « × » à l'ouverture */
+.iam-acc__icon {
+	position: relative;
+	flex: 0 0 auto;
+	width: 34px;
+	height: 34px;
+	transition: transform .3s ease;
+}
+.iam-acc__icon::before,
+.iam-acc__icon::after {
+	content: "";
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 100%;
+	height: 2.5px;
+	background: currentColor;
+	transform: translate(-50%, -50%);
+}
+.iam-acc__icon::after {
+	transform: translate(-50%, -50%) rotate(90deg);
+}
+.iam-acc__btn[aria-expanded="true"] {
+	padding-bottom: 24px;
+}
+.iam-acc__btn[aria-expanded="true"] .iam-acc__icon {
+	transform: rotate(45deg);
+}
+
+/* Ouverture animée en hauteur (grid 0fr -> 1fr) */
+.iam-acc__panel {
+	display: grid;
+	grid-template-rows: 1fr;
+	transition: grid-template-rows .4s ease;
+}
+.iam-acc.is-collapsed .iam-acc__panel {
+	grid-template-rows: 0fr;
+}
+.iam-acc__inner {
+	min-height: 0;
+	overflow: hidden;
+}
+.iam-acc.is-collapsed .iam-acc__inner {
+	visibility: hidden;
+	transition: visibility 0s .4s;
+}
+.iam-acc__content {
+	padding: 0 var(--acc-pad-x) var(--acc-pad-y);
+	font-size: 1.02rem;
+	line-height: 1.6;
+}
+.iam-acc__content > p {
+	margin: 0 0 12px;
+	max-width: 65ch;
+}
+
+/* Objectifs : coches */
+.iam-cert-checks {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	gap: 12px;
+}
+.iam-cert-checks li {
+	position: relative;
+	padding-left: 32px;
+}
+.iam-cert-checks li::before {
+	content: "";
+	position: absolute;
+	left: 4px;
+	top: .2em;
+	width: 7px;
+	height: 13px;
+	border: solid var(--acc-mark);
+	border-width: 0 3px 3px 0;
+	transform: rotate(45deg);
+}
+.iam-cert-checks__single {
+	margin: 0;
+}
+
+/* Programme : modules numérotés */
+.iam-cert-prog {
+	list-style: none;
+	counter-reset: iam-mod;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+	gap: 22px 32px;
+}
+.iam-cert-prog__item {
+	counter-increment: iam-mod;
+	padding-top: 14px;
+	border-top: 1px solid var(--acc-line);
+}
+.iam-cert-prog__title {
+	margin: 0 0 6px;
+	font-weight: 700;
+	line-height: 1.35;
+}
+.iam-cert-prog__lecons {
+	margin: 0;
+	padding-left: 18px;
+	font-size: .93rem;
+	opacity: .88;
+}
+.iam-cert-prog__lecons li {
+	margin: 2px 0;
+}
+
+/* Durée : liste de définitions */
+.iam-cert-dl {
+	margin: 0;
+	max-width: 560px;
+}
+.iam-cert-dl > div {
+	display: flex;
+	justify-content: space-between;
+	gap: 20px;
+	padding: 11px 0;
+	border-bottom: 1px solid var(--acc-line);
+}
+.iam-cert-dl > div:last-child {
+	border-bottom: 0;
+}
+.iam-cert-dl dt {
+	opacity: .8;
+}
+.iam-cert-dl dd {
+	margin: 0;
+	font-weight: 700;
+	text-align: right;
+}
+
+/* --------------------------------------------------------------------------
+ * Contenu libre
+ * ------------------------------------------------------------------------ */
+.iam-cert-prose {
+	padding-block: clamp(48px, 6vw, 88px);
+	color: var(--ckd-ink);
+	line-height: 1.7;
+}
+.iam-cert-prose > * {
+	max-width: 70ch;
+}
+.iam-cert-prose > * + * {
+	margin-top: 1em;
+}
+
+/* --------------------------------------------------------------------------
+ * 5. Téléchargements
+ * ------------------------------------------------------------------------ */
+.iam-cert-downloads {
+	padding-block: clamp(56px, 7vw, 96px);
+	background: var(--ckd-accent-fonce);
+	color: #fff;
+	text-align: center;
+}
+.iam-cert-downloads__title {
+	font-family: var(--ckd-serif);
+	font-size: clamp(1.6rem, 3.2vw, 2.6rem);
+	line-height: 1.2;
+	color: #fff;
+	margin: 0 auto 32px;
+	max-width: 26ch;
+	text-wrap: balance;
+}
+.iam-cert-downloads__btns {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 14px;
+}
+
+/* --------------------------------------------------------------------------
+ * 6. Candidature
+ * ------------------------------------------------------------------------ */
+.iam-cert-apply {
+	padding-block: clamp(56px, 7vw, 104px);
+	background: var(--ckd-card);
+	scroll-margin-top: 90px;
+}
+.iam-cert-apply__grid {
+	display: grid;
+	grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+	gap: clamp(32px, 5vw, 72px);
+	align-items: start;
+}
+.iam-cert-apply__intro p {
+	color: var(--ckd-ink-soft);
+	font-size: 1.05rem;
+	line-height: 1.6;
+	margin: 0;
+	max-width: 46ch;
+}
+.iam-cert-apply__card {
+	background: #fff;
+	border: 1px solid var(--ckd-line);
+	border-radius: var(--ckd-radius);
+	padding: clamp(22px, 3vw, 40px);
+}
+.iam-cert-form-fallback {
+	color: var(--ckd-ink-soft);
+	font-size: 1rem;
+}
+.iam-cert-form-fallback .iam-cert-btn {
+	background: var(--ckd-accent);
+	border-color: var(--ckd-accent);
+	color: #fff;
+}
+
+.iam-cert-contact {
+	margin-top: 32px;
+	padding-top: 24px;
+	border-top: 1px solid var(--ckd-line);
+}
+.iam-cert-contact__title {
+	font-weight: 600;
+	color: var(--ckd-ink);
+	margin: 0 0 10px;
+	font-size: .95rem;
+}
+.iam-cert-contact__line {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin: 0 0 8px;
+	font-size: 1rem;
+}
+.iam-cert-contact__line a {
+	color: var(--ckd-accent);
+	font-weight: 600;
+	text-decoration: none;
+	word-break: break-word;
+}
+.iam-cert-contact__line a:hover {
+	text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+ * Barre d'action mobile
+ * ------------------------------------------------------------------------ */
+.iam-cert-stickybar {
+	display: none;
+}
+
+/* --------------------------------------------------------------------------
+ * Responsive
+ * ------------------------------------------------------------------------ */
+@media (max-width: 900px) {
+	.iam-cert-hero {
+		min-height: 0;
+	}
+	.iam-cert-hero__inner,
+	.iam-cert-band,
+	.iam-cert-apply__grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+	.iam-cert-hero__aside {
+		align-items: stretch;
+		gap: 28px;
+	}
+	.iam-cert-play {
+		flex-direction: row;
+		gap: 16px;
+	}
+	.iam-cert-play__circle {
+		width: 72px;
+	}
+	.iam-cert-hero__ctas {
+		max-width: none;
+	}
+	.iam-cert-band--media .iam-cert-band__media {
+		min-height: 260px;
+	}
+	.iam-acc {
+		min-height: 0;
+	}
+
+	.iam-cert-stickybar:not([hidden]) {
+		position: fixed;
+		inset: auto 0 0 0;
+		z-index: 60;
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		padding: 12px clamp(16px, 4vw, 24px) calc(12px + env(safe-area-inset-bottom, 0px));
+		background: var(--ckd-accent-fonce);
+		color: #fff;
+		box-shadow: 0 -8px 24px rgba(4, 20, 13, .25);
+		transform: translateY(110%);
+		transition: transform .3s ease;
+	}
+	.iam-cert-stickybar.is-shown {
+		transform: translateY(0);
+	}
+	.iam-cert-stickybar__title {
+		flex: 1;
+		min-width: 0;
+		font-weight: 600;
+		font-size: .95rem;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.iam-cert-stickybar .iam-cert-btn {
+		padding: 12px 22px;
+		font-size: .95rem;
+		flex: 0 0 auto;
+	}
+}
+
+@media (max-width: 560px) {
+	.iam-cert-single .iam-cert-btn {
+		width: 100%;
+	}
+	.iam-cert-stickybar .iam-cert-btn {
+		width: auto;
+	}
+	.iam-cert-downloads__btns {
+		flex-direction: column;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {

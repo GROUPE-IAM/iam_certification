@@ -2,7 +2,7 @@
 
 Plugin WordPress de gestion des **formations certifiantes** du Groupe IAM : custom post type, taxonomies, champs, shortcode de liste, page de détail (landing) et **intégration avec le plugin IAM Leads**.
 
-- **Version** : 1.0.0
+- **Version** : 1.1.0
 - **Prérequis** : WordPress 6.0+, PHP 7.4+
 - **Optionnel** : plugin **IAM Leads** (pour le formulaire de candidature embarqué)
 
@@ -45,7 +45,22 @@ Exemples :
 
 ### Page de détail
 
-Chaque certification a sa page (`/certifications/<slug>/`) : hero + bandeau KPIs + contenu + **formulaire de candidature embarqué** + contact direct. Le CTA de la carte y renvoie.
+Chaque certification a sa page (`/certifications/<slug>/`), organisée en bandes pleine largeur :
+
+| Bande | Contenu | Champs utilisés |
+|---|---|---|
+| 1. Hero | Image en fond avec voile vert, domaine, titre, accroche, puces (modules, heures, durée, format, niveau), bouton vidéo, boutons « Candidater » et « Prendre rendez-vous » | image mise en avant, accroche, vidéo, lien RDV, texte du bouton |
+| 2. Admission | À gauche « Conditions d'admission » + public ; à droite blocs dépliables colorés **Objectifs**, **Contenu de la formation** (modules), **Évaluation & certification** | prérequis, public, objectifs, programme, évaluation |
+| 3. Débouchés | Image à gauche, débouchés et outils à droite | image secondaire, débouchés, outils |
+| 4. Modalités | « Durée, rythme et modalités » + blocs **Durée de la formation** et **Coût et scolarité** | volume horaire, durée, rythme, format, niveau, coût |
+| 5. Téléchargements | Brochure et dossier de candidature | brochure, dossier |
+| 6. Candidature | Formulaire IAM Leads + contact direct | formulaire associé |
+
+**Tout bloc dont le champ est vide est masqué** : une fiche incomplète reste propre.
+Sur mobile, une barre « Candidater » apparaît en bas d'écran une fois le hero dépassé
+(et se cache quand le formulaire est visible). Les blocs dépliables sont accessibles au
+clavier et restent ouverts si JavaScript est désactivé. La vidéo s'ouvre dans une fenêtre
+et n'est chargée qu'au clic.
 
 ### Interface d'administration dédiée
 
@@ -54,14 +69,16 @@ Tout se fait **dans le plugin**, via le menu **Certifications** (pas l'éditeur 
 - **Ajouter / Modifier** : formulaire maison unique regroupant tous les champs.
 - **Domaines** / **Outils** : gestion des taxonomies.
 
-Champs du formulaire :
-- **Infos générales** : accroche (hero), volume horaire, durée (texte), niveau, format, public concerné, prérequis, évaluation & certification, texte du CTA, statut, mise en avant.
-- **Programme** : répéteur de **modules** (titre + leçons, une par ligne). Compteurs calculés automatiquement.
-- **Latéral** : domaine, outils (CSV), image mise en avant (médiathèque), formulaire IAM Leads associé.
+Le formulaire d'édition est un assistant en 5 étapes :
+1. **Infos générales** : titre, accroche, volume horaire, durée, rythme, niveau, format.
+2. **Contenu & public** : objectifs, conditions d'admission, public, débouchés, évaluation, coût et scolarité. Les champs « liste » se remplissent avec **une entrée par ligne**.
+3. **Programme** : répéteur de **modules** (titre + leçons, une par ligne). Compteurs calculés automatiquement.
+4. **Médias & liens** : vidéo (YouTube, Vimeo ou .mp4), image secondaire, brochure, dossier de candidature (boutons « Médiathèque »), lien de prise de RDV, texte du bouton principal.
+5. **Classement & publication** : domaine, outils (CSV), image mise en avant, formulaire IAM Leads associé, statut, mise en avant.
 
 Taxonomies : **Domaines** (catégories) et **Outils** (badges technos).
 
-La page de détail reprend la structure des fiches groupeiam.com : hero + puces (modules · leçons · heures · durée · niveau), grille de modules/leçons, évaluation, tableau récapitulatif, public, prérequis, outils, formulaire embarqué, contact direct. **Sans prix ni partenaire.**
+La page de détail reprend la structure des fiches groupeiam.com : hero + puces (modules · leçons · heures · durée · niveau), grille de modules/leçons, évaluation, tableau récapitulatif, public, prérequis, outils, formulaire embarqué, contact direct. Le bloc « Coût et scolarité » n'apparaît que s'il est rempli.
 
 ---
 
@@ -149,3 +166,18 @@ iam-certifications/
     ├── js/iam-front.js             Filtre + pont formulaire
     └── js/iam-admin.js             Répéteur de modules
 ```
+
+---
+
+## Journal des versions
+
+### 1.1.0
+- Nouvelle page de détail en bandes pleine largeur (hero sur image, blocs dépliables colorés, bande débouchés, bande modalités, bandeau de téléchargement).
+- Nouveaux champs : objectifs, débouchés, rythme, coût et scolarité, vidéo, image secondaire, brochure, dossier de candidature, lien de RDV.
+- Fenêtre vidéo (chargement au clic), barre « Candidater » sur mobile.
+- Admin : nouvelle étape « Médias & liens », sélecteur Médiathèque pour les fichiers, lien « Voir la page ».
+- Texte du bouton par défaut : « Candidater ».
+- Animations : une seule entrée orchestrée sur le hero (suppression des apparitions à chaque section).
+
+### 1.0.0
+- Version initiale.

@@ -36,6 +36,8 @@ class IAM_Cert_Assets {
 			return;
 		}
 
+		wp_enqueue_media();
+
 		wp_enqueue_style(
 			'iam-cert-admin',
 			IAM_CERT_URL . 'assets/css/iam-admin.css',

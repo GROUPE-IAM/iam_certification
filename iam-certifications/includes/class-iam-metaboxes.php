@@ -34,52 +34,146 @@ class IAM_Cert_Metaboxes {
 	 */
 	public static function fields() {
 		return array(
+			/* Étape 1 : Infos générales */
 			'_iam_hero'         => array(
 				'label' => __( 'Accroche (hero)', 'iam-certifications' ),
 				'type'  => 'textarea',
-				'desc'  => __( 'Phrase de présentation affichée sous le titre.', 'iam-certifications' ),
+				'step'  => 1,
+				'desc'  => __( 'Phrase de présentation affichée sous le titre, sur l’image du haut de page.', 'iam-certifications' ),
 			),
 			'_iam_duree_heures' => array(
 				'label' => __( 'Volume horaire (heures)', 'iam-certifications' ),
 				'type'  => 'number',
+				'step'  => 1,
 				'desc'  => __( 'Ex. 55', 'iam-certifications' ),
 			),
 			'_iam_duree_texte'  => array(
 				'label' => __( 'Durée (texte)', 'iam-certifications' ),
 				'type'  => 'text',
+				'step'  => 1,
 				'desc'  => __( 'Ex. « 11 semaines » ou « 3 jours (format atelier) ».', 'iam-certifications' ),
+			),
+			'_iam_rythme'       => array(
+				'label' => __( 'Rythme', 'iam-certifications' ),
+				'type'  => 'text',
+				'step'  => 1,
+				'desc'  => __( 'Ex. « 3 h par semaine, en soirée ». Affiché dans « Durée de la formation ».', 'iam-certifications' ),
 			),
 			'_iam_niveau'       => array(
 				'label' => __( 'Niveau', 'iam-certifications' ),
 				'type'  => 'text',
+				'step'  => 1,
 				'desc'  => __( 'Ex. débutant, intermédiaire, avancé.', 'iam-certifications' ),
 			),
 			'_iam_format'       => array(
 				'label' => __( 'Format', 'iam-certifications' ),
 				'type'  => 'text',
+				'step'  => 1,
 				'desc'  => __( 'Ex. « 100 % en ligne ».', 'iam-certifications' ),
+			),
+
+			/* Étape 2 : Contenu & public */
+			'_iam_objectifs'    => array(
+				'label' => __( 'Objectifs', 'iam-certifications' ),
+				'type'  => 'list',
+				'step'  => 2,
+				'desc'  => __( 'Un objectif par ligne. Affiché dans le bloc vert « Objectifs ». Laisser vide pour masquer.', 'iam-certifications' ),
+			),
+			'_iam_prerequis'    => array(
+				'label' => __( 'Conditions d’admission / prérequis', 'iam-certifications' ),
+				'type'  => 'list',
+				'step'  => 2,
+				'desc'  => __( 'Une condition par ligne (ex. « Avec ou sans le BAC »).', 'iam-certifications' ),
 			),
 			'_iam_public'       => array(
 				'label' => __( 'Public concerné', 'iam-certifications' ),
 				'type'  => 'textarea',
+				'step'  => 2,
 				'desc'  => __( 'À qui s’adresse la formation.', 'iam-certifications' ),
 			),
-			'_iam_prerequis'    => array(
-				'label' => __( 'Prérequis', 'iam-certifications' ),
-				'type'  => 'textarea',
-				'desc'  => __( 'Conditions d’accès recommandées.', 'iam-certifications' ),
+			'_iam_debouches'    => array(
+				'label' => __( 'Débouchés', 'iam-certifications' ),
+				'type'  => 'list',
+				'step'  => 2,
+				'desc'  => __( 'Un métier par ligne (ex. « Consultant Odoo »). Laisser vide pour masquer.', 'iam-certifications' ),
 			),
 			'_iam_evaluation'   => array(
 				'label' => __( 'Évaluation & certification', 'iam-certifications' ),
 				'type'  => 'textarea',
+				'step'  => 2,
 				'desc'  => __( 'Modalités d’évaluation et de délivrance du certificat.', 'iam-certifications' ),
 			),
+			'_iam_cout'         => array(
+				'label' => __( 'Coût et scolarité', 'iam-certifications' ),
+				'type'  => 'textarea',
+				'step'  => 2,
+				'desc'  => __( 'Optionnel : tarif, modalités de paiement, financement. Laisser vide pour masquer le bloc.', 'iam-certifications' ),
+			),
+
+			/* Étape 4 : Médias & liens */
+			'_iam_video_url'    => array(
+				'label' => __( 'Vidéo de présentation', 'iam-certifications' ),
+				'type'  => 'url',
+				'step'  => 4,
+				'desc'  => __( 'Lien YouTube, Vimeo ou fichier .mp4. Affiche le bouton « Voir la vidéo de présentation ».', 'iam-certifications' ),
+			),
+			'_iam_image2_url'   => array(
+				'label' => __( 'Image secondaire', 'iam-certifications' ),
+				'type'  => 'media',
+				'media' => 'image',
+				'step'  => 4,
+				'desc'  => __( 'Affichée à côté des débouchés. Par défaut : l’image mise en avant.', 'iam-certifications' ),
+			),
+			'_iam_brochure_url' => array(
+				'label' => __( 'Brochure (PDF)', 'iam-certifications' ),
+				'type'  => 'media',
+				'media' => 'application/pdf',
+				'step'  => 4,
+				'desc'  => __( 'Fichier proposé au téléchargement en bas de page.', 'iam-certifications' ),
+			),
+			'_iam_dossier_url'  => array(
+				'label' => __( 'Dossier de candidature', 'iam-certifications' ),
+				'type'  => 'media',
+				'media' => '',
+				'step'  => 4,
+				'desc'  => __( 'PDF ou Word à remplir, proposé au téléchargement.', 'iam-certifications' ),
+			),
+			'_iam_rdv_url'      => array(
+				'label' => __( 'Lien de prise de rendez-vous', 'iam-certifications' ),
+				'type'  => 'url',
+				'step'  => 4,
+				'desc'  => __( 'Ex. lien Calendly, Google Agenda ou WhatsApp. Affiche le bouton « Prendre rendez-vous ».', 'iam-certifications' ),
+			),
 			'_iam_cta_texte'    => array(
-				'label' => __( 'Texte du bouton (CTA)', 'iam-certifications' ),
+				'label' => __( 'Texte du bouton principal', 'iam-certifications' ),
 				'type'  => 'text',
-				'desc'  => __( 'Par défaut : « Demander une information ».', 'iam-certifications' ),
+				'step'  => 4,
+				'desc'  => __( 'Par défaut : « Candidater ».', 'iam-certifications' ),
 			),
 		);
+	}
+
+	/**
+	 * Nettoie une valeur brute selon le type du champ.
+	 *
+	 * @param mixed $raw  Valeur brute (déjà « unslashée »).
+	 * @param array $args Réglages du champ.
+	 * @return string
+	 */
+	public static function sanitize( $raw, $args ) {
+		$raw = is_string( $raw ) ? $raw : '';
+		switch ( $args['type'] ) {
+			case 'textarea':
+			case 'list':
+				return sanitize_textarea_field( $raw );
+			case 'number':
+				return '' === trim( $raw ) ? '' : (string) absint( $raw );
+			case 'url':
+			case 'media':
+				return esc_url_raw( trim( $raw ) );
+			default:
+				return sanitize_text_field( $raw );
+		}
 	}
 
 	/**
@@ -128,26 +222,7 @@ class IAM_Cert_Metaboxes {
 		echo '<div class="iam-cert-metabox">';
 
 		foreach ( self::fields() as $key => $args ) {
-			$value = get_post_meta( $post->ID, $key, true );
-			$id    = esc_attr( $key );
-			echo '<p class="iam-cert-row">';
-			printf( '<label for="%1$s"><strong>%2$s</strong></label>', $id, esc_html( $args['label'] ) );
-
-			if ( 'textarea' === $args['type'] ) {
-				printf( '<textarea id="%1$s" name="%1$s" rows="3" class="widefat">%2$s</textarea>', $id, esc_textarea( $value ) );
-			} else {
-				printf(
-					'<input type="%1$s" id="%2$s" name="%2$s" value="%3$s" class="widefat" />',
-					esc_attr( $args['type'] ),
-					$id,
-					esc_attr( $value )
-				);
-			}
-
-			if ( ! empty( $args['desc'] ) ) {
-				printf( '<span class="description">%s</span>', esc_html( $args['desc'] ) );
-			}
-			echo '</p>';
+			iam_cert_render_field_row( $key, $args, get_post_meta( $post->ID, $key, true ) );
 		}
 
 		$featured = get_post_meta( $post->ID, '_iam_featured', true );
@@ -280,14 +355,7 @@ class IAM_Cert_Metaboxes {
 			if ( ! isset( $_POST[ $key ] ) ) {
 				continue;
 			}
-			$raw = wp_unslash( $_POST[ $key ] );
-			if ( 'textarea' === $args['type'] ) {
-				$value = sanitize_textarea_field( $raw );
-			} elseif ( 'number' === $args['type'] ) {
-				$value = '' === $raw ? '' : (string) absint( $raw );
-			} else {
-				$value = sanitize_text_field( $raw );
-			}
+			$value = self::sanitize( wp_unslash( $_POST[ $key ] ), $args ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
 			update_post_meta( $post_id, $key, $value );
 		}
 
