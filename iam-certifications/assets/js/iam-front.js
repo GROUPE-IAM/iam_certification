@@ -254,8 +254,41 @@
 		}, { rootMargin: '0px 0px -20% 0px' }).observe(form);
 	}
 
+	/**
+	 * Les formulaires multi-étapes d'IAM Leads (< 1.5.3) font défiler la page
+	 * jusqu'au formulaire et y placent le focus dès le chargement. Sur la page
+	 * de détail, le visiteur doit arriver sur le hero : si le focus a été posé
+	 * dans le formulaire sans action de sa part (et sans ancre dans l'URL), on
+	 * le retire et on revient en haut.
+	 */
+	function guardInitialScroll() {
+		if (window.location.hash || !document.querySelector('.iam-lp')) {
+			return;
+		}
+		var touched = false;
+		['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (type) {
+			window.addEventListener(type, function () {
+				touched = true;
+			}, { once: true, passive: true });
+		});
+
+		function restore() {
+			var active = document.activeElement;
+			if (touched || !active || !active.closest || !active.closest('.iam-form-wrap')) {
+				return;
+			}
+			active.blur();
+			window.scrollTo({ top: 0, behavior: 'instant' });
+		}
+
+		[0, 150, 500].forEach(function (delay) {
+			window.setTimeout(restore, delay);
+		});
+	}
+
 	function init() {
 		document.querySelectorAll('.iam-cert').forEach(initFilters);
+		guardInitialScroll();
 		initFormBridge();
 		initSessions();
 		initPageNav();
