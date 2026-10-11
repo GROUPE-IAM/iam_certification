@@ -18,6 +18,7 @@ class IAM_Cert_Seeder {
 	const OPT_CONTENT = 'iam_cert_content_seeded';
 	const OPT_V12     = 'iam_cert_seed_v12';
 	const OPT_V13     = 'iam_cert_seed_v13';
+	const OPT_V131    = 'iam_cert_seed_v131';
 	const OPT_FORM    = 'iam_cert_default_form_id';
 
 	/**
@@ -43,6 +44,7 @@ class IAM_Cert_Seeder {
 		$this->seed_content();
 		$this->seed_v12();
 		$this->seed_v13();
+		$this->seed_v131();
 		$this->seed_form();
 	}
 
@@ -125,6 +127,18 @@ class IAM_Cert_Seeder {
 			return;
 		}
 
+		$this->apply_complements();
+
+		update_option( self::OPT_V13, 1 );
+	}
+
+	/**
+	 * Compléments des catalogues : « fill » si vide, « fix » si la valeur est
+	 * encore celle de l'import d'origine.
+	 *
+	 * @return void
+	 */
+	private function apply_complements() {
 		$data_file = IAM_CERT_PATH . 'includes/data/complements-v13.php';
 		$items     = file_exists( $data_file ) ? include $data_file : array();
 
@@ -144,8 +158,78 @@ class IAM_Cert_Seeder {
 				}
 			}
 		}
+	}
 
-		update_option( self::OPT_V13, 1 );
+	/**
+	 * v1.3.1 : réparation des fiches existantes restées incomplètes (créées
+	 * avant les imports, qui ne touchent pas une fiche déjà présente).
+	 * Chaque champ VIDE est rempli depuis les catalogues : méta, modules,
+	 * programme jour par jour, domaine, outils ; l'extrait suit l'accroche.
+	 * Rien de ce qui est déjà renseigné n'est modifié.
+	 *
+	 * @return void
+	 */
+	public function seed_v131() {
+		if ( get_option( self::OPT_V131 ) ) {
+			return;
+		}
+
+		$items = array();
+		foreach ( array( 'certifications-seed.php', 'seminaires-seed.php' ) as $file ) {
+			$path  = IAM_CERT_PATH . 'includes/data/' . $file;
+			$items = array_merge( $items, file_exists( $path ) ? (array) include $path : array() );
+		}
+
+		$alias = array( 'heures' => 'duree_heures' );
+
+		foreach ( $items as $c ) {
+			$post = get_page_by_path( $c['slug'], OBJECT, IAM_CERT_CPT );
+			if ( ! $post ) {
+				continue;
+			}
+			$id         = $post->ID;
+			$hero_avant = trim( (string) get_post_meta( $id, '_iam_hero', true ) );
+
+			foreach ( $c as $key => $value ) {
+				if ( in_array( $key, array( 'titre', 'slug', 'domaine', 'outils' ), true ) ) {
+					continue;
+				}
+				$meta    = '_iam_' . ( isset( $alias[ $key ] ) ? $alias[ $key ] : $key );
+				$current = get_post_meta( $id, $meta, true );
+				$vide    = is_array( $current ) ? ! $current : '' === trim( (string) $current );
+				if ( $vide && ( is_array( $value ) ? $value : '' !== trim( (string) $value ) ) ) {
+					update_post_meta( $id, $meta, $value );
+				}
+			}
+
+			if ( '' === get_post_meta( $id, '_iam_type', true ) ) {
+				update_post_meta( $id, '_iam_type', isset( $c['type'] ) ? $c['type'] : 'certificat' );
+			}
+
+			$terms = wp_get_object_terms( $id, IAM_CERT_TAX_DOMAINE, array( 'fields' => 'ids' ) );
+			if ( ! is_wp_error( $terms ) && ! $terms ) {
+				wp_set_object_terms( $id, $c['domaine'], IAM_CERT_TAX_DOMAINE, false );
+			}
+			$terms = wp_get_object_terms( $id, IAM_CERT_TAX_OUTIL, array( 'fields' => 'ids' ) );
+			if ( ! is_wp_error( $terms ) && ! $terms ) {
+				wp_set_object_terms( $id, $c['outils'], IAM_CERT_TAX_OUTIL, false );
+			}
+
+			// L'extrait (cartes du catalogue) suit l'accroche quand celle-ci vient d'être posée.
+			if ( '' === $hero_avant || '' === trim( $post->post_excerpt ) ) {
+				wp_update_post(
+					array(
+						'ID'           => $id,
+						'post_excerpt' => get_post_meta( $id, '_iam_hero', true ),
+					)
+				);
+			}
+		}
+
+		// Corrections et compléments des catalogues, après le remplissage.
+		$this->apply_complements();
+
+		update_option( self::OPT_V131, 1 );
 	}
 
 	/**

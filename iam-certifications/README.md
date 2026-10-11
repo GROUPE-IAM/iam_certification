@@ -192,7 +192,40 @@ iam-certifications/
 
 ---
 
+## Mises à jour automatiques (GitHub)
+
+Le plugin se met à jour depuis les **Releases** du dépôt
+[SofianeKOINDA/iam_certification](https://github.com/SofianeKOINDA/iam_certification)
+grâce à la bibliothèque *Plugin Update Checker* (`lib/plugin-update-checker`, licence MIT).
+
+**Publier une version**
+1. Monter la version dans `iam-certifications.php` (en-tête `Version:` **et** constante `IAM_CERT_VERSION`).
+2. Commiter, pousser, puis créer le tag correspondant :
+   ```
+   git tag v1.4.1
+   git push origin v1.4.1
+   ```
+3. La GitHub Action `.github/workflows/release.yml` vérifie que tag et version concordent,
+   contrôle la syntaxe PHP, construit `iam-certifications.zip` et publie la Release.
+
+**Côté WordPress**
+- Une fois la 1.4.0 installée (dernière installation manuelle), la mise à jour apparaît dans
+  *Extensions* comme pour tout plugin (vérification toutes les 12 h, ou « Vérifier les mises à jour »).
+- Activer « Activer les mises à jour auto » sur la ligne du plugin pour qu'elles s'installent seules.
+- Après une mise à jour, les imports de données éventuels s'exécutent au premier passage d'un
+  administrateur dans l'admin.
+- Dépôt passé en privé : ajouter dans `wp-config.php`
+  `define( 'IAM_CERT_GITHUB_TOKEN', 'ghp_…' );` (jeton en lecture seule).
+
 ## Journal des versions
+
+### 1.4.0
+- Mises à jour automatiques depuis les Releases GitHub (Plugin Update Checker 5.7) et publication automatisée par GitHub Action.
+
+### 1.3.1
+- **Réparation des données** (option `iam_cert_seed_v131`) : les fiches créées avant les imports restaient incomplètes en production (accroche, modules, format, niveau, domaine, outils…). Chaque champ **vide** est rempli depuis les catalogues, l'extrait des cartes suit l'accroche, puis les corrections 1.3 sont réappliquées. Rien de renseigné n'est modifié. S'exécute au premier chargement d'une page d'admin par un administrateur.
+- **Compatibilité thème Univet / Elementor** : titre du hero forcé en blanc, icônes SVG protégées du remplissage imposé par le thème, barre de navigation de la page placée sous le header du site quand il réapparaît au scroll.
+- **Animations** : utilisation de nos propres instances GSAP / ScrollTrigger (le thème charge d'autres versions de GSAP), filets de sécurité (hero, compteurs et apparitions au scroll toujours affichés dans leur état final).
 
 ### 1.3.0
 - Page de détail : direction « sobre + temps forts verts » (hero, programme, sessions / débouchés, candidature en vert ; accent `#EDA900`), formulaire IAM Leads aux couleurs IAM (surcharge CSS, IAM Leads inchangé), logo du Groupe IAM sur le diplôme (filtre `iam_cert_logo_url`).

@@ -699,8 +699,9 @@ body.admin-bar .iam-lp {
  * ================================================================== */
 .iam-lp-nav {
 	position: sticky;
-	top: var(--sticky-top);
+	top: calc(var(--sticky-top) + var(--site-header, 0px));
 	z-index: 40;
+	transition: top .3s ease;
 	border-bottom: 1px solid var(--line);
 	background: rgba(252, 250, 247, .9);
 	backdrop-filter: blur(14px) saturate(1.3);
@@ -2186,6 +2187,43 @@ body.admin-bar .iam-lp {
 	background: var(--accent);
 	color: var(--ink);
 	cursor: pointer;
+}
+
+/* ====================================================================
+ * Garde-fous face au thème (Univet / Elementor imposent couleurs des titres
+ * et remplissage des SVG) : on rétablit nos valeurs dans la page.
+ * ================================================================== */
+.iam-lp .iam-lp-hero .iam-lp-hero__title,
+.iam-lp .iam-lp-hero .iam-lp-hero__title .iam-w > span {
+	color: #fff !important;
+}
+
+.iam-lp .iam-lp-hero .iam-lp-hero__sub {
+	color: var(--accent-light) !important;
+}
+
+.iam-lp .iam-lp-sec--green .iam-lp-h2,
+.iam-lp .iam-lp-apply .iam-lp-h2 {
+	color: #fff !important;
+}
+
+.iam-lp .iam-lp-h2,
+.iam-lp .iam-lp-dl__title {
+	color: var(--green);
+}
+
+.iam-lp svg[fill="none"],
+.iam-lp svg[fill="none"] * {
+	fill: none !important;
+}
+
+.iam-lp svg[fill="currentColor"],
+.iam-lp svg[fill="currentColor"] * {
+	fill: currentColor !important;
+}
+
+.iam-lp svg[stroke="currentColor"] * {
+	stroke: currentColor;
 }
 
 /* ====================================================================

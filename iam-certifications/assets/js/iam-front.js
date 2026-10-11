@@ -103,8 +103,37 @@
 			return document.getElementById(a.getAttribute('href').slice(1));
 		});
 
+		/* Header du thème fixé en haut (ex. réapparition au scroll) : on décale
+		 * la barre pour qu'elle reste visible juste en dessous. */
+		function siteHeaderBottom() {
+			var x = Math.round(window.innerWidth / 2);
+			// Sous la barre d'admin WordPress si elle est là (déjà prise en compte en CSS).
+			var bar = document.getElementById('wpadminbar');
+			var top = bar && getComputedStyle(bar).position === 'fixed' ? bar.offsetHeight : 0;
+			var el = document.elementFromPoint(x, top + 2);
+			while (el && el !== document.body) {
+				if (page && page.contains(el)) {
+					return 0;
+				}
+				var pos = getComputedStyle(el).position;
+				if (pos === 'fixed' || pos === 'sticky') {
+					var r = el.getBoundingClientRect();
+					return r.top <= top + 1 && r.bottom > top && r.bottom < window.innerHeight / 3 ? Math.round(r.bottom - top) : 0;
+				}
+				el = el.parentElement;
+			}
+			return 0;
+		}
+
 		function update() {
 			ticking = false;
+			if (page) {
+				var offset = 0;
+				nav.style.visibility = 'hidden';
+				offset = siteHeaderBottom();
+				nav.style.visibility = '';
+				page.style.setProperty('--site-header', offset + 'px');
+			}
 			var navRect = nav.getBoundingClientRect();
 			var stuck = navRect.top <= parseFloat(getComputedStyle(nav).top) + 1;
 			nav.classList.toggle('is-stuck', stuck);

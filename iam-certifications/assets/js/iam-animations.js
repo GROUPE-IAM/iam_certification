@@ -7,12 +7,13 @@
 	'use strict';
 
 	var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-	if (reduce || !window.gsap) {
+	// Nos instances (mémorisées au chargement) plutôt que les globales, que le thème peut écraser.
+	var gsap = window.iamGsap || window.gsap;
+	var ST = window.iamScrollTrigger || window.ScrollTrigger;
+	if (reduce || !gsap) {
 		return;
 	}
 
-	var gsap = window.gsap;
-	var ST = window.ScrollTrigger;
 	var hasST = !!ST;
 	if (hasST) {
 		gsap.registerPlugin(ST);
@@ -50,7 +51,7 @@
 		var end = parseInt(el.getAttribute('data-iam-count'), 10) || 0;
 		var obj = { v: 0 };
 		el.textContent = '0';
-		return gsap.to(obj, {
+		var tween = gsap.to(obj, {
 			v: end,
 			duration: 1.6,
 			delay: delay || 0,
@@ -59,6 +60,14 @@
 				el.textContent = Math.round(obj.v);
 			}
 		});
+		// Filet de sécurité : la valeur finale s'affiche quoi qu'il arrive.
+		window.setTimeout(function () {
+			if (tween.progress() < 1) {
+				tween.progress(1);
+			}
+			el.textContent = end;
+		}, ((delay || 0) + 3) * 1000);
+		return tween;
 	}
 
 	/* ------------------------------------------------------------------
@@ -73,7 +82,20 @@
 			var q = function (sel) {
 				return hero.querySelectorAll(sel);
 			};
-			var tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+			var tl = gsap.timeline({
+				defaults: { ease: 'expo.out' },
+				// En fin d'entrée, on rend la main au CSS (survols, responsive).
+				onComplete: function () {
+					gsap.set(hero.querySelectorAll('.iam-lp-kpi, .iam-lp-kpi__icon, .iam-lp-kpi__title, .iam-lp-fiche, .iam-lp-fiche__row'), { clearProps: 'transform,opacity' });
+				}
+			});
+			// Filet de sécurité : si l'animation n'a pas pu se jouer (onglet en arrière-plan,
+			// conflit de scripts), le hero est affiché dans son état final.
+			window.setTimeout(function () {
+				if (tl.progress() < 1) {
+					tl.progress(1);
+				}
+			}, 4500);
 			if (q('.iam-lp-hero__img').length) {
 				tl.from(q('.iam-lp-hero__img'), { scale: 1.18, duration: 2.4, ease: 'power2.out' }, 0);
 			}
@@ -182,6 +204,35 @@
 			initTilt(page);
 			initMagnetic(page);
 		}
+
+		revealSafetyNet(page);
+	}
+
+	/* Filet de sécurité des apparitions au scroll : un élément visible à l'écran
+	 * mais resté transparent (déclencheur qui n'a pas fonctionné) est affiché. */
+	function revealSafetyNet(page) {
+		if (!('IntersectionObserver' in window)) {
+			page.classList.remove('is-animated');
+			return;
+		}
+		var items = $$('[data-iam-reveal], [data-iam-stagger] > *', page);
+		var io = new IntersectionObserver(function (entries) {
+			entries.forEach(function (entry) {
+				if (!entry.isIntersecting) {
+					return;
+				}
+				var el = entry.target;
+				io.unobserve(el);
+				window.setTimeout(function () {
+					if (parseFloat(getComputedStyle(el).opacity) < 0.05) {
+						gsap.set(el, { opacity: 1, clearProps: 'transform' });
+					}
+				}, 1600);
+			});
+		}, { threshold: 0.1 });
+		items.forEach(function (el) {
+			io.observe(el);
+		});
 	}
 
 	/* Inclinaison 3D au survol (fiche du hero, diplôme). */
