@@ -68,6 +68,13 @@ class IAM_Cert_Assets {
 			IAM_CERT_VERSION
 		);
 
+		wp_register_style(
+			'iam-cert-single',
+			IAM_CERT_URL . 'assets/css/iam-single.css',
+			array( 'iam-cert-front' ),
+			IAM_CERT_VERSION
+		);
+
 		wp_register_script(
 			'iam-cert-front',
 			IAM_CERT_URL . 'assets/js/iam-front.js',

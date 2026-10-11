@@ -16,6 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 class IAM_Cert_Seeder {
 
 	const OPT_CONTENT = 'iam_cert_content_seeded';
+	const OPT_V12     = 'iam_cert_seed_v12';
+	const OPT_V13     = 'iam_cert_seed_v13';
 	const OPT_FORM    = 'iam_cert_default_form_id';
 
 	/**
@@ -39,6 +41,8 @@ class IAM_Cert_Seeder {
 		}
 
 		$this->seed_content();
+		$this->seed_v12();
+		$this->seed_v13();
 		$this->seed_form();
 	}
 
@@ -66,45 +70,131 @@ class IAM_Cert_Seeder {
 		}
 
 		foreach ( $certifs as $ordre => $c ) {
-			// On évite les doublons si un article de même slug existe déjà.
-			if ( get_page_by_path( $c['slug'], OBJECT, IAM_CERT_CPT ) ) {
-				continue;
-			}
-
-			$post_id = wp_insert_post(
-				array(
-					'post_type'    => IAM_CERT_CPT,
-					'post_status'  => 'publish',
-					'post_title'   => $c['titre'],
-					'post_name'    => $c['slug'],
-					'post_content' => '',
-					'post_excerpt' => $c['hero'],
-					'menu_order'   => $ordre,
-				),
-				true
-			);
-
-			if ( is_wp_error( $post_id ) || ! $post_id ) {
-				continue;
-			}
-
-			// Taxonomies (les termes manquants sont créés automatiquement).
-			wp_set_object_terms( $post_id, $c['domaine'], IAM_CERT_TAX_DOMAINE, false );
-			wp_set_object_terms( $post_id, $c['outils'], IAM_CERT_TAX_OUTIL, false );
-
-			// Métadonnées.
-			update_post_meta( $post_id, '_iam_hero', $c['hero'] );
-			update_post_meta( $post_id, '_iam_duree_heures', $c['heures'] );
-			update_post_meta( $post_id, '_iam_duree_texte', $c['duree_texte'] );
-			update_post_meta( $post_id, '_iam_niveau', $c['niveau'] );
-			update_post_meta( $post_id, '_iam_format', $c['format'] );
-			update_post_meta( $post_id, '_iam_public', $c['public'] );
-			update_post_meta( $post_id, '_iam_prerequis', $c['prerequis'] );
-			update_post_meta( $post_id, '_iam_evaluation', $c['evaluation'] );
-			update_post_meta( $post_id, '_iam_modules', $c['modules'] );
+			$this->insert( $c, $ordre );
 		}
 
 		update_option( self::OPT_CONTENT, 1 );
+	}
+
+	/**
+	 * v1.2 : type « certificat » posé sur les fiches existantes, puis import
+	 * des séminaires et du certificat CEDLA.
+	 *
+	 * @return void
+	 */
+	public function seed_v12() {
+		if ( get_option( self::OPT_V12 ) ) {
+			return;
+		}
+
+		$existants = get_posts(
+			array(
+				'post_type'   => IAM_CERT_CPT,
+				'post_status' => 'any',
+				'numberposts' => -1,
+				'fields'      => 'ids',
+			)
+		);
+		foreach ( $existants as $post_id ) {
+			if ( '' === get_post_meta( $post_id, '_iam_type', true ) ) {
+				update_post_meta( $post_id, '_iam_type', 'certificat' );
+			}
+		}
+
+		$data_file = IAM_CERT_PATH . 'includes/data/seminaires-seed.php';
+		$items     = file_exists( $data_file ) ? include $data_file : array();
+		if ( is_array( $items ) ) {
+			$ordre = 100;
+			foreach ( $items as $c ) {
+				$this->insert( $c, $ordre++ );
+			}
+		}
+
+		update_option( self::OPT_V12, 1 );
+	}
+
+	/**
+	 * v1.3 : compléments tirés des catalogues (objectifs, projet final, rythme)
+	 * et corrections de l'import d'origine. Non destructif : un champ rempli ou
+	 * modifié à la main n'est jamais écrasé.
+	 *
+	 * @return void
+	 */
+	public function seed_v13() {
+		if ( get_option( self::OPT_V13 ) ) {
+			return;
+		}
+
+		$data_file = IAM_CERT_PATH . 'includes/data/complements-v13.php';
+		$items     = file_exists( $data_file ) ? include $data_file : array();
+
+		foreach ( (array) $items as $slug => $c ) {
+			$post = get_page_by_path( $slug, OBJECT, IAM_CERT_CPT );
+			if ( ! $post ) {
+				continue;
+			}
+			foreach ( isset( $c['fill'] ) ? $c['fill'] : array() as $key => $value ) {
+				if ( '' === trim( (string) get_post_meta( $post->ID, '_iam_' . $key, true ) ) ) {
+					update_post_meta( $post->ID, '_iam_' . $key, $value );
+				}
+			}
+			foreach ( isset( $c['fix'] ) ? $c['fix'] : array() as $key => $pair ) {
+				if ( get_post_meta( $post->ID, '_iam_' . $key, true ) === $pair[0] ) {
+					update_post_meta( $post->ID, '_iam_' . $key, $pair[1] );
+				}
+			}
+		}
+
+		update_option( self::OPT_V13, 1 );
+	}
+
+	/**
+	 * Crée une formation à partir d'une entrée de données (ignorée si le slug existe).
+	 * Toute clé hors titre/slug/domaine/outils devient une méta « _iam_<clé> ».
+	 *
+	 * @param array $c     Données.
+	 * @param int   $ordre Ordre d'affichage.
+	 * @return void
+	 */
+	private function insert( $c, $ordre ) {
+		if ( get_page_by_path( $c['slug'], OBJECT, IAM_CERT_CPT ) ) {
+			return;
+		}
+
+		$post_id = wp_insert_post(
+			array(
+				'post_type'    => IAM_CERT_CPT,
+				'post_status'  => 'publish',
+				'post_title'   => $c['titre'],
+				'post_name'    => $c['slug'],
+				'post_content' => '',
+				'post_excerpt' => $c['hero'],
+				'menu_order'   => $ordre,
+			),
+			true
+		);
+		if ( is_wp_error( $post_id ) || ! $post_id ) {
+			return;
+		}
+
+		// Taxonomies (les termes manquants sont créés automatiquement).
+		wp_set_object_terms( $post_id, $c['domaine'], IAM_CERT_TAX_DOMAINE, false );
+		wp_set_object_terms( $post_id, $c['outils'], IAM_CERT_TAX_OUTIL, false );
+
+		// Anciennes clés du premier jeu de données.
+		$alias = array(
+			'heures' => 'duree_heures',
+		);
+		foreach ( $c as $key => $value ) {
+			if ( in_array( $key, array( 'titre', 'slug', 'domaine', 'outils' ), true ) ) {
+				continue;
+			}
+			$meta = isset( $alias[ $key ] ) ? $alias[ $key ] : $key;
+			update_post_meta( $post_id, '_iam_' . $meta, $value );
+		}
+		if ( empty( $c['type'] ) ) {
+			update_post_meta( $post_id, '_iam_type', 'certificat' );
+		}
 	}
 
 	/* ---------------------------------------------------------------------

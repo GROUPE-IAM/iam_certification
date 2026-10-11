@@ -28,127 +28,242 @@ class IAM_Cert_Metaboxes {
 	}
 
 	/**
-	 * Champs simples : clé meta => réglages (type + libellé + aide).
+	 * Champs simples : clé meta => réglages.
+	 *
+	 * - step  : étape de l'assistant d'édition (1 à 5).
+	 * - scope : « both », « certificat » ou « seminaire » (champ masqué pour l'autre type).
+	 * - label / desc : libellés ; « labels » / « descs » les surchargent par type.
+	 * - required : obligatoire pour publier (dans la portée du champ).
 	 *
 	 * @return array
 	 */
 	public static function fields() {
 		return array(
-			/* Étape 1 : Infos générales */
-			'_iam_hero'         => array(
-				'label' => __( 'Accroche (hero)', 'iam-certifications' ),
-				'type'  => 'textarea',
-				'step'  => 1,
-				'desc'  => __( 'Phrase de présentation affichée sous le titre, sur l’image du haut de page.', 'iam-certifications' ),
-			),
-			'_iam_duree_heures' => array(
-				'label' => __( 'Volume horaire (heures)', 'iam-certifications' ),
-				'type'  => 'number',
-				'step'  => 1,
-				'desc'  => __( 'Ex. 55', 'iam-certifications' ),
-			),
-			'_iam_duree_texte'  => array(
-				'label' => __( 'Durée (texte)', 'iam-certifications' ),
-				'type'  => 'text',
-				'step'  => 1,
-				'desc'  => __( 'Ex. « 11 semaines » ou « 3 jours (format atelier) ».', 'iam-certifications' ),
-			),
-			'_iam_rythme'       => array(
-				'label' => __( 'Rythme', 'iam-certifications' ),
-				'type'  => 'text',
-				'step'  => 1,
-				'desc'  => __( 'Ex. « 3 h par semaine, en soirée ». Affiché dans « Durée de la formation ».', 'iam-certifications' ),
-			),
-			'_iam_niveau'       => array(
-				'label' => __( 'Niveau', 'iam-certifications' ),
-				'type'  => 'text',
-				'step'  => 1,
-				'desc'  => __( 'Ex. débutant, intermédiaire, avancé.', 'iam-certifications' ),
-			),
-			'_iam_format'       => array(
-				'label' => __( 'Format', 'iam-certifications' ),
-				'type'  => 'text',
-				'step'  => 1,
-				'desc'  => __( 'Ex. « 100 % en ligne ».', 'iam-certifications' ),
+			/* Type de formation (cartes de choix dans l'assistant, liste déroulante en metabox). */
+			'_iam_type'             => array(
+				'label'   => __( 'Type de formation', 'iam-certifications' ),
+				'type'    => 'select',
+				'options' => iam_cert_types(),
+				'step'    => 0,
 			),
 
-			/* Étape 2 : Contenu & public */
-			'_iam_objectifs'    => array(
-				'label' => __( 'Objectifs', 'iam-certifications' ),
-				'type'  => 'list',
-				'step'  => 2,
-				'desc'  => __( 'Un objectif par ligne. Affiché dans le bloc vert « Objectifs ». Laisser vide pour masquer.', 'iam-certifications' ),
-			),
-			'_iam_prerequis'    => array(
-				'label' => __( 'Conditions d’admission / prérequis', 'iam-certifications' ),
-				'type'  => 'list',
-				'step'  => 2,
-				'desc'  => __( 'Une condition par ligne (ex. « Avec ou sans le BAC »).', 'iam-certifications' ),
-			),
-			'_iam_public'       => array(
-				'label' => __( 'Public concerné', 'iam-certifications' ),
+			/* Étape 1 : Identité */
+			'_iam_hero'             => array(
+				'required'    => true,
+				'label' => __( 'Accroche', 'iam-certifications' ),
 				'type'  => 'textarea',
-				'step'  => 2,
-				'desc'  => __( 'À qui s’adresse la formation.', 'iam-certifications' ),
+				'step'  => 1,
+				'desc'  => __( 'Une ou deux phrases sous le titre, en haut de la page. Reprise sur la carte du catalogue.', 'iam-certifications' ),
+				'descs' => array(
+					'seminaire' => __( 'La promesse du séminaire en une phrase (ex. « Diviser par deux le temps de recrutement… »).', 'iam-certifications' ),
+				),
 			),
-			'_iam_debouches'    => array(
+
+			/* Étape 2 : Format */
+			'_iam_duree_texte'      => array(
+				'required'    => true,
+				'label'       => __( 'Durée', 'iam-certifications' ),
+				'type'        => 'text',
+				'step'        => 2,
+				'width'       => 'half',
+				'placeholder' => array(
+					'certificat' => __( '10 semaines', 'iam-certifications' ),
+					'seminaire'  => __( '3 jours', 'iam-certifications' ),
+				),
+			),
+			'_iam_duree_heures'     => array(
+				'required'    => true,
+				'label'       => __( 'Volume horaire (heures)', 'iam-certifications' ),
+				'type'        => 'number',
+				'step'        => 2,
+				'width'       => 'half',
+				'placeholder' => array(
+					'certificat' => '50',
+					'seminaire'  => '24',
+				),
+			),
+			'_iam_format'           => array(
+				'required'    => true,
+				'label'       => __( 'Format', 'iam-certifications' ),
+				'type'        => 'text',
+				'step'        => 2,
+				'width'       => 'half',
+				'placeholder' => array(
+					'certificat' => __( '100 % en ligne, coaching', 'iam-certifications' ),
+					'seminaire'  => __( 'Présentiel Dakar ou intra', 'iam-certifications' ),
+				),
+			),
+			'_iam_niveau'           => array(
+				'required'    => true,
+				'label'       => __( 'Niveau', 'iam-certifications' ),
+				'type'        => 'text',
+				'step'        => 2,
+				'width'       => 'half',
+				'scope'       => 'certificat',
+				'placeholder' => __( 'débutant, intermédiaire, avancé', 'iam-certifications' ),
+			),
+			'_iam_rythme'           => array(
+				'label'       => __( 'Rythme', 'iam-certifications' ),
+				'type'        => 'text',
+				'step'        => 2,
+				'scope'       => 'certificat',
+				'placeholder' => __( '5 h par semaine, à votre rythme', 'iam-certifications' ),
+			),
+			'_iam_participants_max' => array(
+				'required'    => true,
+				'label'       => __( 'Participants maximum', 'iam-certifications' ),
+				'type'        => 'number',
+				'step'        => 2,
+				'width'       => 'half',
+				'scope'       => 'seminaire',
+				'placeholder' => '16',
+			),
+			'_iam_pratique_pct'     => array(
+				'required'    => true,
+				'label'       => __( 'Part de pratique (%)', 'iam-certifications' ),
+				'type'        => 'number',
+				'step'        => 2,
+				'width'       => 'half',
+				'scope'       => 'seminaire',
+				'placeholder' => '70',
+				'desc'        => __( 'Affiché en jauge animée sur la page.', 'iam-certifications' ),
+			),
+			'_iam_horaires'         => array(
+				'required'    => true,
+				'label'       => __( 'Horaires', 'iam-certifications' ),
+				'type'        => 'text',
+				'step'        => 2,
+				'width'       => 'half',
+				'scope'       => 'seminaire',
+				'placeholder' => __( 'Matin 8h30 – 12h30 · Après-midi 14h – 17h30', 'iam-certifications' ),
+			),
+			'_iam_elearning'        => array(
+				'label'       => __( 'Suivi après le séminaire', 'iam-certifications' ),
+				'type'        => 'text',
+				'step'        => 2,
+				'width'       => 'half',
+				'scope'       => 'seminaire',
+				'placeholder' => __( 'Accès 3 mois à la plateforme eLearning (29 contenus)', 'iam-certifications' ),
+			),
+			'_iam_sessions'         => array(
+				'label'       => __( 'Prochaines sessions', 'iam-certifications' ),
+				'type'        => 'list',
+				'step'        => 2,
+				'scope'       => 'seminaire',
+				'placeholder' => __( "12-14 novembre 2026 | Dakar, campus IAM\n26-28 novembre 2026 | Dakar", 'iam-certifications' ),
+				'desc'        => __( 'Une session par ligne : « dates | lieu ». Vide = « sessions intra sur demande ».', 'iam-certifications' ),
+			),
+			'_iam_infos_pratiques'  => array(
+				'label'       => __( 'Informations pratiques', 'iam-certifications' ),
+				'type'        => 'list',
+				'step'        => 2,
+				'scope'       => 'seminaire',
+				'placeholder' => __( "Venir avec son ordinateur portable\nPauses café et déjeuner incluses\nFormation en français", 'iam-certifications' ),
+				'desc'        => __( 'Une information par ligne.', 'iam-certifications' ),
+			),
+
+			/* Étape 3 : Contenu & public */
+			'_iam_objectifs'        => array(
+				'required'    => true,
+				'label'  => __( 'Objectifs', 'iam-certifications' ),
+				'labels' => array( 'seminaire' => __( 'Objectifs pédagogiques', 'iam-certifications' ) ),
+				'type'   => 'list',
+				'step'   => 3,
+				'desc'   => __( 'Un objectif par ligne (idéalement 3 à 6). Affichés en cartes numérotées.', 'iam-certifications' ),
+			),
+			'_iam_public'           => array(
+				'required'    => true,
+				'label'  => __( 'Public concerné', 'iam-certifications' ),
+				'labels' => array( 'seminaire' => __( 'Public visé', 'iam-certifications' ) ),
+				'type'   => 'textarea',
+				'step'   => 3,
+				'desc'   => __( 'Les profils, séparés par des virgules.', 'iam-certifications' ),
+			),
+			'_iam_prerequis'        => array(
+				'required'    => true,
+				'label' => __( 'Prérequis / conditions d’admission', 'iam-certifications' ),
+				'type'  => 'list',
+				'step'  => 3,
+				'desc'  => __( 'Une condition par ligne.', 'iam-certifications' ),
+			),
+			'_iam_debouches'        => array(
 				'label' => __( 'Débouchés', 'iam-certifications' ),
 				'type'  => 'list',
-				'step'  => 2,
-				'desc'  => __( 'Un métier par ligne (ex. « Consultant Odoo »). Laisser vide pour masquer.', 'iam-certifications' ),
+				'step'  => 3,
+				'scope' => 'certificat',
+				'desc'  => __( 'Un métier par ligne. Laisser vide pour masquer.', 'iam-certifications' ),
 			),
-			'_iam_evaluation'   => array(
-				'label' => __( 'Évaluation & certification', 'iam-certifications' ),
+			'_iam_projet_final'     => array(
+				'label' => __( 'Projet final', 'iam-certifications' ),
 				'type'  => 'textarea',
-				'step'  => 2,
-				'desc'  => __( 'Modalités d’évaluation et de délivrance du certificat.', 'iam-certifications' ),
+				'step'  => 3,
+				'scope' => 'certificat',
+				'desc'  => __( 'Le livrable soutenu devant jury. Mis en avant à la fin du parcours.', 'iam-certifications' ),
 			),
-			'_iam_cout'         => array(
-				'label' => __( 'Coût et scolarité', 'iam-certifications' ),
+			'_iam_livrables'        => array(
+				'required'    => true,
+				'label' => __( 'Livrables', 'iam-certifications' ),
+				'type'  => 'list',
+				'step'  => 3,
+				'scope' => 'seminaire',
+				'desc'  => __( 'Ce que chaque participant emporte, un par ligne (ex. « Feuille de route personnalisée »).', 'iam-certifications' ),
+			),
+			'_iam_evaluation'       => array(
+				'required'    => true,
+				'label'  => __( 'Évaluation & certification', 'iam-certifications' ),
+				'labels' => array( 'seminaire' => __( 'Évaluation & attestation', 'iam-certifications' ) ),
+				'type'   => 'textarea',
+				'step'   => 3,
+				'desc'   => __( 'Modalités d’évaluation et de délivrance.', 'iam-certifications' ),
+			),
+			'_iam_cout'             => array(
+				'label' => __( 'Coût et financement', 'iam-certifications' ),
 				'type'  => 'textarea',
-				'step'  => 2,
-				'desc'  => __( 'Optionnel : tarif, modalités de paiement, financement. Laisser vide pour masquer le bloc.', 'iam-certifications' ),
+				'step'  => 3,
+				'desc'  => __( 'Optionnel. Laisser vide pour masquer le bloc.', 'iam-certifications' ),
 			),
 
-			/* Étape 4 : Médias & liens */
-			'_iam_video_url'    => array(
+			/* Étape 5 : Médias & liens */
+			'_iam_video_url'        => array(
 				'label' => __( 'Vidéo de présentation', 'iam-certifications' ),
 				'type'  => 'url',
-				'step'  => 4,
-				'desc'  => __( 'Lien YouTube, Vimeo ou fichier .mp4. Affiche le bouton « Voir la vidéo de présentation ».', 'iam-certifications' ),
+				'step'  => 5,
+				'desc'  => __( 'Lien YouTube, Vimeo ou fichier .mp4. Affiche le bouton « Voir la vidéo ».', 'iam-certifications' ),
 			),
-			'_iam_image2_url'   => array(
+			'_iam_image2_url'       => array(
 				'label' => __( 'Image secondaire', 'iam-certifications' ),
 				'type'  => 'media',
 				'media' => 'image',
-				'step'  => 4,
-				'desc'  => __( 'Affichée à côté des débouchés. Par défaut : l’image mise en avant.', 'iam-certifications' ),
+				'step'  => 5,
+				'desc'  => __( 'Affichée dans la section « Pour qui ». Par défaut : l’image principale.', 'iam-certifications' ),
 			),
-			'_iam_brochure_url' => array(
+			'_iam_brochure_url'     => array(
 				'label' => __( 'Brochure (PDF)', 'iam-certifications' ),
 				'type'  => 'media',
 				'media' => 'application/pdf',
-				'step'  => 4,
-				'desc'  => __( 'Fichier proposé au téléchargement en bas de page.', 'iam-certifications' ),
+				'step'  => 5,
 			),
-			'_iam_dossier_url'  => array(
-				'label' => __( 'Dossier de candidature', 'iam-certifications' ),
-				'type'  => 'media',
-				'media' => '',
-				'step'  => 4,
-				'desc'  => __( 'PDF ou Word à remplir, proposé au téléchargement.', 'iam-certifications' ),
+			'_iam_dossier_url'      => array(
+				'label'  => __( 'Dossier de candidature', 'iam-certifications' ),
+				'labels' => array( 'seminaire' => __( 'Bulletin d’inscription', 'iam-certifications' ) ),
+				'type'   => 'media',
+				'media'  => '',
+				'step'   => 5,
 			),
-			'_iam_rdv_url'      => array(
+			'_iam_rdv_url'          => array(
 				'label' => __( 'Lien de prise de rendez-vous', 'iam-certifications' ),
 				'type'  => 'url',
-				'step'  => 4,
-				'desc'  => __( 'Ex. lien Calendly, Google Agenda ou WhatsApp. Affiche le bouton « Prendre rendez-vous ».', 'iam-certifications' ),
+				'step'  => 5,
+				'desc'  => __( 'Calendly, Google Agenda ou WhatsApp. Affiche « Prendre rendez-vous ».', 'iam-certifications' ),
 			),
-			'_iam_cta_texte'    => array(
-				'label' => __( 'Texte du bouton principal', 'iam-certifications' ),
-				'type'  => 'text',
-				'step'  => 4,
-				'desc'  => __( 'Par défaut : « Candidater ».', 'iam-certifications' ),
+			'_iam_cta_texte'        => array(
+				'label'       => __( 'Texte du bouton principal', 'iam-certifications' ),
+				'type'        => 'text',
+				'step'        => 5,
+				'placeholder' => array(
+					'certificat' => __( 'Candidater', 'iam-certifications' ),
+					'seminaire'  => __( 'Réserver ma place', 'iam-certifications' ),
+				),
 			),
 		);
 	}
@@ -171,6 +286,8 @@ class IAM_Cert_Metaboxes {
 			case 'url':
 			case 'media':
 				return esc_url_raw( trim( $raw ) );
+			case 'select':
+				return isset( $args['options'][ $raw ] ) ? $raw : (string) key( $args['options'] );
 			default:
 				return sanitize_text_field( $raw );
 		}

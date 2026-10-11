@@ -1,6 +1,6 @@
 # IAM Certifications
 
-Plugin WordPress de gestion des **formations certifiantes** du Groupe IAM : custom post type, taxonomies, champs, shortcode de liste, page de détail (landing) et **intégration avec le plugin IAM Leads**.
+Plugin WordPress de gestion du **catalogue de formations** du Groupe IAM — **certificats professionnels** (parcours de 6 à 12 semaines) et **séminaires intensifs** (3 jours en présentiel ou intra) : custom post type, taxonomies, champs, shortcode de liste, page de détail (landing) et **intégration avec le plugin IAM Leads**.
 
 - **Version** : 1.1.0
 - **Prérequis** : WordPress 6.0+, PHP 7.4+
@@ -26,6 +26,7 @@ Plugin WordPress de gestion des **formations certifiantes** du Groupe IAM : cust
 
 | Attribut | Rôle | Défaut |
 |---|---|---|
+| `type` | `certificat` ou `seminaire` (vide = tous) | — |
 | `columns` | colonnes grand écran (1–4) | `3` |
 | `domaine` | slug(s) de domaine, séparés par des virgules | — |
 | `outil` | slug(s) d'outil | — |
@@ -41,44 +42,60 @@ Exemples :
 [iam_certifications group_by_domaine="true"]
 [iam_certifications domaine="marketing-digital" columns="4"]
 [iam_certifications featured="true" limit="3"]
+[iam_certifications type="seminaire" group_by_domaine="true"]
+[iam_certifications type="certificat" filters="true"]
 ```
+
+### Deux types de formation
+
+Chaque formation est soit un **certificat**, soit un **séminaire**. Le type se choisit en
+première étape de l'assistant (cartes de choix) ; les champs, les libellés et la page de
+détail s'adaptent. Les fiches créées avant la v1.2 sont des certificats.
+
+| | Certificat professionnel | Séminaire intensif |
+|---|---|---|
+| Chiffres clés du hero | heures, semaines, modules, leçons | jours, heures, % de pratique, participants max |
+| Programme | **frise de modules** qui se remplit au scroll, leçons dépliables, projet final mis en avant | **jour par jour** (J1, J2, J3…), matin / après-midi |
+| Format | format, durée, rythme, niveau | jauge animée « % de pratique », groupe, horaires, suivi eLearning, infos pratiques |
+| Fin de parcours | débouchés (métiers) + certificat délivré | livrables + attestation de réussite |
+| Spécifique | — | **sessions datées** en cartes « billet » (+ carte intra) ; la session cliquée est transmise avec le lead |
+| Bouton principal | « Candidater » | « Réserver ma place » |
 
 ### Page de détail
 
-Chaque certification a sa page (`/certifications/<slug>/`), organisée en bandes pleine largeur :
+Chaque formation a sa page (`/certifications/<slug>/`) :
 
-| Bande | Contenu | Champs utilisés |
-|---|---|---|
-| 1. Hero | Image en fond avec voile vert, domaine, titre, accroche, puces (modules, heures, durée, format, niveau), bouton vidéo, boutons « Candidater » et « Prendre rendez-vous » | image mise en avant, accroche, vidéo, lien RDV, texte du bouton |
-| 2. Admission | À gauche « Conditions d'admission » + public ; à droite blocs dépliables colorés **Objectifs**, **Contenu de la formation** (modules), **Évaluation & certification** | prérequis, public, objectifs, programme, évaluation |
-| 3. Débouchés | Image à gauche, débouchés et outils à droite | image secondaire, débouchés, outils |
-| 4. Modalités | « Durée, rythme et modalités » + blocs **Durée de la formation** et **Coût et scolarité** | volume horaire, durée, rythme, format, niveau, coût |
-| 5. Téléchargements | Brochure et dossier de candidature | brochure, dossier |
-| 6. Candidature | Formulaire IAM Leads + contact direct | formulaire associé |
+1. **Hero** plein écran : fil d'Ariane, type, titre révélé mot à mot (un titre « X — sous-titre »
+   est séparé en deux), accroche, boutons, fiche « En bref » en verre dépoli (inclinaison 3D au
+   survol), chiffres clés avec compteurs animés.
+2. **Bandeau d'outils** défilant (taxonomie Outils).
+3. **Navigation collante** : section active surlignée, barre de progression de lecture,
+   bouton d'action affiché une fois la barre collée.
+4. Sections (masquées si vides) : objectifs en cartes numérotées, programme, format, pour qui
+   (public en puces + prérequis), sessions, débouchés, certificat / livrables (diplôme 3D).
+5. Téléchargements, **candidature** (formulaire IAM Leads + contact direct), formations proches.
+6. Mobile : barre d'action flottante en bas d'écran.
 
-**Tout bloc dont le champ est vide est masqué** : une fiche incomplète reste propre.
-Sur mobile, une barre « Candidater » apparaît en bas d'écran une fois le hero dépassé
-(et se cache quand le formulaire est visible). Les blocs dépliables sont accessibles au
-clavier et restent ouverts si JavaScript est désactivé. La vidéo s'ouvre dans une fenêtre
-et n'est chargée qu'au clic.
+Animations GSAP + ScrollTrigger (bundlés en local). Avec `prefers-reduced-motion` ou sans
+JavaScript, tout le contenu reste visible et statique.
 
 ### Interface d'administration dédiée
 
-Tout se fait **dans le plugin**, via le menu **Certifications** (pas l'éditeur WordPress) :
-- **Toutes les certifications** : liste avec titre, domaine, durée, modules, statut, actions.
-- **Ajouter / Modifier** : formulaire maison unique regroupant tous les champs.
-- **Domaines** / **Outils** : gestion des taxonomies.
+Menu **Formations** : **Catalogue** (liste filtrable Tout / Certificats / Séminaires, boutons
+« Nouveau certificat » et « Nouveau séminaire »), **Ajouter**, **Domaines**, **Outils**.
 
-Le formulaire d'édition est un assistant en 5 étapes :
-1. **Infos générales** : titre, accroche, volume horaire, durée, rythme, niveau, format.
-2. **Contenu & public** : objectifs, conditions d'admission, public, débouchés, évaluation, coût et scolarité. Les champs « liste » se remplissent avec **une entrée par ligne**.
-3. **Programme** : répéteur de **modules** (titre + leçons, une par ligne). Compteurs calculés automatiquement.
-4. **Médias & liens** : vidéo (YouTube, Vimeo ou .mp4), image secondaire, brochure, dossier de candidature (boutons « Médiathèque »), lien de prise de RDV, texte du bouton principal.
-5. **Classement & publication** : domaine, outils (CSV), image mise en avant, formulaire IAM Leads associé, statut, mise en avant.
+L'assistant de saisie (inspiré des formulaires de création de ticket-place) compte 6 étapes,
+avec stepper, barre de progression et « Ensuite : … » :
 
-Taxonomies : **Domaines** (catégories) et **Outils** (badges technos).
+1. **Identité** : type (cartes), titre, accroche, domaine / collection, visuel (zone de dépôt).
+2. **Format & durée** / **Format & sessions** : chiffres clés ; pour un séminaire, horaires, suivi, sessions (« dates | lieu », une par ligne) et infos pratiques.
+3. **Contenu & public** : objectifs, public, prérequis, puis débouchés + projet final (certificat) ou livrables (séminaire), évaluation, coût.
+4. **Modules** (répéteur titre + leçons) ou **Jour par jour** (répéteur J1, J2… matin / après-midi, 3 jours préparés).
+5. **Médias & liens** : vidéo, image secondaire, brochure, dossier / bulletin, rendez-vous, texte du bouton.
+6. **Publication** : outils, formulaire IAM Leads, mise en avant, check-list de vérification.
 
-La page de détail reprend la structure des fiches groupeiam.com : hero + puces (modules · leçons · heures · durée · niveau), grille de modules/leçons, évaluation, tableau récapitulatif, public, prérequis, outils, formulaire embarqué, contact direct. Le bloc « Coût et scolarité » n'apparaît que s'il est rempli.
+Seul le titre est obligatoire. « Brouillon » enregistre à tout moment ; après
+enregistrement, l'assistant rouvre l'étape où l'on était.
 
 ---
 
@@ -126,6 +143,12 @@ Copier un template dans le thème pour le personnaliser :
 
 ## Contenu pré-rempli
 
+**v1.2** ajoute les **8 séminaires** du catalogue 2026-2027 (collections « Talents × IA » et
+« Marketing Digital & IA » : programme J1–J3, objectifs, public, prérequis, livrables) et le
+certificat **CEDLA** (`includes/data/seminaires-seed.php`), sans prix ni partenaire. Les
+sessions ne sont pas datées (à saisir dans l'admin). Import idempotent (option
+`iam_cert_seed_v12`) ; les fiches existantes reçoivent le type « certificat ».
+
 Les 8 certifications sont **pré-remplies à partir du contenu réel** des fiches
 `/certification/` de groupeiam.com (accroche, modules, leçons, niveau, format, public,
 prérequis, évaluation, outils), **sans le prix ni le partenaire**.
@@ -170,6 +193,17 @@ iam-certifications/
 ---
 
 ## Journal des versions
+
+### 1.3.0
+- Page de détail : direction « sobre + temps forts verts » (hero, programme, sessions / débouchés, candidature en vert ; accent `#EDA900`), formulaire IAM Leads aux couleurs IAM (surcharge CSS, IAM Leads inchangé), logo du Groupe IAM sur le diplôme (filtre `iam_cert_logo_url`).
+- Admin : écrans centrés, écrans maison **Domaines** et **Outils** (les écrans natifs redirigent), champs obligatoires pour publier (contrôle navigateur + serveur ; une fiche déjà en ligne n'est jamais dépubliée).
+- Données : compléments tirés des catalogues PDF (`includes/data/complements-v13.php`, option `iam_cert_seed_v13`) — objectifs et projet final des 9 certificats, rythme, corrections Knowledge Management RH (format atelier, mention tarifaire retirée), ADAPT-IA (blended, 10 à 12 semaines). Non destructif : seuls les champs vides ou encore identiques à l'import d'origine sont touchés.
+
+### 1.2.0
+- Deux types de formation : **certificat** et **séminaire** (méta `_iam_type`), champs propres à chaque type.
+- Nouvelle page de détail (hero animé, compteurs, frise de modules, programme jour par jour, sessions, diplôme 3D, navigation collante).
+- Nouvel assistant d'administration en 6 étapes et nouvelle liste du catalogue.
+- Import des 8 séminaires et du certificat CEDLA ; shortcode : attribut `type`.
 
 ### 1.1.0
 - Nouvelle page de détail en bandes pleine largeur (hero sur image, blocs dépliables colorés, bande débouchés, bande modalités, bandeau de téléchargement).

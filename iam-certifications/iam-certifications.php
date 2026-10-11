@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       IAM Certifications
  * Plugin URI:        https://groupeiam.com/
- * Description:        Gestion des certifications / formations certifiantes du Groupe IAM : custom post type, taxonomies, champs, shortcode [iam_certifications] et page de détail.
- * Version:           1.1.0
+ * Description:        Catalogue de formations du Groupe IAM : certificats professionnels et séminaires intensifs (custom post type, taxonomies, assistant de saisie, shortcode [iam_certifications] et page de détail).
+ * Version:           1.3.0
  * Author:            Groupe IAM
  * Author URI:        https://groupeiam.com/
  * License:           GPL-2.0-or-later
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // -----------------------------------------------------------------------------
 // Constantes du plugin.
 // -----------------------------------------------------------------------------
-define( 'IAM_CERT_VERSION', '1.1.0' );
+define( 'IAM_CERT_VERSION', '1.3.0' );
 define( 'IAM_CERT_FILE', __FILE__ );
 define( 'IAM_CERT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'IAM_CERT_URL', plugin_dir_url( __FILE__ ) );
