@@ -92,29 +92,48 @@ while ( have_posts() ) :
 	/* ---------------------------------------------------------------
 	 * Chiffres clés (compteurs animés)
 	 * ------------------------------------------------------------- */
+	// Carte : icône, titre, nombre animé (0 = pas de compteur) et texte qui suit.
+	$kpi  = function ( $icon, $title, $num, $after ) {
+		return array(
+			'icon'  => $icon,
+			'title' => $title,
+			'num'   => (int) $num,
+			'after' => $after,
+		);
+	};
 	$kpis = array();
 	if ( $is_sem ) {
 		$nb_jours = count( $jours ) ? count( $jours ) : $nombre( $duree );
-		$kpis[]   = array( $nb_jours, '', _n( 'jour intensif', 'jours intensifs', max( 1, $nb_jours ), 'iam-certifications' ) );
-		$kpis[]   = array( (int) $heures, 'h', __( 'en présentiel', 'iam-certifications' ) );
-		$kpis[]   = array( $pratique, '%', __( 'de pratique en atelier', 'iam-certifications' ) );
-		$kpis[]   = array( $places, '', __( 'participants maximum', 'iam-certifications' ) );
+		$kpis[]   = $kpi( 'calendar', __( 'Durée', 'iam-certifications' ), $nb_jours, ' ' . _n( 'jour', 'jours', max( 1, $nb_jours ), 'iam-certifications' ) );
+		$kpis[]   = $kpi( 'clock', __( 'Volume', 'iam-certifications' ), $heures, ' ' . __( 'heures', 'iam-certifications' ) );
+		$kpis[]   = $kpi( 'target', __( 'Pratique', 'iam-certifications' ), $pratique, ' % ' . __( 'ateliers', 'iam-certifications' ) );
+		$kpis[]   = $kpi( 'users', __( 'Groupe', 'iam-certifications' ), $places, ' ' . __( 'places max.', 'iam-certifications' ) );
 	} else {
-		$kpis[] = array( (int) $heures, 'h', __( 'de formation encadrée', 'iam-certifications' ) );
-		// « 10 semaines » → 10 + « semaines » ; « 10 à 12 semaines » → 10 + « –12 » + « semaines ».
+		// « 10 semaines » → 10 + « semaines » ; « 10 à 12 semaines » → 10 + « –12 semaines ».
 		if ( preg_match( '/^\s*(\d+)\s*(?:à|-|–)\s*(\d+)\s*(.*)$/u', $duree, $rg ) ) {
-			$kpis[] = array( (int) $rg[1], '–' . $rg[2], $rg[3] );
-		} else {
-			$kpis[] = array( $nombre( $duree ), '', preg_replace( '/^\s*\d+\s*/u', '', $duree ) );
+			$kpis[] = $kpi( 'calendar', __( 'Durée', 'iam-certifications' ), $rg[1], '–' . $rg[2] . ' ' . $rg[3] );
+		} elseif ( $nombre( $duree ) ) {
+			$kpis[] = $kpi( 'calendar', __( 'Durée', 'iam-certifications' ), $nombre( $duree ), ' ' . preg_replace( '/^\s*\d+\s*/u', '', $duree ) );
+		} elseif ( $duree ) {
+			$kpis[] = $kpi( 'calendar', __( 'Durée', 'iam-certifications' ), 0, $duree );
 		}
-		$kpis[] = array( $counts['modules'], '', _n( 'module', 'modules', max( 1, $counts['modules'] ), 'iam-certifications' ) );
-		$kpis[] = array( $counts['lecons'], '', _n( 'leçon', 'leçons', max( 1, $counts['lecons'] ), 'iam-certifications' ) );
+		$kpis[] = $kpi( 'clock', __( 'Volume', 'iam-certifications' ), $heures, ' ' . __( 'heures', 'iam-certifications' ) );
+		$kpis[] = $kpi(
+			'layers',
+			__( 'Programme', 'iam-certifications' ),
+			$counts['modules'],
+			' ' . _n( 'module', 'modules', max( 1, $counts['modules'] ), 'iam-certifications' )
+		);
+		$kpis[] = $niveau
+			? $kpi( 'gauge', __( 'Niveau', 'iam-certifications' ), 0, ucfirst( $niveau ) )
+			: $kpi( 'monitor', __( 'Format', 'iam-certifications' ), 0, $format );
 	}
+	// Une carte à compteur sans nombre (unité seule, « heures ») ou un texte vide est retiré.
 	$kpis = array_values(
 		array_filter(
 			$kpis,
 			function ( $k ) {
-				return $k[0] > 0 && '' !== trim( $k[2] );
+				return $k['num'] > 0 || ( '' !== trim( $k['after'] ) && ! preg_match( '/^[\s–]/u', $k['after'] ) );
 			}
 		)
 	);
@@ -273,8 +292,17 @@ while ( have_posts() ) :
 					<ul class="iam-lp-kpis" style="--n:<?php echo (int) count( $kpis ); ?>">
 						<?php foreach ( $kpis as $k ) : ?>
 							<li class="iam-lp-kpi">
-								<span class="iam-lp-kpi__value"><span data-iam-count="<?php echo (int) $k[0]; ?>"><?php echo (int) $k[0]; ?></span><?php echo esc_html( $k[1] ); ?></span>
-								<span class="iam-lp-kpi__label"><?php echo esc_html( $k[2] ); ?></span>
+								<span class="iam-lp-kpi__icon" aria-hidden="true"><?php echo iam_cert_icon( $k['icon'] ); // phpcs:ignore ?></span>
+								<span class="iam-lp-kpi__body">
+									<span class="iam-lp-kpi__title"><?php echo esc_html( $k['title'] ); ?></span>
+									<span class="iam-lp-kpi__value">
+										<?php if ( $k['num'] ) : ?>
+											<span class="iam-lp-kpi__num" data-iam-count="<?php echo (int) $k['num']; ?>"><?php echo (int) $k['num']; ?></span><?php echo esc_html( $k['after'] ); ?>
+										<?php else : ?>
+											<?php echo esc_html( $k['after'] ); ?>
+										<?php endif; ?>
+									</span>
+								</span>
 							</li>
 						<?php endforeach; ?>
 					</ul>

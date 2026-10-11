@@ -84,10 +84,13 @@
 				.from(q('.iam-lp-hero__ctas > *'), { opacity: 0, y: 18, duration: 0.8, stagger: 0.1 }, 0.75)
 				.from(q('.iam-lp-fiche'), { opacity: 0, y: 50, rotateX: -12, duration: 1.2 }, 0.5)
 				.from(q('.iam-lp-fiche__row'), { opacity: 0, x: 18, duration: 0.6, stagger: 0.06 }, 0.85)
-				.from(q('.iam-lp-kpi'), { opacity: 0, y: 26, duration: 0.8, stagger: 0.1 }, 0.9);
+				.from(q('.iam-lp-kpi'), { opacity: 0, y: 46, scale: 0.96, duration: 0.9, stagger: 0.12 }, 0.85)
+				.from(q('.iam-lp-kpi__icon'), { scale: 0, rotate: -60, duration: 0.8, ease: 'back.out(2.2)', stagger: 0.12 }, 1.05)
+				.from(q('.iam-lp-kpi__title'), { opacity: 0, x: -14, duration: 0.6, stagger: 0.12 }, 1.15)
+				.fromTo(q('.iam-lp-kpi'), { '--stripes': '60px' }, { '--stripes': '0px', duration: 1.1, stagger: 0.12 }, 1.1);
 
 			$$('.iam-lp-kpi [data-iam-count]', hero).forEach(function (el, i) {
-				countUp(el, 1 + i * 0.1);
+				countUp(el, 1.1 + i * 0.12);
 			});
 
 			// Parallaxe douce du fond pendant le défilement.
