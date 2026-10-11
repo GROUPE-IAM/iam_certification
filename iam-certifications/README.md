@@ -219,6 +219,9 @@ grâce à la bibliothèque *Plugin Update Checker* (`lib/plugin-update-checker`,
 
 ## Journal des versions
 
+### 1.4.2
+- Version de test de la chaîne de mises à jour automatiques (aucun changement fonctionnel).
+
 ### 1.4.1
 - La page de détail s'ouvre sur le hero : le formulaire IAM Leads multi-étapes (< 1.5.3) faisait défiler la page jusqu'à lui et y plaçait le focus dès le chargement. Garde-fou côté plugin (sans effet avec IAM Leads 1.5.3, qui corrige la cause).
 
