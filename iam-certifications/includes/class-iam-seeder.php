@@ -19,6 +19,7 @@ class IAM_Cert_Seeder {
 	const OPT_V12     = 'iam_cert_seed_v12';
 	const OPT_V13     = 'iam_cert_seed_v13';
 	const OPT_V131    = 'iam_cert_seed_v131';
+	const OPT_V15     = 'iam_cert_seed_v15';
 	const OPT_FORM    = 'iam_cert_default_form_id';
 
 	/**
@@ -45,6 +46,7 @@ class IAM_Cert_Seeder {
 		$this->seed_v12();
 		$this->seed_v13();
 		$this->seed_v131();
+		$this->seed_v15();
 		$this->seed_form();
 	}
 
@@ -230,6 +232,71 @@ class IAM_Cert_Seeder {
 		$this->apply_complements();
 
 		update_option( self::OPT_V131, 1 );
+	}
+
+	/**
+	 * v1.5 : visuel principal des formations. Les photos sont livrées dans
+	 * assets/img/formations/<slug>.jpg (Unsplash, licence libre). Chacune est
+	 * ajoutée à la médiathèque et posée comme image mise en avant, seulement
+	 * si la fiche n'en a pas : un visuel choisi à la main n'est jamais remplacé.
+	 * En cas d'échec d'un import, l'option n'est pas posée et la passe est
+	 * retentée au chargement suivant de l'admin.
+	 *
+	 * @return void
+	 */
+	public function seed_v15() {
+		if ( get_option( self::OPT_V15 ) ) {
+			return;
+		}
+
+		$images = glob( IAM_CERT_PATH . 'assets/img/formations/*.jpg' );
+		if ( ! $images ) {
+			update_option( self::OPT_V15, 1 );
+			return;
+		}
+
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		require_once ABSPATH . 'wp-admin/includes/media.php';
+		require_once ABSPATH . 'wp-admin/includes/image.php';
+
+		$echec = false;
+
+		foreach ( $images as $source ) {
+			$slug = basename( $source, '.jpg' );
+			$post = get_page_by_path( $slug, OBJECT, IAM_CERT_CPT );
+			if ( ! $post || has_post_thumbnail( $post ) ) {
+				continue;
+			}
+
+			// media_handle_sideload() déplace le fichier : on lui confie une copie.
+			$copie = wp_tempnam( $slug . '.jpg' );
+			if ( ! $copie || ! copy( $source, $copie ) ) {
+				$echec = true;
+				continue;
+			}
+
+			$piece = media_handle_sideload(
+				array(
+					'name'     => $slug . '.jpg',
+					'tmp_name' => $copie,
+				),
+				$post->ID,
+				get_the_title( $post )
+			);
+
+			if ( is_wp_error( $piece ) ) {
+				wp_delete_file( $copie );
+				$echec = true;
+				continue;
+			}
+
+			update_post_meta( $piece, '_wp_attachment_image_alt', get_the_title( $post ) );
+			set_post_thumbnail( $post, $piece );
+		}
+
+		if ( ! $echec ) {
+			update_option( self::OPT_V15, 1 );
+		}
 	}
 
 	/**

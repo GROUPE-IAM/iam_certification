@@ -219,6 +219,9 @@ grâce à la bibliothèque *Plugin Update Checker* (`lib/plugin-update-checker`,
 
 ## Journal des versions
 
+### 1.5.0
+- **Visuels des formations** : une photo par certificat et par séminaire (17), livrée dans `assets/img/formations/<slug>.jpg` (Unsplash, licence libre d'usage commercial). Au premier passage dans l'admin (option `iam_cert_seed_v15`), chaque photo est ajoutée à la médiathèque et posée comme image mise en avant, **uniquement si la fiche n'en a pas** : un visuel choisi à la main n'est jamais remplacé. Elle apparaît dans le hero de la page, sur les cartes du catalogue et dans l'admin.
+
 ### 1.4.2
 - Version de test de la chaîne de mises à jour automatiques (aucun changement fonctionnel).
 
