@@ -35,6 +35,7 @@ class IAM_Cert_Shortcode {
 				'type'             => '',      // « certificat » ou « seminaire » (vide = tous).
 				'domaine'          => '',      // Slug(s) de domaine, séparés par des virgules.
 				'outil'            => '',      // Slug(s) d'outil.
+				'ids'              => '',      // Formations précises (ID séparés par des virgules), dans cet ordre.
 				'limit'            => -1,      // Nombre de certifications (-1 = toutes).
 				'columns'          => 3,       // Colonnes sur grand écran (1 à 4).
 				'featured'         => '',      // "true" pour ne montrer que les mises en avant.
@@ -95,6 +96,13 @@ class IAM_Cert_Shortcode {
 			'order'          => 'DESC' === strtoupper( $atts['order'] ) ? 'DESC' : 'ASC',
 			'no_found_rows'  => true,
 		);
+
+		// Formations choisies une à une : affichées dans l'ordre donné.
+		$ids = array_filter( array_map( 'absint', explode( ',', (string) $atts['ids'] ) ) );
+		if ( $ids ) {
+			$args['post__in'] = $ids;
+			$args['orderby']  = 'post__in';
+		}
 
 		$tax_query = array();
 

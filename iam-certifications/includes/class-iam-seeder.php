@@ -20,6 +20,7 @@ class IAM_Cert_Seeder {
 	const OPT_V13     = 'iam_cert_seed_v13';
 	const OPT_V131    = 'iam_cert_seed_v131';
 	const OPT_V15     = 'iam_cert_seed_v15';
+	const OPT_V16     = 'iam_cert_seed_v16';
 	const OPT_FORM    = 'iam_cert_default_form_id';
 
 	/**
@@ -47,6 +48,7 @@ class IAM_Cert_Seeder {
 		$this->seed_v13();
 		$this->seed_v131();
 		$this->seed_v15();
+		$this->seed_v16();
 		$this->seed_form();
 	}
 
@@ -249,17 +251,54 @@ class IAM_Cert_Seeder {
 			return;
 		}
 
+		if ( $this->importer_visuels() ) {
+			update_option( self::OPT_V15, 1 );
+		}
+	}
+
+	/**
+	 * v1.6 : catalogue IAM Executive, domaine Data & Business Intelligence
+	 * (3 formations courtes, au format séminaire), puis leurs visuels.
+	 *
+	 * @return void
+	 */
+	public function seed_v16() {
+		if ( get_option( self::OPT_V16 ) ) {
+			return;
+		}
+
+		$data_file = IAM_CERT_PATH . 'includes/data/executive-seed.php';
+		$items     = file_exists( $data_file ) ? include $data_file : array();
+		if ( is_array( $items ) ) {
+			$ordre = 200;
+			foreach ( $items as $c ) {
+				$this->insert( $c, $ordre++ );
+			}
+		}
+
+		if ( $this->importer_visuels() ) {
+			update_option( self::OPT_V16, 1 );
+		}
+	}
+
+	/**
+	 * Pose les visuels livrés dans assets/img/formations/<slug>.jpg (Unsplash,
+	 * licence libre) comme image mise en avant, seulement pour les fiches qui
+	 * n'en ont pas : un visuel choisi à la main n'est jamais remplacé.
+	 *
+	 * @return bool False si un import a échoué (la passe sera retentée).
+	 */
+	private function importer_visuels() {
 		$images = glob( IAM_CERT_PATH . 'assets/img/formations/*.jpg' );
 		if ( ! $images ) {
-			update_option( self::OPT_V15, 1 );
-			return;
+			return true;
 		}
 
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		require_once ABSPATH . 'wp-admin/includes/media.php';
 		require_once ABSPATH . 'wp-admin/includes/image.php';
 
-		$echec = false;
+		$ok = true;
 
 		foreach ( $images as $source ) {
 			$slug = basename( $source, '.jpg' );
@@ -271,7 +310,7 @@ class IAM_Cert_Seeder {
 			// media_handle_sideload() déplace le fichier : on lui confie une copie.
 			$copie = wp_tempnam( $slug . '.jpg' );
 			if ( ! $copie || ! copy( $source, $copie ) ) {
-				$echec = true;
+				$ok = false;
 				continue;
 			}
 
@@ -286,7 +325,7 @@ class IAM_Cert_Seeder {
 
 			if ( is_wp_error( $piece ) ) {
 				wp_delete_file( $copie );
-				$echec = true;
+				$ok = false;
 				continue;
 			}
 
@@ -294,9 +333,7 @@ class IAM_Cert_Seeder {
 			set_post_thumbnail( $post, $piece );
 		}
 
-		if ( ! $echec ) {
-			update_option( self::OPT_V15, 1 );
-		}
+		return $ok;
 	}
 
 	/**

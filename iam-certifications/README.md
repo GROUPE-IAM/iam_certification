@@ -30,6 +30,7 @@ Plugin WordPress de gestion du **catalogue de formations** du Groupe IAM — **c
 | `columns` | colonnes grand écran (1–4) | `3` |
 | `domaine` | slug(s) de domaine, séparés par des virgules | — |
 | `outil` | slug(s) d'outil | — |
+| `ids` | formations précises (ID séparés par des virgules), affichées dans cet ordre | — |
 | `featured` | `true` = mises en avant uniquement | — |
 | `limit` | nombre maximum | `-1` |
 | `max_tools` | outils affichés avant « +N » | `6` |
@@ -218,6 +219,11 @@ grâce à la bibliothèque *Plugin Update Checker* (`lib/plugin-update-checker`,
   `define( 'IAM_CERT_GITHUB_TOKEN', 'ghp_…' );` (jeton en lecture seule).
 
 ## Journal des versions
+
+### 1.6.0
+- **Catalogue IAM Executive — Data & Business Intelligence** : 3 formations courtes au format séminaire, hybrides (présentiel Dakar ou intra, et à distance) : *Power BI : concevoir des tableaux de bord décisionnels* (3 jours), *Analyse de données pour managers* (2 jours), *Data visualisation & storytelling* (2 jours). Repris du catalogue : accroche, objectifs, compétences, public ; complété de façon cohérente avec les séminaires existants : durée, programme jour par jour, prérequis, livrables, évaluation, infos pratiques. Données dans `includes/data/executive-seed.php`, import au premier passage dans l'admin (option `iam_cert_seed_v16`), avec leurs visuels.
+- **Générateur de shortcode** (Formations → Shortcodes) : blocs à glisser-déposer ou à ajouter d'un clic (type, mises en avant, domaines, outils, formations précises, colonnes, nombre, tri, filtres, regroupement), shortcode écrit en direct, compteur de formations affichées, aperçu réel et shortcodes enregistrés (option `iam_cert_shortcodes`).
+- Shortcode : nouvel attribut `ids="12,5,9"` pour afficher des formations précises, dans cet ordre.
 
 ### 1.5.0
 - **Visuels des formations** : une photo par certificat et par séminaire (17), livrée dans `assets/img/formations/<slug>.jpg` (Unsplash, licence libre d'usage commercial). Au premier passage dans l'admin (option `iam_cert_seed_v15`), chaque photo est ajoutée à la médiathèque et posée comme image mise en avant, **uniquement si la fiche n'en a pas** : un visuel choisi à la main n'est jamais remplacé. Elle apparaît dans le hero de la page, sur les cartes du catalogue et dans l'admin.
