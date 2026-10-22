@@ -21,6 +21,7 @@ class IAM_Cert_Seeder {
 	const OPT_V131    = 'iam_cert_seed_v131';
 	const OPT_V15     = 'iam_cert_seed_v15';
 	const OPT_V16     = 'iam_cert_seed_v16';
+	const OPT_V17     = 'iam_cert_seed_v17';
 	const OPT_FORM    = 'iam_cert_default_form_id';
 
 	/**
@@ -49,6 +50,7 @@ class IAM_Cert_Seeder {
 		$this->seed_v131();
 		$this->seed_v15();
 		$this->seed_v16();
+		$this->seed_v17();
 		$this->seed_form();
 	}
 
@@ -278,6 +280,31 @@ class IAM_Cert_Seeder {
 
 		if ( $this->importer_visuels() ) {
 			update_option( self::OPT_V16, 1 );
+		}
+	}
+
+	/**
+	 * v1.7 : catalogue « Certificats professionnels 2025-2026 » de l'IAM
+	 * E-Learning Center (parcours BBA, 19 certificats), puis leurs visuels.
+	 *
+	 * @return void
+	 */
+	public function seed_v17() {
+		if ( get_option( self::OPT_V17 ) ) {
+			return;
+		}
+
+		$data_file = IAM_CERT_PATH . 'includes/data/certificats-bba-seed.php';
+		$items     = file_exists( $data_file ) ? include $data_file : array();
+		if ( is_array( $items ) ) {
+			$ordre = 300;
+			foreach ( $items as $c ) {
+				$this->insert( $c, $ordre++ );
+			}
+		}
+
+		if ( $this->importer_visuels() ) {
+			update_option( self::OPT_V17, 1 );
 		}
 	}
 

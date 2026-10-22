@@ -220,6 +220,11 @@ grâce à la bibliothèque *Plugin Update Checker* (`lib/plugin-update-checker`,
 
 ## Journal des versions
 
+### 1.7.0
+- **Catalogue « Certificats professionnels 2025-2026 » (IAM E-Learning Center)** : les 19 certificats du parcours diplômant BBA, 100 % en ligne, 3 mois chacun. Prix du catalogue majoré de 50 000 FCFA : **400 000 FCFA**. Repris du catalogue : titres et cours (codes GES). Rédigé au niveau des autres certificats : accroche, un module par cours avec ses leçons, objectifs, débouchés, projet final, évaluation, public, prérequis (niveau BAC), rythme, outils. Niveau déduit du code des cours (1xxx débutant, 2xxx intermédiaire, 3xxx avancé). Domaine « Gestion & Management (BBA) ». Données dans `includes/data/certificats-bba-seed.php`, import au premier passage dans l'admin (option `iam_cert_seed_v17`).
+- **Tarif dans l'encadré « En bref »** de la page de détail : le montant (FCFA, XOF ou €) est repris du champ « Coût et financement ».
+- **19 visuels** (Unsplash, licence libre) montrant des professionnels et étudiants noirs, cœur de cible du Groupe IAM, posés seulement sur les fiches sans visuel.
+
 ### 1.6.0
 - **Catalogue IAM Executive — Data & Business Intelligence** : 3 formations courtes au format séminaire, hybrides (présentiel Dakar ou intra, et à distance) : *Power BI : concevoir des tableaux de bord décisionnels* (3 jours), *Analyse de données pour managers* (2 jours), *Data visualisation & storytelling* (2 jours). Repris du catalogue : accroche, objectifs, compétences, public ; complété de façon cohérente avec les séminaires existants : durée, programme jour par jour, prérequis, livrables, évaluation, infos pratiques. Données dans `includes/data/executive-seed.php`, import au premier passage dans l'admin (option `iam_cert_seed_v16`), avec leurs visuels.
 - **Générateur de shortcode** (Formations → Shortcodes) : blocs à glisser-déposer ou à ajouter d'un clic (type, mises en avant, domaines, outils, formations précises, colonnes, nombre, tri, filtres, regroupement), shortcode écrit en direct, compteur de formations affichées, aperçu réel et shortcodes enregistrés (option `iam_cert_shortcodes`).

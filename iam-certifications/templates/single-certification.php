@@ -154,6 +154,12 @@ while ( have_posts() ) :
 		$facts[] = array( 'calendar', __( 'Rythme', 'iam-certifications' ), $rythme );
 		$facts[] = array( 'award', __( 'Délivrance', 'iam-certifications' ), $evaluation ? __( 'Certificat après évaluation', 'iam-certifications' ) : '' );
 	}
+
+	// Tarif : le montant est repris du bloc « Coût et financement » pour être
+	// visible dès le haut de la page (ex. « 400 000 FCFA »).
+	if ( $cout && preg_match( '/\d[\d\s .\x{202F}\x{00A0}]*\s?(?:FCFA|F CFA|XOF|€|EUR)/u', $cout, $tarif ) ) {
+		$facts[] = array( 'wallet', __( 'Tarif', 'iam-certifications' ), trim( $tarif[0] ) );
+	}
 	$facts = array_filter(
 		$facts,
 		function ( $f ) {
