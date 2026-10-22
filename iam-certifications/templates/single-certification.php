@@ -155,10 +155,19 @@ while ( have_posts() ) :
 		$facts[] = array( 'award', __( 'Délivrance', 'iam-certifications' ), $evaluation ? __( 'Certificat après évaluation', 'iam-certifications' ) : '' );
 	}
 
-	// Tarif : le montant est repris du bloc « Coût et financement » pour être
-	// visible dès le haut de la page (ex. « 400 000 FCFA »).
-	if ( $cout && preg_match( '/\d[\d\s .\x{202F}\x{00A0}]*\s?(?:FCFA|F CFA|XOF|€|EUR)/u', $cout, $tarif ) ) {
-		$facts[] = array( 'wallet', __( 'Tarif', 'iam-certifications' ), trim( $tarif[0] ) );
+	/*
+	 * Tarif : montant et devise lus dans « Coût et financement »
+	 * (ex. « 400 000 FCFA pour le certificat complet… »). Il est affiché dans
+	 * la fiche du hero et dans la section « Investissement ».
+	 */
+	$prix_montant = 0;
+	$prix_devise  = '';
+	$prix_note    = '';
+	if ( $cout && preg_match( '/(\d[\d\s.\x{202F}\x{00A0}]*)\s?(FCFA|F CFA|XOF|€|EUR)/u', $cout, $tarif ) ) {
+		$prix_montant = (int) preg_replace( '/\D/', '', $tarif[1] );
+		$prix_devise  = 'F CFA' === $tarif[2] ? 'FCFA' : $tarif[2];
+		$prix_note    = trim( str_replace( $tarif[0], '', $cout ), " \t\n\r\0\x0B.,;:–—-" );
+		$facts[]      = array( 'wallet', __( 'Tarif', 'iam-certifications' ), number_format_i18n( $prix_montant ) . ' ' . $prix_devise );
 	}
 	$facts = array_filter(
 		$facts,
@@ -183,6 +192,7 @@ while ( have_posts() ) :
 			'iam-sessions'      => $is_sem ? __( 'Sessions', 'iam-certifications' ) : '',
 			'iam-debouches'     => $debouches ? __( 'Débouchés', 'iam-certifications' ) : '',
 			'iam-certification' => $has_certif ? ( $is_sem ? __( 'Livrables', 'iam-certifications' ) : __( 'Certification', 'iam-certifications' ) ) : '',
+			'iam-tarif'         => $cout ? __( 'Tarif', 'iam-certifications' ) : '',
 		)
 	);
 
@@ -715,17 +725,69 @@ while ( have_posts() ) :
 			</section>
 		<?php endif; ?>
 
-		<!-- ============================================== CONTENU LIBRE / COÛT -->
-		<?php if ( trim( get_the_content() ) || $cout ) : ?>
+		<!-- ===================================================== CONTENU LIBRE -->
+		<?php if ( trim( get_the_content() ) ) : ?>
 			<section class="iam-lp-sec">
 				<div class="iam-lp-wrap iam-lp-narrow">
-					<?php if ( trim( get_the_content() ) ) : ?>
-						<div class="iam-lp-prose"><?php the_content(); ?></div>
-					<?php endif; ?>
-					<?php if ( $cout ) : ?>
-						<div class="iam-lp-cost">
-							<p class="iam-lp-eyebrow"><?php esc_html_e( 'Coût et financement', 'iam-certifications' ); ?></p>
-							<?php echo wpautop( esc_html( $cout ) ); // phpcs:ignore ?>
+					<div class="iam-lp-prose"><?php the_content(); ?></div>
+				</div>
+			</section>
+		<?php endif; ?>
+
+		<!-- ================================================== INVESTISSEMENT -->
+		<?php if ( $cout ) : ?>
+			<?php
+			$inclus = array_filter(
+				array(
+					trim( $duree . ( '' !== $heures ? ' · ' . $heures . ' h' : '' ), ' ·' ) ? sprintf( /* translators: %s : durée */ __( 'Formation complète : %s', 'iam-certifications' ), trim( $duree . ( '' !== $heures ? ' · ' . $heures . ' h' : '' ), ' ·' ) ) : '',
+					$format,
+					$is_sem
+						? ( $jours ? sprintf( _n( '%d jour de programme détaillé', '%d jours de programme détaillé', count( $jours ), 'iam-certifications' ), count( $jours ) ) : '' )
+						: ( $modules ? sprintf( _n( '%d module et tous ses supports', '%d modules et tous leurs supports', count( $modules ), 'iam-certifications' ), count( $modules ) ) : '' ),
+					$elearning,
+					$evaluation ? ( $is_sem ? __( 'Attestation de réussite après évaluation', 'iam-certifications' ) : __( 'Certificat délivré après évaluation', 'iam-certifications' ) ) : '',
+				)
+			);
+			?>
+			<section class="iam-lp-price" id="iam-tarif">
+				<span class="iam-lp-price__glow" aria-hidden="true"></span>
+				<div class="iam-lp-wrap iam-lp-price__grid">
+					<div class="iam-lp-price__main" data-iam-reveal>
+						<p class="iam-lp-eyebrow"><?php esc_html_e( 'Investissement', 'iam-certifications' ); ?></p>
+						<h2 class="iam-lp-h2"><?php esc_html_e( 'Un tarif clair, tout compris.', 'iam-certifications' ); ?></h2>
+
+						<?php if ( $prix_montant ) : ?>
+							<p class="iam-lp-price__amount">
+								<span class="iam-lp-price__num" data-iam-price="<?php echo (int) $prix_montant; ?>"><?php echo esc_html( number_format_i18n( $prix_montant ) ); ?></span>
+								<span class="iam-lp-price__cur"><?php echo esc_html( $prix_devise ); ?></span>
+							</p>
+							<?php if ( $prix_note ) : ?>
+								<p class="iam-lp-price__note"><?php echo esc_html( ucfirst( $prix_note ) ); ?></p>
+							<?php endif; ?>
+						<?php else : ?>
+							<div class="iam-lp-price__text"><?php echo wpautop( esc_html( $cout ) ); // phpcs:ignore ?></div>
+						<?php endif; ?>
+
+						<div class="iam-lp-price__ctas">
+							<a class="iam-lp-btn iam-lp-price__cta" href="#iam-candidature" data-iam-magnetic>
+								<?php echo esc_html( $cta ); ?>
+								<span class="iam-lp-btn__icon"><?php echo iam_cert_icon( 'arrow' ); // phpcs:ignore ?></span>
+							</a>
+							<?php if ( $brochure ) : ?>
+								<a class="iam-lp-price__link" href="<?php echo esc_url( $brochure ); ?>" download><?php echo iam_cert_icon( 'download' ); // phpcs:ignore ?><?php esc_html_e( 'Télécharger la brochure', 'iam-certifications' ); ?></a>
+							<?php endif; ?>
+						</div>
+					</div>
+
+					<?php if ( $inclus ) : ?>
+						<div class="iam-lp-price__card" data-iam-tilt>
+							<p class="iam-lp-price__card-title"><?php echo iam_cert_icon( 'check' ); // phpcs:ignore ?><?php esc_html_e( 'Ce qui est inclus', 'iam-certifications' ); ?></p>
+							<ul class="iam-lp-price__list" data-iam-stagger>
+								<?php foreach ( $inclus as $ligne ) : ?>
+									<li><span class="iam-lp-price__tick" aria-hidden="true"><?php echo iam_cert_icon( 'check' ); // phpcs:ignore ?></span><?php echo esc_html( $ligne ); ?></li>
+								<?php endforeach; ?>
+							</ul>
+							<span class="iam-lp-price__shine" aria-hidden="true"></span>
 						</div>
 					<?php endif; ?>
 				</div>

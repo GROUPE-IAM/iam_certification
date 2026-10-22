@@ -182,6 +182,57 @@
 			});
 		});
 
+		/* Tarif : le montant défile de 0 à sa valeur, séparateurs de milliers
+		 * compris, quand la section entre à l'écran. */
+		$$('[data-iam-price]', page).forEach(function (el) {
+			var end = parseInt(el.getAttribute('data-iam-price'), 10) || 0;
+			var fmt = function (v) {
+				return Math.round(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '\u202f');
+			};
+			var obj = { v: 0 };
+			el.style.setProperty('--w', el.offsetWidth + 'px');
+			el.classList.add('is-counting');
+			var tween = gsap.to(obj, {
+				v: end,
+				duration: 2.2,
+				ease: 'power3.out',
+				scrollTrigger: st(el, 'top 85%'),
+				onStart: function () {
+					el.textContent = fmt(0);
+				},
+				onUpdate: function () {
+					el.textContent = fmt(obj.v);
+				},
+				onComplete: function () {
+					el.textContent = fmt(end);
+					el.classList.remove('is-counting');
+				}
+			});
+			gsap.from(el, { scale: 0.85, opacity: 0, duration: 1.2, ease: 'back.out(1.6)', scrollTrigger: st(el, 'top 85%') });
+			// Filet de sécurité : le montant final s'affiche quoi qu'il arrive.
+			if ('IntersectionObserver' in window) {
+				var io = new IntersectionObserver(function (entries) {
+					if (entries[0].isIntersecting) {
+						io.disconnect();
+						window.setTimeout(function () {
+							if (tween.progress() < 1) {
+								tween.progress(1);
+							}
+							el.textContent = fmt(end);
+							gsap.set(el, { opacity: 1, scale: 1 });
+						}, 4000);
+					}
+				});
+				io.observe(el);
+			}
+		});
+
+		/* Carte « Ce qui est inclus » : arrive en se redressant. */
+		var priceCard = page.querySelector('.iam-lp-price__card');
+		if (priceCard) {
+			gsap.from(priceCard, { rotateY: 18, rotateX: 8, x: 60, opacity: 0, duration: 1.3, ease: 'expo.out', scrollTrigger: st(priceCard, 'top 85%') });
+		}
+
 		/* Image « Pour qui » : parallaxe interne. */
 		$$('[data-iam-parallax] img', page).forEach(function (img) {
 			if (!hasST) {
@@ -215,7 +266,7 @@
 			page.classList.remove('is-animated');
 			return;
 		}
-		var items = $$('[data-iam-reveal], [data-iam-stagger] > *', page);
+		var items = $$('[data-iam-reveal], [data-iam-stagger] > *, .iam-lp-price__card', page);
 		var io = new IntersectionObserver(function (entries) {
 			entries.forEach(function (entry) {
 				if (!entry.isIntersecting) {

@@ -220,6 +220,9 @@ grâce à la bibliothèque *Plugin Update Checker* (`lib/plugin-update-checker`,
 
 ## Journal des versions
 
+### 1.7.1
+- **Section « Investissement » sur la page de détail** : le petit encadré « Coût et financement » devient un bandeau vert profond pleine largeur, avec le montant en très grand (compteur animé de 0 au prix, séparateurs de milliers), la phrase qui l'accompagne, la carte « Ce qui est inclus » (durée, format, nombre de modules ou de jours, eLearning, certificat), un bouton « Candidater » pulsé et le lien vers la brochure. Lien « Tarif » ajouté à la barre de navigation de la fiche. Animations désactivées si le visiteur a demandé à réduire les mouvements ; le montant final s'affiche quoi qu'il arrive.
+
 ### 1.7.0
 - **Catalogue « Certificats professionnels 2025-2026 » (IAM E-Learning Center)** : les 19 certificats du parcours diplômant BBA, 100 % en ligne, 3 mois chacun. Prix du catalogue majoré de 50 000 FCFA : **400 000 FCFA**. Repris du catalogue : titres et cours (codes GES). Rédigé au niveau des autres certificats : accroche, un module par cours avec ses leçons, objectifs, débouchés, projet final, évaluation, public, prérequis (niveau BAC), rythme, outils. Niveau déduit du code des cours (1xxx débutant, 2xxx intermédiaire, 3xxx avancé). Domaine « Gestion & Management (BBA) ». Données dans `includes/data/certificats-bba-seed.php`, import au premier passage dans l'admin (option `iam_cert_seed_v17`).
 - **Tarif dans l'encadré « En bref »** de la page de détail : le montant (FCFA, XOF ou €) est repris du champ « Coût et financement ».

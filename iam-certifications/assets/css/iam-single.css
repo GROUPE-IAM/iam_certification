@@ -2426,3 +2426,235 @@ body.admin-bar .iam-lp {
 		transform: none;
 	}
 }
+
+/* ======================================================================
+ * Investissement (tarif)
+ * Bandeau vert profond, montant en très grand (compteur animé), carte
+ * « Ce qui est inclus ». Couleurs en !important : le thème impose les
+ * siennes aux titres et paragraphes.
+ * ==================================================================== */
+.iam-lp-price {
+	position: relative;
+	padding: clamp(56px, 8vw, 112px) 0;
+	overflow: hidden;
+	isolation: isolate;
+	background:
+		radial-gradient(90% 120% at 100% 0%, rgba(237, 169, 0, .16) 0%, transparent 55%),
+		radial-gradient(70% 90% at 0% 100%, rgba(11, 93, 59, .55) 0%, transparent 60%),
+		var(--green-deep);
+	color: #fff;
+	scroll-margin-top: calc(var(--sticky-top) + 72px);
+}
+
+/* Halo doré qui dérive lentement derrière le montant. */
+.iam-lp-price__glow {
+	position: absolute;
+	z-index: -1;
+	top: 10%;
+	left: -10%;
+	width: 55%;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	background: radial-gradient(circle, rgba(237, 169, 0, .28) 0%, rgba(237, 169, 0, 0) 65%);
+	filter: blur(10px);
+	animation: iam-price-float 14s ease-in-out infinite alternate;
+	pointer-events: none;
+}
+
+@keyframes iam-price-float {
+	from { transform: translate(0, 0) scale(1); }
+	to { transform: translate(18%, 12%) scale(1.15); }
+}
+
+.iam-lp-price__grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+	align-items: center;
+	gap: clamp(32px, 6vw, 88px);
+}
+
+.iam-lp-price .iam-lp-eyebrow {
+	color: var(--accent-light) !important;
+}
+
+.iam-lp-price .iam-lp-h2 {
+	color: #fff !important;
+}
+
+.iam-lp-price__amount {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: .25em .4em;
+	margin: clamp(18px, 3vw, 28px) 0 0 !important;
+	line-height: .95;
+}
+
+.iam-lp-price__num {
+	font-family: var(--ckd-serif);
+	font-size: clamp(3.4rem, 9vw, 7rem);
+	font-weight: 700;
+	letter-spacing: -.03em;
+	font-variant-numeric: tabular-nums;
+	color: var(--accent-light) !important;
+	text-shadow: 0 10px 40px rgba(237, 169, 0, .25);
+}
+
+.iam-lp-price__cur {
+	font-size: clamp(1.2rem, 2.4vw, 1.9rem);
+	font-weight: 700;
+	letter-spacing: .06em;
+	color: #fff !important;
+}
+
+.iam-lp-price__note,
+.iam-lp-price__text,
+.iam-lp-price__text p {
+	max-width: 520px;
+	margin: 14px 0 0 !important;
+	font-size: 1.05rem;
+	line-height: 1.6;
+	color: rgba(255, 255, 255, .78) !important;
+}
+
+.iam-lp-price__ctas {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 14px 24px;
+	margin-top: clamp(24px, 3.5vw, 36px);
+}
+
+.iam-lp-price__cta {
+	--bg: var(--accent);
+	--fg: var(--ink);
+	--bd: var(--accent);
+
+	box-shadow: 0 14px 40px rgba(237, 169, 0, .35);
+	animation: iam-price-pulse 2.8s ease-in-out infinite;
+}
+
+@keyframes iam-price-pulse {
+	0%, 100% { box-shadow: 0 14px 40px rgba(237, 169, 0, .30), 0 0 0 0 rgba(237, 169, 0, .45); }
+	50% { box-shadow: 0 14px 40px rgba(237, 169, 0, .30), 0 0 0 12px rgba(237, 169, 0, 0); }
+}
+
+.iam-lp-price__link {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-weight: 600;
+	color: #fff !important;
+	text-decoration: underline;
+	text-decoration-color: rgba(255, 255, 255, .35);
+	text-underline-offset: 4px;
+}
+
+.iam-lp-price__link:hover {
+	text-decoration-color: var(--accent-light);
+}
+
+.iam-lp-price__link svg {
+	width: 18px;
+	height: 18px;
+}
+
+/* Carte « Ce qui est inclus » : verre dépoli, reflet au survol. */
+.iam-lp-price__card {
+	position: relative;
+	padding: clamp(24px, 3vw, 36px);
+	border: 1px solid rgba(255, 255, 255, .16);
+	border-radius: 28px;
+	background: linear-gradient(160deg, rgba(255, 255, 255, .12) 0%, rgba(255, 255, 255, .04) 100%);
+	backdrop-filter: blur(14px);
+	box-shadow: 0 30px 70px rgba(0, 0, 0, .28);
+	overflow: hidden;
+	transform-style: preserve-3d;
+}
+
+.iam-lp-price__card-title {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin: 0 0 18px !important;
+	font-size: .78rem;
+	font-weight: 700;
+	letter-spacing: .16em;
+	text-transform: uppercase;
+	color: var(--accent-light) !important;
+}
+
+.iam-lp-price__card-title svg {
+	width: 18px;
+	height: 18px;
+}
+
+.iam-lp-price__list {
+	display: grid;
+	gap: 14px;
+	margin: 0 !important;
+	padding: 0 !important;
+	list-style: none !important;
+}
+
+.iam-lp-price__list li {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	margin: 0 !important;
+	font-size: 1rem;
+	line-height: 1.5;
+	color: #fff !important;
+}
+
+.iam-lp-price__tick {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 26px;
+	width: 26px;
+	height: 26px;
+	border-radius: 50%;
+	background: var(--accent);
+	color: var(--ink);
+}
+
+.iam-lp-price__tick svg {
+	width: 14px;
+	height: 14px;
+	stroke-width: 3;
+}
+
+.iam-lp-price__shine {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, .14) 48%, transparent 66%);
+	transform: translateX(-120%);
+	animation: iam-price-shine 6s ease-in-out infinite;
+	pointer-events: none;
+}
+
+@keyframes iam-price-shine {
+	0%, 55% { transform: translateX(-120%); }
+	80%, 100% { transform: translateX(120%); }
+}
+
+/* Le compteur tient sa largeur finale pendant qu'il défile. */
+.iam-lp-price__num.is-counting {
+	display: inline-block;
+	min-width: var(--w, auto);
+}
+
+@media (max-width: 860px) {
+	.iam-lp-price__grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.iam-lp-price__glow,
+	.iam-lp-price__cta,
+	.iam-lp-price__shine {
+		animation: none;
+	}
+}
