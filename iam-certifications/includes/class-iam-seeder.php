@@ -22,6 +22,7 @@ class IAM_Cert_Seeder {
 	const OPT_V15     = 'iam_cert_seed_v15';
 	const OPT_V16     = 'iam_cert_seed_v16';
 	const OPT_V17     = 'iam_cert_seed_v17';
+	const OPT_V172    = 'iam_cert_seed_v172';
 	const OPT_FORM    = 'iam_cert_default_form_id';
 
 	/**
@@ -51,6 +52,7 @@ class IAM_Cert_Seeder {
 		$this->seed_v15();
 		$this->seed_v16();
 		$this->seed_v17();
+		$this->seed_v172();
 		$this->seed_form();
 	}
 
@@ -306,6 +308,31 @@ class IAM_Cert_Seeder {
 		if ( $this->importer_visuels() ) {
 			update_option( self::OPT_V17, 1 );
 		}
+	}
+
+	/**
+	 * v1.7.2 : tarif des certificats hors parcours BBA (350 000 à 450 000 FCFA,
+	 * voir includes/data/tarifs-v172.php). Seulement si « Coût et financement »
+	 * est vide : un tarif saisi à la main n'est jamais remplacé.
+	 *
+	 * @return void
+	 */
+	public function seed_v172() {
+		if ( get_option( self::OPT_V172 ) ) {
+			return;
+		}
+
+		$data_file = IAM_CERT_PATH . 'includes/data/tarifs-v172.php';
+		$tarifs    = file_exists( $data_file ) ? include $data_file : array();
+
+		foreach ( (array) $tarifs as $slug => $cout ) {
+			$post = get_page_by_path( $slug, OBJECT, IAM_CERT_CPT );
+			if ( $post && '' === trim( (string) get_post_meta( $post->ID, '_iam_cout', true ) ) ) {
+				update_post_meta( $post->ID, '_iam_cout', $cout );
+			}
+		}
+
+		update_option( self::OPT_V172, 1 );
 	}
 
 	/**

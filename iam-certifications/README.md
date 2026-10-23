@@ -220,6 +220,9 @@ grâce à la bibliothèque *Plugin Update Checker* (`lib/plugin-update-checker`,
 
 ## Journal des versions
 
+### 1.7.2
+- **Tarif de tous les certificats** (fourchette 350 000 à 450 000 FCFA, fixée selon la durée, le volume horaire et la valeur métier) : 450 000 pour CEDLA, CRM Social & E-CRM et Consultant fonctionnel Odoo ; 400 000 pour Content Marketing, No Code, Marketing Automation et ADAPT-IA ; 350 000 pour Social Media Marketing et Knowledge Management RH (formats les plus courts). Les 19 certificats BBA restent à 400 000. Données : `includes/data/tarifs-v172.php`, posées au premier passage dans l'admin (option `iam_cert_seed_v172`) uniquement si le tarif est vide. La section « Investissement » et le tarif de l'encadré « En bref » apparaissent donc sur tous les certificats.
+
 ### 1.7.1
 - **Section « Investissement » sur la page de détail** : le petit encadré « Coût et financement » devient un bandeau vert profond pleine largeur, avec le montant en très grand (compteur animé de 0 au prix, séparateurs de milliers), la phrase qui l'accompagne, la carte « Ce qui est inclus » (durée, format, nombre de modules ou de jours, eLearning, certificat), un bouton « Candidater » pulsé et le lien vers la brochure. Lien « Tarif » ajouté à la barre de navigation de la fiche. Animations désactivées si le visiteur a demandé à réduire les mouvements ; le montant final s'affiche quoi qu'il arrive.
 
