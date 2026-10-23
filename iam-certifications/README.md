@@ -220,6 +220,9 @@ grâce à la bibliothèque *Plugin Update Checker* (`lib/plugin-update-checker`,
 
 ## Journal des versions
 
+### 1.7.3
+- **Mise à jour automatique en 30 minutes au lieu de plusieurs heures** : une tâche planifiée (`iam_cert_maj_auto`, toutes les 30 minutes) interroge GitHub et, si une version plus récente existe et que « mises à jour auto » est activé pour IAM Certifications dans Extensions, l'installe aussitôt avec l'outil de mise à jour automatique de WordPress. Auparavant, WordPress n'installait les mises à jour automatiques que deux fois par jour. La tâche s'arrête à la désactivation du plugin. WP-Cron s'exécutant au passage des visiteurs, le délai réel dépend aussi du trafic du site.
+
 ### 1.7.2
 - **Tarif de tous les certificats** (fourchette 350 000 à 450 000 FCFA, fixée selon la durée, le volume horaire et la valeur métier) : 450 000 pour CEDLA, CRM Social & E-CRM et Consultant fonctionnel Odoo ; 400 000 pour Content Marketing, No Code, Marketing Automation et ADAPT-IA ; 350 000 pour Social Media Marketing et Knowledge Management RH (formats les plus courts). Les 19 certificats BBA restent à 400 000. Données : `includes/data/tarifs-v172.php`, posées au premier passage dans l'admin (option `iam_cert_seed_v172`) uniquement si le tarif est vide. La section « Investissement » et le tarif de l'encadré « En bref » apparaissent donc sur tous les certificats.
 
