@@ -220,6 +220,9 @@ grâce à la bibliothèque *Plugin Update Checker* (`lib/plugin-update-checker`,
 
 ## Journal des versions
 
+### 1.7.4
+- **Étiquette de catégorie déplacée en bas à droite des cartes** : elle cachait le haut des visuels (souvent les visages). La durée reste en bas à gauche ; chaque pastille est limitée à la moitié de la largeur, le texte trop long est coupé avec « … » et s'affiche en entier au survol.
+
 ### 1.7.3
 - **Mise à jour automatique en 30 minutes au lieu de plusieurs heures** : une tâche planifiée (`iam_cert_maj_auto`, toutes les 30 minutes) interroge GitHub et, si une version plus récente existe et que « mises à jour auto » est activé pour IAM Certifications dans Extensions, l'installe aussitôt avec l'outil de mise à jour automatique de WordPress. Auparavant, WordPress n'installait les mises à jour automatiques que deux fois par jour. La tâche s'arrête à la désactivation du plugin. WP-Cron s'exécutant au passage des visiteurs, le délai réel dépend aussi du trafic du site.
 

@@ -56,11 +56,11 @@ if ( $max_tools > 0 && count( $outils ) > $max_tools ) {
 		<span class="iam-cert-card__type"><?php echo esc_html( 'seminaire' === $type ? __( 'Séminaire', 'iam-certifications' ) : __( 'Certificat', 'iam-certifications' ) ); ?></span>
 
 		<?php if ( $domaine_nom ) : ?>
-			<span class="iam-cert-card__badge"><?php echo esc_html( $domaine_nom ); ?></span>
+			<span class="iam-cert-card__badge" title="<?php echo esc_attr( $domaine_nom ); ?>"><?php echo esc_html( $domaine_nom ); ?></span>
 		<?php endif; ?>
 
 		<?php if ( $duree ) : ?>
-			<span class="iam-cert-card__duree"><?php echo esc_html( $duree ); ?></span>
+			<span class="iam-cert-card__duree" title="<?php echo esc_attr( $duree ); ?>"><?php echo esc_html( $duree ); ?></span>
 		<?php endif; ?>
 	</a>
 
