@@ -35,7 +35,7 @@ Plugin WordPress de gestion du **catalogue de formations** du Groupe IAM — **c
 | `limit` | nombre maximum | `-1` |
 | `max_tools` | outils affichés avant « +N » | `6` |
 | `group_by_domaine` | `true` = sections titrées par domaine | — |
-| `filters` | `true` = barre de filtre cliquable | — |
+| `filters` | Barre de filtres (recherche, format en ligne / hybride / présentiel, type, thématique). `auto` : affichée dès 4 formations ; `true` : toujours ; `false` : jamais | `auto` |
 
 Exemples :
 ```

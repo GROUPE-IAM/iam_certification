@@ -148,6 +148,51 @@ function iam_cert_type( $post_id ) {
 }
 
 /**
+ * Modalités reconnues par la barre de filtres : clé => libellé.
+ *
+ * @return array
+ */
+function iam_cert_modes() {
+	return array(
+		'en-ligne'   => __( 'En ligne', 'iam-certifications' ),
+		'hybride'    => __( 'Hybride', 'iam-certifications' ),
+		'presentiel' => __( 'Présentiel', 'iam-certifications' ),
+	);
+}
+
+/**
+ * Modalité d'une formation, déduite du champ libre « Format ».
+ * « Hybride », ou un format qui cite à la fois la distance et la salle,
+ * donne « hybride ». Un format non reconnu renvoie une chaîne vide : la
+ * formation n'apparaît alors que sous « Tous ».
+ *
+ * @param int $post_id ID.
+ * @return string « en-ligne », « hybride », « presentiel » ou ''.
+ */
+function iam_cert_mode( $post_id ) {
+	$format = remove_accents( strtolower( (string) get_post_meta( $post_id, '_iam_format', true ) ) );
+
+	if ( false !== strpos( $format, 'hybride' ) ) {
+		return 'hybride';
+	}
+
+	$distance = (bool) preg_match( '/en ligne|distance|online|e-learning|visio|virtuel/', $format );
+	$salle    = (bool) preg_match( '/presentiel|intra|en salle|sur site|campus/', $format );
+
+	if ( $distance && $salle ) {
+		return 'hybride';
+	}
+	if ( $distance ) {
+		return 'en-ligne';
+	}
+	if ( $salle ) {
+		return 'presentiel';
+	}
+
+	return '';
+}
+
+/**
  * Programme jour par jour d'un séminaire : tableau de { titre, matin, apres_midi }.
  *
  * @param int $post_id ID.
@@ -413,6 +458,9 @@ function iam_cert_icon( $name ) {
 		'wallet'   => '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3"/><path d="M21 11h-5a2 2 0 0 0 0 4h5z"/></svg>',
 		'package'  => '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7.5 4.3 9 5.2M21 16V8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.7z"/><path d="M3.3 7 12 12l8.7-5M12 22V12"/></svg>',
 		'info'     => '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>',
+		'search'   => '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+		'hybrid'   => '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8M21 3v5h-5M21 12a9 9 0 0 1-15.5 6.2L3 16M3 21v-5h5"/></svg>',
+		'grid'     => '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>',
 		'check'    => '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
 	);
 

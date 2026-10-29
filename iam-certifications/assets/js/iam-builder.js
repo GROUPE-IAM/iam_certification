@@ -57,7 +57,7 @@
 		{ cle: 'columns', libelle: 'Colonnes', icone: 'columns', defaut: '3', choix: [ [ '1', '1' ], [ '2', '2' ], [ '3', '3' ], [ '4', '4' ] ] },
 		{ cle: 'limit', libelle: 'Nombre maximum', icone: 'editor-ol', defaut: '6', nombre: [ 1, 50 ] },
 		{ cle: 'orderby', libelle: 'Tri', icone: 'sort', defaut: 'titre', choix: [ [ 'titre', 'Titre A → Z' ], [ 'recent', 'Plus récentes' ], [ 'manuel', 'Ordre du catalogue' ] ] },
-		{ cle: 'filters', libelle: 'Barre de filtres par domaine', icone: 'filter' },
+		{ cle: 'nofilters', libelle: 'Masquer la barre de filtres', icone: 'hidden' },
 		{ cle: 'group', libelle: 'Grouper par domaine', icone: 'excerpt-view' },
 		{ cle: 'max_tools', libelle: 'Outils affichés par carte', icone: 'admin-tools', defaut: '4', nombre: [ 0, 12 ] }
 	] );
@@ -172,8 +172,8 @@
 					a.orderby = 'date';
 					a.order = 'DESC';
 				}
-			} else if ( 'filters' === b.cle ) {
-				a.filters = 'true';
+			} else if ( 'nofilters' === b.cle ) {
+				a.filters = 'false';
 			} else if ( 'group' === b.cle ) {
 				a.group_by_domaine = 'true';
 			} else if ( 'max_tools' === b.cle && '6' !== b.valeur ) {
@@ -327,9 +327,6 @@
 	function rendreNotes( a ) {
 		var notes = [];
 
-		if ( a.group_by_domaine && a.filters ) {
-			notes.push( 'La barre de filtres n\'apparaît pas quand les formations sont groupées par domaine.' );
-		}
 		if ( a.ids && ( a.type || a.domaine || a.outil || a.featured ) ) {
 			notes.push( 'Les formations choisies sont aussi filtrées par les autres blocs : une formation qui ne correspond pas n\'apparaîtra pas.' );
 		}

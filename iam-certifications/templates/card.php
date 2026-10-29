@@ -36,6 +36,10 @@ if ( $domaines && ! is_wp_error( $domaines ) ) {
 $outils = get_the_terms( $post_id, IAM_CERT_TAX_OUTIL );
 $outils = ( $outils && ! is_wp_error( $outils ) ) ? $outils : array();
 
+// Texte parcouru par la recherche de la barre de filtres.
+$mode      = iam_cert_mode( $post_id );
+$recherche = implode( ' ', array_merge( array( get_the_title( $post_id ), $domaine_nom, $public ), wp_list_pluck( $outils, 'name' ) ) );
+
 $max_tools = isset( $atts['max_tools'] ) ? (int) $atts['max_tools'] : 6;
 $reste     = 0;
 if ( $max_tools > 0 && count( $outils ) > $max_tools ) {
@@ -43,7 +47,7 @@ if ( $max_tools > 0 && count( $outils ) > $max_tools ) {
 	$outils = array_slice( $outils, 0, $max_tools );
 }
 ?>
-<article class="iam-cert-card iam-cert-card--<?php echo esc_attr( $type ); ?>" data-type="<?php echo esc_attr( $type ); ?>" data-domaine="<?php echo esc_attr( $domaine_slug ); ?>">
+<article class="iam-cert-card iam-cert-card--<?php echo esc_attr( $type ); ?>" data-type="<?php echo esc_attr( $type ); ?>" data-domaine="<?php echo esc_attr( $domaine_slug ); ?>" data-mode="<?php echo esc_attr( $mode ); ?>" data-recherche="<?php echo esc_attr( $recherche ); ?>">
 
 	<a class="iam-cert-card__media" href="<?php echo esc_url( $permalink ); ?>"
 		aria-label="<?php echo esc_attr( get_the_title( $post_id ) ); ?>">
