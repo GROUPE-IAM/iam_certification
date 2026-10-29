@@ -42,7 +42,7 @@ class IAM_Cert_Shortcode {
 				'orderby'          => 'menu_order title',
 				'order'            => 'ASC',
 				'group_by_domaine' => '',      // "true" : titres de section par domaine (façon site actuel).
-				'filters'          => 'auto',  // Barre de filtres (thématique, format, recherche) : « auto » dès 4 formations, « true » toujours, « false » jamais.
+				'filters'          => '',      // Barre de filtres : « true » toujours, « false » jamais ; vide = réglage Formations → Filtres.
 				'max_tools'        => 6,       // Nombre d'outils affichés sur la carte avant « +N ».
 			),
 			$atts,
@@ -65,9 +65,11 @@ class IAM_Cert_Shortcode {
 		ob_start();
 		echo '<div class="iam-cert">';
 
-		$filtres = 'true' === $atts['filters'] || ( 'auto' === $atts['filters'] && count( $query->posts ) >= 4 );
+		$reglages = IAM_Cert_Filtres::reglages();
+		$quand    = '' === $atts['filters'] ? $reglages['affichage'] : $atts['filters'];
+		$filtres  = in_array( $quand, array( 'true', 'toujours' ), true ) || ( 'auto' === $quand && count( $query->posts ) >= 4 );
 		if ( $filtres ) {
-			$this->render_filter_bar( $query );
+			$this->render_filter_bar( $query, $reglages );
 		}
 
 		if ( $group ) {
@@ -255,10 +257,11 @@ class IAM_Cert_Shortcode {
 	 * type et thématique. Filtrage côté client via les data-attributs des
 	 * cartes ; les compteurs sont recalculés par iam-front.js.
 	 *
-	 * @param WP_Query $query Résultats (pour lister les choix présents).
+	 * @param WP_Query $query    Résultats (pour lister les choix présents).
+	 * @param array    $reglages Réglages de Formations → Filtres.
 	 * @return void
 	 */
-	private function render_filter_bar( $query ) {
+	private function render_filter_bar( $query, $reglages ) {
 		$themes = array();
 		$poids  = array();
 		$modes  = array();
@@ -280,23 +283,29 @@ class IAM_Cert_Shortcode {
 			'hybride'    => 'hybrid',
 			'presentiel' => 'pin',
 		);
-		// Les 3 thématiques les plus fournies sont visibles d'office, les autres s'ajoutent par « + ».
+		// Thématiques visibles d'office : celles choisies dans les réglages, sinon
+		// les plus fournies ; les autres s'ajoutent par « + Thématiques ».
 		arsort( $poids );
-		$en_vue = array_slice( array_keys( $poids ), 0, 3 );
+		$en_vue = array_values( array_intersect( $reglages['themes'], array_keys( $themes ) ) );
+		if ( ! $en_vue ) {
+			$en_vue = array_slice( array_keys( $poids ), 0, (int) $reglages['nb_themes'] );
+		}
 		$cachees = count( $themes ) - count( $en_vue );
 
 		$choix_modes = array( '' => __( 'Tous les formats', 'iam-certifications' ) ) + array_intersect_key( iam_cert_modes(), $modes );
 		?>
 		<div class="iam-filtre" data-iam-filtre>
 			<div class="iam-filtre__haut">
+				<?php if ( $reglages['recherche'] ) : ?>
 				<label class="iam-filtre__recherche">
 					<span class="iam-filtre__loupe"><?php echo iam_cert_icon( 'search' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 					<span class="screen-reader-text"><?php esc_html_e( 'Rechercher une formation', 'iam-certifications' ); ?></span>
 					<input type="search" data-filtre-q autocomplete="off" placeholder="<?php esc_attr_e( 'Une formation, un outil, un métier…', 'iam-certifications' ); ?>">
 					<kbd aria-hidden="true">/</kbd>
 				</label>
+				<?php endif; ?>
 
-				<?php if ( count( $choix_modes ) > 2 ) : ?>
+				<?php if ( $reglages['formats'] && count( $choix_modes ) > 2 ) : ?>
 					<div class="iam-filtre__modes" role="group" aria-label="<?php esc_attr_e( 'Format', 'iam-certifications' ); ?>">
 						<span class="iam-filtre__curseur" aria-hidden="true"></span>
 						<?php foreach ( $choix_modes as $cle => $nom ) : ?>
@@ -358,7 +367,7 @@ class IAM_Cert_Shortcode {
 			<div class="iam-filtre__etat">
 				<p class="iam-filtre__total" aria-live="polite"><strong data-filtre-total><?php echo (int) count( $query->posts ); ?></strong> <span data-filtre-mot><?php esc_html_e( 'formations', 'iam-certifications' ); ?></span></p>
 
-				<?php if ( count( $types ) > 1 ) : ?>
+				<?php if ( $reglages['types'] && count( $types ) > 1 ) : ?>
 					<div class="iam-filtre__types" role="group" aria-label="<?php esc_attr_e( 'Type de formation', 'iam-certifications' ); ?>">
 						<button type="button" data-filtre="type" data-valeur="" aria-pressed="true"><?php esc_html_e( 'Tout', 'iam-certifications' ); ?></button>
 						<button type="button" data-filtre="type" data-valeur="certificat" aria-pressed="false"><?php esc_html_e( 'Certificats', 'iam-certifications' ); ?> <span class="iam-filtre__n" data-n></span></button>

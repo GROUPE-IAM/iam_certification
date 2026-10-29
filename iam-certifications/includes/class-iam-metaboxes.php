@@ -93,6 +93,14 @@ class IAM_Cert_Metaboxes {
 					'seminaire'  => __( 'Présentiel Dakar ou intra', 'iam-certifications' ),
 				),
 			),
+			'_iam_mode'             => array(
+				'label'   => __( 'Modalité (barre de filtres)', 'iam-certifications' ),
+				'type'    => 'select',
+				'options' => array( '' => __( 'Automatique, d’après le format', 'iam-certifications' ) ) + iam_cert_modes(),
+				'step'    => 2,
+				'width'   => 'half',
+				'desc'    => __( 'Range la formation sous En ligne, Hybride ou Présentiel dans le catalogue.', 'iam-certifications' ),
+			),
 			'_iam_niveau'           => array(
 				'required'    => true,
 				'label'       => __( 'Niveau', 'iam-certifications' ),

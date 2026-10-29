@@ -3,7 +3,7 @@
  * Plugin Name:       IAM Certifications
  * Plugin URI:        https://groupeiam.com/
  * Description:        Catalogue de formations du Groupe IAM : certificats professionnels et séminaires intensifs (custom post type, taxonomies, assistant de saisie, shortcode [iam_certifications] et page de détail).
- * Version:           1.7.4
+ * Version:           1.8.0
  * Author:            Groupe IAM
  * Author URI:        https://groupeiam.com/
  * License:           GPL-2.0-or-later
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // -----------------------------------------------------------------------------
 // Constantes du plugin.
 // -----------------------------------------------------------------------------
-define( 'IAM_CERT_VERSION', '1.7.4' );
+define( 'IAM_CERT_VERSION', '1.8.0' );
 define( 'IAM_CERT_FILE', __FILE__ );
 define( 'IAM_CERT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'IAM_CERT_URL', plugin_dir_url( __FILE__ ) );
@@ -48,6 +48,7 @@ require_once IAM_CERT_PATH . 'includes/class-iam-admin-ui.php';
 require_once IAM_CERT_PATH . 'includes/class-iam-assets.php';
 require_once IAM_CERT_PATH . 'includes/class-iam-shortcode.php';
 require_once IAM_CERT_PATH . 'includes/class-iam-shortcode-builder.php';
+require_once IAM_CERT_PATH . 'includes/class-iam-filtres.php';
 require_once IAM_CERT_PATH . 'includes/class-iam-template.php';
 require_once IAM_CERT_PATH . 'includes/class-iam-seeder.php';
 
@@ -165,6 +166,7 @@ function iam_cert_init() {
 	( new IAM_Cert_Assets() )->register();
 	( new IAM_Cert_Shortcode() )->register();
 	( new IAM_Cert_Shortcode_Builder() )->register();
+	( new IAM_Cert_Filtres() )->register();
 	( new IAM_Cert_Template() )->register();
 
 	if ( is_admin() ) {

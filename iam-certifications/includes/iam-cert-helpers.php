@@ -161,7 +161,8 @@ function iam_cert_modes() {
 }
 
 /**
- * Modalité d'une formation, déduite du champ libre « Format ».
+ * Modalité d'une formation : celle choisie dans sa fiche, sinon déduite
+ * du champ libre « Format ».
  * « Hybride », ou un format qui cite à la fois la distance et la salle,
  * donne « hybride ». Un format non reconnu renvoie une chaîne vide : la
  * formation n'apparaît alors que sous « Tous ».
@@ -170,6 +171,11 @@ function iam_cert_modes() {
  * @return string « en-ligne », « hybride », « presentiel » ou ''.
  */
 function iam_cert_mode( $post_id ) {
+	$choisi = get_post_meta( $post_id, '_iam_mode', true );
+	if ( array_key_exists( $choisi, iam_cert_modes() ) ) {
+		return $choisi;
+	}
+
 	$format = remove_accents( strtolower( (string) get_post_meta( $post_id, '_iam_format', true ) ) );
 
 	if ( false !== strpos( $format, 'hybride' ) ) {

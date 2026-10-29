@@ -35,7 +35,7 @@ Plugin WordPress de gestion du **catalogue de formations** du Groupe IAM — **c
 | `limit` | nombre maximum | `-1` |
 | `max_tools` | outils affichés avant « +N » | `6` |
 | `group_by_domaine` | `true` = sections titrées par domaine | — |
-| `filters` | Barre de filtres (recherche, format en ligne / hybride / présentiel, type, thématique). `auto` : affichée dès 4 formations ; `true` : toujours ; `false` : jamais | `auto` |
+| `filters` | Barre de filtres (recherche, format en ligne / hybride / présentiel, type, thématique). `true` : toujours ; `false` : jamais ; absent : réglage de Formations → Filtres | — |
 
 Exemples :
 ```
@@ -219,6 +219,12 @@ grâce à la bibliothèque *Plugin Update Checker* (`lib/plugin-update-checker`,
   `define( 'IAM_CERT_GITHUB_TOKEN', 'ghp_…' );` (jeton en lecture seule).
 
 ## Journal des versions
+
+### 1.8.0
+- **Barre de filtres au-dessus du catalogue** : recherche (titre, outil, public), format En ligne / Hybride / Présentiel, Certificats / Séminaires et thématiques. Les thématiques se combinent : quelques-unes sont visibles d'office, les autres s'ajoutent par le bouton « + Thématiques » (fenêtre à cases à cocher) et se retirent par ×. Compteurs à facettes (chaque choix indique ce qu'il donnerait, un choix vide est grisé), sélection gardée dans l'URL, message quand rien ne correspond. Fonctionne aussi en mode groupé par domaine.
+- **Formations → Filtres** : quand afficher la barre (automatique dès 4 formations, toujours, jamais), filtres proposés (recherche, format, type) et thématiques visibles d'office (sinon les plus fournies, en nombre réglable). Option `iam_cert_filtres`. Un shortcode avec `filters="true"` ou `filters="false"` garde la main sur sa page.
+- **Modalité de chaque formation** : nouveau champ « Modalité (barre de filtres) » dans la fiche (étape Format), par défaut déduite du champ Format (« hybride », « en ligne », « présentiel »…).
+- Générateur de shortcode : le bloc « Masquer la barre de filtres » remplace « Barre de filtres par domaine ».
 
 ### 1.7.4
 - **Étiquette de catégorie déplacée en bas à droite des cartes** : elle cachait le haut des visuels (souvent les visages). La durée reste en bas à gauche ; chaque pastille est limitée à la moitié de la largeur, le texte trop long est coupé avec « … » et s'affiche en entier au survol.

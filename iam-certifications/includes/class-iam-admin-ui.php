@@ -548,7 +548,7 @@ class IAM_Cert_Admin_UI {
 					<?php $this->section_open( 'dashicons-chart-bar', __( 'Chiffres clés', 'iam-certifications' ), __( 'Affichés en grand, avec compteurs animés, en haut de la page.', 'iam-certifications' ) ); ?>
 						<div class="iam-fields">
 							<?php
-							foreach ( array( '_iam_duree_texte', '_iam_duree_heures', '_iam_format', '_iam_niveau', '_iam_participants_max', '_iam_pratique_pct', '_iam_rythme' ) as $k ) {
+							foreach ( array( '_iam_duree_texte', '_iam_duree_heures', '_iam_format', '_iam_mode', '_iam_niveau', '_iam_participants_max', '_iam_pratique_pct', '_iam_rythme' ) as $k ) {
 								$field( $k );
 							}
 							?>
