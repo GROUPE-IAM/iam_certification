@@ -44,9 +44,20 @@ class IAM_Cert_Filtres {
 			'types'     => 1,
 			'themes'    => array(),  // Thématiques visibles d'office ; vide = les plus fournies.
 			'nb_themes' => 3,
+			'page_titre' => __( 'Formez-vous aux compétences qui font la différence', 'iam-certifications' ),
+			'page_intro' => __( 'Certificats professionnels en ligne et séminaires intensifs à Dakar : {n} formations conçues par le Groupe IAM pour les professionnels et les organisations.', 'iam-certifications' ),
 		);
 
-		return wp_parse_args( (array) get_option( self::OPTION, array() ), $defaut );
+		$r = wp_parse_args( (array) get_option( self::OPTION, array() ), $defaut );
+
+		// Un titre ou une accroche vidés reprennent le texte par défaut.
+		foreach ( array( 'page_titre', 'page_intro' ) as $cle ) {
+			if ( '' === trim( (string) $r[ $cle ] ) ) {
+				$r[ $cle ] = $defaut[ $cle ];
+			}
+		}
+
+		return $r;
 	}
 
 	/**
@@ -57,8 +68,8 @@ class IAM_Cert_Filtres {
 	public function menu() {
 		add_submenu_page(
 			IAM_Cert_Admin_UI::PAGE_LIST,
-			__( 'Barre de filtres', 'iam-certifications' ),
-			__( 'Filtres', 'iam-certifications' ),
+			__( 'Page catalogue et filtres', 'iam-certifications' ),
+			__( 'Page catalogue', 'iam-certifications' ),
 			IAM_Cert_Admin_UI::CAP,
 			self::PAGE,
 			array( $this, 'render' )
@@ -99,7 +110,7 @@ class IAM_Cert_Filtres {
 			<header class="iam-adm-head">
 				<div>
 					<p class="iam-adm-eyebrow"><?php esc_html_e( 'Catalogue', 'iam-certifications' ); ?></p>
-					<h1 class="iam-adm-title"><?php esc_html_e( 'Barre de filtres', 'iam-certifications' ); ?></h1>
+					<h1 class="iam-adm-title"><?php esc_html_e( 'Page catalogue et filtres', 'iam-certifications' ); ?></h1>
 					<p class="iam-adm-intro"><?php esc_html_e( 'Réglez la barre affichée au-dessus des certificats et séminaires. Le format d’une formation se choisit dans sa fiche (étape « Format & durée »).', 'iam-certifications' ); ?></p>
 				</div>
 			</header>
@@ -184,6 +195,35 @@ class IAM_Cert_Filtres {
 					</div>
 				</section>
 
+				<section class="iam-sec">
+					<header class="iam-sec__head">
+						<span class="iam-sec__icon dashicons dashicons-welcome-view-site" aria-hidden="true"></span>
+						<div>
+							<h2 class="iam-sec__title"><?php esc_html_e( 'Page catalogue', 'iam-certifications' ); ?></h2>
+							<p class="iam-sec__desc">
+								<?php
+								printf(
+									/* translators: %s : lien vers la page catalogue */
+									esc_html__( 'Toutes les formations, avec la barre de filtres : %s. Les shortcodes restent utilisables dans n’importe quelle page.', 'iam-certifications' ),
+									'<a href="' . esc_url( get_post_type_archive_link( IAM_CERT_CPT ) ) . '" target="_blank" rel="noopener">' . esc_html( untrailingslashit( preg_replace( '#^https?://#', '', get_post_type_archive_link( IAM_CERT_CPT ) ) ) ) . '</a>'
+								);
+								?>
+							</p>
+						</div>
+					</header>
+					<div class="iam-sec__body">
+						<div class="iam-field">
+							<label class="iam-field__label" for="iam_page_titre"><?php esc_html_e( 'Titre', 'iam-certifications' ); ?></label>
+							<input type="text" id="iam_page_titre" name="page_titre" class="widefat" value="<?php echo esc_attr( $r['page_titre'] ); ?>">
+						</div>
+						<div class="iam-field" style="margin-top: 12px;">
+							<label class="iam-field__label" for="iam_page_intro"><?php esc_html_e( 'Accroche', 'iam-certifications' ); ?></label>
+							<textarea id="iam_page_intro" name="page_intro" rows="3" class="widefat"><?php echo esc_textarea( $r['page_intro'] ); ?></textarea>
+							<p class="iam-field__hint"><?php esc_html_e( '{n} est remplacé par le nombre de formations publiées.', 'iam-certifications' ); ?></p>
+						</div>
+					</div>
+				</section>
+
 				<p><button type="submit" class="iam-adm-btn iam-adm-btn--publish"><span class="dashicons dashicons-saved"></span> <?php esc_html_e( 'Enregistrer', 'iam-certifications' ); ?></button></p>
 			</form>
 		</div>
@@ -213,7 +253,9 @@ class IAM_Cert_Filtres {
 				'formats'   => empty( $_POST['formats'] ) ? 0 : 1,
 				'types'     => empty( $_POST['types'] ) ? 0 : 1,
 				'themes'    => array_values( array_filter( $themes ) ),
-				'nb_themes' => min( 20, absint( $_POST['nb_themes'] ?? 3 ) ),
+				'nb_themes'  => min( 20, absint( $_POST['nb_themes'] ?? 3 ) ),
+				'page_titre' => sanitize_text_field( wp_unslash( $_POST['page_titre'] ?? '' ) ),
+				'page_intro' => sanitize_textarea_field( wp_unslash( $_POST['page_intro'] ?? '' ) ),
 			),
 			false
 		);

@@ -25,12 +25,16 @@ class IAM_Cert_Template {
 	}
 
 	/**
-	 * Remplace le template single par celui du plugin (surchargeable par le thème).
+	 * Remplace les templates single et catalogue par ceux du plugin (surchargeables par le thème).
 	 *
 	 * @param string $template Template résolu par WordPress.
 	 * @return string
 	 */
 	public function template_include( $template ) {
+		if ( is_post_type_archive( IAM_CERT_CPT ) || is_tax( IAM_CERT_TAX_DOMAINE ) ) {
+			return $this->catalogue( $template );
+		}
+
 		if ( ! is_singular( IAM_CERT_CPT ) ) {
 			return $template;
 		}
@@ -53,5 +57,25 @@ class IAM_Cert_Template {
 		wp_enqueue_script( 'iam-cert-animations' );
 
 		return IAM_CERT_PATH . 'templates/single-certification.php';
+	}
+
+	/**
+	 * Page catalogue (/certifications/ et pages de domaine), surchargeable
+	 * par theme/iam-certifications/archive-certification.php.
+	 *
+	 * @param string $template Template résolu par WordPress.
+	 * @return string
+	 */
+	private function catalogue( $template ) {
+		$override = locate_template( array( 'iam-certifications/archive-certification.php' ) );
+		if ( $override ) {
+			return $override;
+		}
+
+		wp_enqueue_style( 'iam-cert-front' );
+		wp_enqueue_script( 'iam-cert-front' );
+		wp_enqueue_script( 'iam-cert-animations' );
+
+		return IAM_CERT_PATH . 'templates/archive-certification.php';
 	}
 }

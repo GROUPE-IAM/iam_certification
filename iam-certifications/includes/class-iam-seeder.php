@@ -23,6 +23,7 @@ class IAM_Cert_Seeder {
 	const OPT_V16     = 'iam_cert_seed_v16';
 	const OPT_V17     = 'iam_cert_seed_v17';
 	const OPT_V172    = 'iam_cert_seed_v172';
+	const OPT_V19     = 'iam_cert_seed_v19';
 	const OPT_FORM    = 'iam_cert_default_form_id';
 
 	/**
@@ -53,6 +54,7 @@ class IAM_Cert_Seeder {
 		$this->seed_v16();
 		$this->seed_v17();
 		$this->seed_v172();
+		$this->seed_v19();
 		$this->seed_form();
 	}
 
@@ -199,7 +201,7 @@ class IAM_Cert_Seeder {
 			$hero_avant = trim( (string) get_post_meta( $id, '_iam_hero', true ) );
 
 			foreach ( $c as $key => $value ) {
-				if ( in_array( $key, array( 'titre', 'slug', 'domaine', 'outils' ), true ) ) {
+				if ( in_array( $key, array( 'titre', 'slug', 'domaine', 'outils', 'contenu' ), true ) ) {
 					continue;
 				}
 				$meta    = '_iam_' . ( isset( $alias[ $key ] ) ? $alias[ $key ] : $key );
@@ -336,13 +338,43 @@ class IAM_Cert_Seeder {
 	}
 
 	/**
+	 * v1.9 : les 162 séminaires de la « Proposition 2027 » (fiches 3FPT), puis
+	 * leurs visuels (un par séminaire, assets/img/formations/<slug>.jpg).
+	 * Les visuels sont importés par lots de 8 : la passe reprend au
+	 * chargement suivant de l'admin tant qu'il en reste.
+	 *
+	 * @return void
+	 */
+	public function seed_v19() {
+		if ( get_option( self::OPT_V19 ) ) {
+			return;
+		}
+
+		$data_file = IAM_CERT_PATH . 'includes/data/seminaires-2027-seed.php';
+		$items     = file_exists( $data_file ) ? include $data_file : array();
+		if ( ! is_array( $items ) ) {
+			return;
+		}
+
+		$ordre = 400;
+		foreach ( $items as $c ) {
+			$this->insert( $c, $ordre++ );
+		}
+
+		if ( $this->importer_visuels( 8 ) ) {
+			update_option( self::OPT_V19, 1 );
+		}
+	}
+
+	/**
 	 * Pose les visuels livrés dans assets/img/formations/<slug>.jpg (Unsplash,
 	 * licence libre) comme image mise en avant, seulement pour les fiches qui
 	 * n'en ont pas : un visuel choisi à la main n'est jamais remplacé.
 	 *
-	 * @return bool False si un import a échoué (la passe sera retentée).
+	 * @param int $max Imports au plus pour cette passe (0 : sans limite).
+	 * @return bool False si un import a échoué ou s'il en reste (la passe sera retentée).
 	 */
-	private function importer_visuels() {
+	private function importer_visuels( $max = 0 ) {
 		$images = glob( IAM_CERT_PATH . 'assets/img/formations/*.jpg' );
 		if ( ! $images ) {
 			return true;
@@ -352,7 +384,8 @@ class IAM_Cert_Seeder {
 		require_once ABSPATH . 'wp-admin/includes/media.php';
 		require_once ABSPATH . 'wp-admin/includes/image.php';
 
-		$ok = true;
+		$ok      = true;
+		$imports = 0;
 
 		foreach ( $images as $source ) {
 			$slug = basename( $source, '.jpg' );
@@ -360,6 +393,10 @@ class IAM_Cert_Seeder {
 			if ( ! $post || has_post_thumbnail( $post ) ) {
 				continue;
 			}
+			if ( $max && $imports >= $max ) {
+				return false;
+			}
+			++$imports;
 
 			// media_handle_sideload() déplace le fichier : on lui confie une copie.
 			$copie = wp_tempnam( $slug . '.jpg' );
@@ -409,7 +446,7 @@ class IAM_Cert_Seeder {
 				'post_status'  => 'publish',
 				'post_title'   => $c['titre'],
 				'post_name'    => $c['slug'],
-				'post_content' => '',
+				'post_content' => isset( $c['contenu'] ) ? wp_kses_post( $c['contenu'] ) : '',
 				'post_excerpt' => $c['hero'],
 				'menu_order'   => $ordre,
 			),

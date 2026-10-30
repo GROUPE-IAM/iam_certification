@@ -186,7 +186,11 @@
 				section.hidden = !section.querySelector('.iam-cert-card:not(.is-hidden)');
 			});
 
-			animerTotal(visibles);
+			if (anime) {
+				animerTotal(visibles);
+			} else {
+				total.textContent = visibles;
+			}
 			if (mot) {
 				mot.textContent = visibles > 1 ? 'formations' : 'formation';
 			}
@@ -320,6 +324,10 @@
 		}
 
 		window.addEventListener('resize', placerCurseur);
+		// La police web change la largeur des boutons : on remesure une fois chargée.
+		if (document.fonts && document.fonts.ready) {
+			document.fonts.ready.then(placerCurseur);
+		}
 		appliquer(false);
 		bar.classList.add('is-pret');
 	}
@@ -576,6 +584,37 @@
 		});
 	}
 
+	/* Page catalogue : chiffres clés comptés de 0 à leur valeur. */
+	function initCompteurs() {
+		if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			return;
+		}
+		document.querySelectorAll('[data-iam-cat-count]').forEach(function (el, i) {
+			var fin = parseInt(el.getAttribute('data-iam-cat-count'), 10) || 0;
+			var debut = Date.now() + 300 + i * 120;
+			var fini = false;
+			function pas() {
+				if (fini) {
+					return;
+				}
+				var k = Math.max(0, Math.min(1, (Date.now() - debut) / 1400));
+				el.textContent = Math.round(fin * (1 - Math.pow(1 - k, 3)));
+				if (k < 1) {
+					window.requestAnimationFrame(pas);
+				} else {
+					fini = true;
+				}
+			}
+			el.textContent = '0';
+			window.requestAnimationFrame(pas);
+			// Filet de sécurité si l'animation ne tourne pas (onglet en arrière-plan).
+			window.setTimeout(function () {
+				fini = true;
+				el.textContent = fin;
+			}, 2600 + i * 120);
+		});
+	}
+
 	function init() {
 		document.querySelectorAll('.iam-cert').forEach(initFilters);
 		guardInitialScroll();
@@ -584,6 +623,7 @@
 		initPageNav();
 		initVideo();
 		initStickyBar();
+		initCompteurs();
 	}
 
 	if (document.readyState === 'loading') {

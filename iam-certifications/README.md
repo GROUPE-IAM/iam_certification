@@ -220,6 +220,13 @@ grâce à la bibliothèque *Plugin Update Checker* (`lib/plugin-update-checker`,
 
 ## Journal des versions
 
+### 1.9.0
+- **Page catalogue** `/certifications/` (archive du type « certification ») et pages de thématique : en-tête avec chiffres clés animés, accès rapides Certificats / Séminaires, barre de filtres et toutes les formations, bandeau de contact. Titre et accroche dans Formations → Page catalogue (`{n}` = nombre de formations). Surchargeable par `votre-theme/iam-certifications/archive-certification.php`. Les shortcodes restent utilisables dans n'importe quelle page.
+- **162 séminaires de la Proposition 2027** (fiches 3FPT, « Catalogue_seminaires_IAM_pour le site.xlsx », feuille « Fiches 3FPT ») : 3 jours / 24 h en présentiel à Dakar ou en intra, 16 participants, 70 % de pratique. Présentation, objectifs, compétences, programme jour par jour, livrables, évaluation, apports et infos pratiques. 16 thématiques. Sans prix : le tarif 3FPT reste à confirmer. Données : `includes/data/seminaires-2027-seed.php`, option `iam_cert_seed_v19`.
+- **Une photo différente par séminaire** (162 photos Unsplash, licence libre, aucune répétition ni reprise d'une image existante), importées par lots de 8 à chaque chargement de l'admin.
+- Le seeder accepte `contenu` (texte libre de la page).
+- **Barre de filtres blindée contre les styles du thème** (Elementor) : fenêtre « + Thématiques » centrée, bouton de fermeture et compteurs ronds, police Montserrat partout, plus de majuscule forcée à chaque mot. Sur mobile, la fenêtre monte du bas sans dépasser de l'écran.
+
 ### 1.8.0
 - **Barre de filtres au-dessus du catalogue** : recherche (titre, outil, public), format En ligne / Hybride / Présentiel, Certificats / Séminaires et thématiques. Les thématiques se combinent : quelques-unes sont visibles d'office, les autres s'ajoutent par le bouton « + Thématiques » (fenêtre à cases à cocher) et se retirent par ×. Compteurs à facettes (chaque choix indique ce qu'il donnerait, un choix vide est grisé), sélection gardée dans l'URL, message quand rien ne correspond. Fonctionne aussi en mode groupé par domaine.
 - **Formations → Filtres** : quand afficher la barre (automatique dès 4 formations, toujours, jamais), filtres proposés (recherche, format, type) et thématiques visibles d'office (sinon les plus fournies, en nombre réglable). Option `iam_cert_filtres`. Un shortcode avec `filters="true"` ou `filters="false"` garde la main sur sa page.
