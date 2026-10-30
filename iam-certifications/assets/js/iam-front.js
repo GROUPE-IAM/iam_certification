@@ -22,9 +22,12 @@
 
 	function initFilters(root) {
 		var bar = root.querySelector('[data-iam-filtre]');
-		if (!bar) {
+		// La page catalogue (.iam-cert) contient le bloc du shortcode (.iam-cert) :
+		// seule la barre du bloc le plus proche est initialisée, une seule fois.
+		if (!bar || bar.closest('.iam-cert') !== root || bar.hasAttribute('data-iam-pret')) {
 			return;
 		}
+		bar.setAttribute('data-iam-pret', '');
 
 		var cards = Array.prototype.slice.call(root.querySelectorAll('.iam-cert-card'));
 		var boutons = Array.prototype.slice.call(bar.querySelectorAll('[data-filtre]'));
@@ -43,6 +46,20 @@
 		var motModale = bar.querySelector('[data-filtre-mot-modale]');
 		var puces = Array.prototype.slice.call(bar.querySelectorAll('.iam-filtre__theme[data-valeur]:not([data-valeur=""])'));
 		var etat = { mode: '', theme: [], type: '', q: '' };
+		// Affichage par paquets : 9 cartes sur mobile, 24 sur grand écran.
+		var paquet = window.matchMedia && window.matchMedia('(max-width: 720px)').matches ? 9 : 24;
+		var limite = paquet;
+		var deja = 0;
+		var plus = document.createElement('div');
+		plus.className = 'iam-filtre__plus-de';
+		plus.hidden = true;
+		plus.innerHTML = '<button type="button" class="iam-cert-btn"></button>';
+		var grilles = root.querySelectorAll('.iam-cert-grid');
+		if (grilles.length) {
+			var derniere = grilles[grilles.length - 1];
+			var bloc = derniere.closest('.iam-cert-section') || derniere;
+			bloc.parentNode.insertBefore(plus, bloc.nextSibling);
+		}
 
 		var fiches = cards.map(function (card) {
 			return {
@@ -136,11 +153,12 @@
 
 			fiches.forEach(function (f) {
 				var ok = correspond(f, etat);
-				f.el.classList.toggle('is-hidden', !ok);
-				if (ok) {
-					visibles++;
-					if (anime && !reduit) {
-						f.el.style.animationDelay = Math.min(rang, 8) * 35 + 'ms';
+				// Au-delà du paquet affiché, la carte attend le bouton « Afficher plus ».
+				f.el.classList.toggle('is-hidden', !ok || visibles >= limite);
+				if (ok && visibles++ < limite) {
+					// Après « Afficher plus », seules les nouvelles cartes s'animent.
+					if (anime && !reduit && rang >= deja) {
+						f.el.style.animationDelay = Math.min(rang - deja, 8) * 35 + 'ms';
 						f.el.classList.remove('is-entering');
 						void f.el.offsetWidth;
 						f.el.classList.add('is-entering');
@@ -201,6 +219,10 @@
 			if (vide) {
 				vide.hidden = visibles > 0;
 			}
+			var reste = visibles - limite;
+			plus.hidden = reste <= 0;
+			plus.firstChild.textContent = reste > 0 ? 'Afficher plus de formations (' + reste + ')' : '';
+			deja = 0;
 			var filtre = !!(etat.mode || etat.theme.length || etat.type || etat.q);
 			reset.forEach(function (r) {
 				if (r.classList.contains('iam-filtre__reset')) {
@@ -231,6 +253,7 @@
 				// Recliquer sur un choix actif le désactive.
 				etat[cle] = etat[cle] === valeur ? '' : valeur;
 			}
+			limite = paquet;
 			appliquer(true);
 			memoriser();
 		});
@@ -241,6 +264,7 @@
 				if (champ) {
 					champ.value = '';
 				}
+				limite = paquet;
 				appliquer(true);
 				memoriser();
 			});
@@ -252,6 +276,7 @@
 				window.clearTimeout(minuteur);
 				minuteur = window.setTimeout(function () {
 					etat.q = champ.value.trim();
+					limite = paquet;
 					appliquer(true);
 					memoriser();
 				}, 140);
@@ -260,6 +285,7 @@
 				if ('Escape' === e.key) {
 					champ.value = '';
 					etat.q = '';
+					limite = paquet;
 					appliquer(true);
 					memoriser();
 				}
@@ -322,6 +348,12 @@
 				plus.hidden = true;
 			}
 		}
+
+		plus.addEventListener('click', function () {
+			deja = limite;
+			limite += paquet;
+			appliquer(true);
+		});
 
 		window.addEventListener('resize', placerCurseur);
 		// La police web change la largeur des boutons : on remesure une fois chargée.

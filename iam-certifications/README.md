@@ -220,6 +220,11 @@ grâce à la bibliothèque *Plugin Update Checker* (`lib/plugin-update-checker`,
 
 ## Journal des versions
 
+### 1.9.1
+- **Correctif page catalogue** : la barre de filtres était initialisée deux fois (la page et le bloc du shortcode portent tous deux `.iam-cert`), si bien qu'un clic sur une thématique s'annulait. Une seule initialisation désormais.
+- **Affichage par paquets** : 9 cartes sur mobile, 24 sur grand écran, puis un bouton « Afficher plus de formations (n) ». Le total et les compteurs portent toujours sur toutes les formations filtrées.
+- **Mobile** : accès rapides Certificats / Séminaires en deux tuiles compactes, en-tête resserré, outils des cartes sur une seule ligne, boutons de contact pleine largeur.
+
 ### 1.9.0
 - **Page catalogue** `/certifications/` (archive du type « certification ») et pages de thématique : en-tête avec chiffres clés animés, accès rapides Certificats / Séminaires, barre de filtres et toutes les formations, bandeau de contact. Titre et accroche dans Formations → Page catalogue (`{n}` = nombre de formations). Surchargeable par `votre-theme/iam-certifications/archive-certification.php`. Les shortcodes restent utilisables dans n'importe quelle page.
 - **162 séminaires de la Proposition 2027** (fiches 3FPT, « Catalogue_seminaires_IAM_pour le site.xlsx », feuille « Fiches 3FPT ») : 3 jours / 24 h en présentiel à Dakar ou en intra, 16 participants, 70 % de pratique. Présentation, objectifs, compétences, programme jour par jour, livrables, évaluation, apports et infos pratiques. 16 thématiques. Sans prix : le tarif 3FPT reste à confirmer. Données : `includes/data/seminaires-2027-seed.php`, option `iam_cert_seed_v19`.

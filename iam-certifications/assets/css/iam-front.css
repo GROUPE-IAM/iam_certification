@@ -701,6 +701,26 @@
 	font-weight: 800;
 }
 
+/* « Afficher plus de formations » sous la grille */
+.iam-cert .iam-filtre__plus-de {
+	display: flex;
+	justify-content: center;
+	margin-top: 32px;
+}
+
+.iam-cert .iam-filtre__plus-de[hidden] {
+	display: none;
+}
+
+.iam-cert .iam-filtre__plus-de .iam-cert-btn {
+	padding: 14px 28px;
+	font-family: var(--ckd-sans);
+	font-size: .95rem;
+	text-transform: none;
+	line-height: 1.2;
+	box-shadow: 0 12px 26px -12px rgba(11, 93, 59, .6);
+}
+
 /* Cartes qui réapparaissent après un filtre */
 .iam-cert-card.is-entering {
 	animation: iam-carte-in .45s cubic-bezier(.2, .9, .3, 1.15) both;
@@ -1389,9 +1409,80 @@
 }
 
 @media (max-width: 720px) {
+	.iam-cat-hero {
+		padding: 44px 0 76px;
+	}
+
+	.iam-cat-hero__sur {
+		margin-bottom: 14px;
+	}
+
+	.iam-cat-hero__intro {
+		font-size: .95rem;
+	}
+
+	.iam-cat-kpis {
+		margin-top: 24px;
+	}
+
+	/* Accès rapides : deux tuiles compactes côte à côte */
 	.iam-cat-types {
-		grid-template-columns: 1fr;
-		margin-top: -44px;
+		gap: 10px;
+		margin-top: -48px;
+	}
+
+	.iam-cert .iam-cat-type {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 10px;
+		padding: 14px;
+		border-radius: 18px;
+	}
+
+	.iam-cat-type__icone {
+		width: 40px;
+		height: 40px;
+		border-radius: 12px;
+	}
+
+	.iam-cat-type__corps strong {
+		font-size: .92rem;
+		line-height: 1.3;
+	}
+
+	.iam-cat-type__corps span,
+	.iam-cat-type__fleche {
+		display: none;
+	}
+
+	.iam-cat-liste {
+		margin-top: 24px;
+	}
+
+	.iam-cat-cta {
+		margin-top: 40px;
+		border-radius: 22px;
+	}
+
+	.iam-cat-cta__actions,
+	.iam-cert .iam-cat-cta__btn {
+		width: 100%;
+	}
+
+	.iam-cert .iam-cat-cta__btn {
+		justify-content: center;
+	}
+
+	/* Cartes plus compactes : outils sur une seule ligne */
+	.iam-cert .iam-cert-card__tools {
+		flex-wrap: nowrap;
+		overflow: hidden;
+		-webkit-mask-image: linear-gradient(90deg, #000 85%, transparent);
+		mask-image: linear-gradient(90deg, #000 85%, transparent);
+	}
+
+	.iam-cert .iam-cert-card__tool {
+		flex: none;
 	}
 
 	.iam-cat-kpis {
