@@ -24,6 +24,7 @@ class IAM_Cert_Seeder {
 	const OPT_V17     = 'iam_cert_seed_v17';
 	const OPT_V172    = 'iam_cert_seed_v172';
 	const OPT_V19     = 'iam_cert_seed_v19';
+	const OPT_V110    = 'iam_cert_seed_v110';
 	const OPT_FORM    = 'iam_cert_default_form_id';
 
 	/**
@@ -55,6 +56,7 @@ class IAM_Cert_Seeder {
 		$this->seed_v17();
 		$this->seed_v172();
 		$this->seed_v19();
+		$this->seed_v110();
 		$this->seed_form();
 	}
 
@@ -364,6 +366,78 @@ class IAM_Cert_Seeder {
 		if ( $this->importer_visuels( 8 ) ) {
 			update_option( self::OPT_V19, 1 );
 		}
+	}
+
+	/**
+	 * v1.10 : programme Cloud & IA de l'Innovation Center (IAM × Aviro).
+	 * - crée les deux fiches « certificat » du catalogue (Cloud Foundations,
+	 *   AI Foundations) à partir de includes/data/cloud-ia.php, la même source
+	 *   que le bloc [iam_cloud_ia] de la page Innovation Center ;
+	 * - pose leurs visuels ;
+	 * - renomme les deux séminaires AWS de 3 jours, pour ne pas les confondre
+	 *   avec les parcours de 13 semaines (seulement si le titre n'a pas été
+	 *   modifié à la main).
+	 *
+	 * @return void
+	 */
+	public function seed_v110() {
+		if ( get_option( self::OPT_V110 ) ) {
+			return;
+		}
+
+		$data_file = IAM_CERT_PATH . 'includes/data/cloud-ia.php';
+		$data      = file_exists( $data_file ) ? include $data_file : array();
+		if ( ! is_array( $data ) || empty( $data['parcours'] ) ) {
+			return;
+		}
+
+		// Clés propres au bloc Innovation Center, à ne pas stocker en méta.
+		$hors_fiche = array( 'nom', 'num', 'certif', 'public_liste', 'appris', 'projet', 'debouches_c', 'image', 'image_alt', 'prix', 'deux_fois', 'detail', 'test' );
+		$ordre      = 10;
+		foreach ( $data['parcours'] as $p ) {
+			$fiche            = array_diff_key( $p, array_flip( $hors_fiche ) );
+			$fiche['contenu'] = $this->contenu_cloud_ia( $p, $data );
+			$this->insert( $fiche, $ordre++ );
+		}
+
+		foreach ( (array) $data['renommages'] as $slug => $titres ) {
+			$post = get_page_by_path( $slug, OBJECT, IAM_CERT_CPT );
+			if ( $post && $titres[0] === $post->post_title ) {
+				wp_update_post(
+					array(
+						'ID'         => $post->ID,
+						'post_title' => $titres[1],
+					)
+				);
+			}
+		}
+
+		if ( $this->importer_visuels() ) {
+			update_option( self::OPT_V110, 1 );
+		}
+	}
+
+	/**
+	 * Présentation (contenu de la fiche) d'un parcours Cloud & IA.
+	 *
+	 * @param array $p    Parcours.
+	 * @param array $data Données du programme.
+	 * @return string HTML.
+	 */
+	private function contenu_cloud_ia( $p, $data ) {
+		$test        = esc_url( $data['url'] . $p['test'] );
+		$innovation  = esc_url( home_url( $data['innovation_page'] . '#formations-ia' ) );
+		$apprentissages = '';
+		foreach ( $p['appris'] as $a ) {
+			$apprentissages .= '<li>' . esc_html( $a ) . '</li>';
+		}
+
+		return '<p>' . esc_html( $p['nom'] ) . ' est l’un des deux parcours du Centre d’excellence Cloud &amp; IA de l’Innovation Center du Groupe IAM, en partenariat avec Aviro. En 13 semaines, vous suivez les contenus officiels AWS accompagné par un formateur, puis vous passez l’examen ' . esc_html( $p['certif'] ) . ', inclus dans l’inscription, au centre Pearson VUE d’IAM ou en ligne.</p>'
+			. '<p>Plus de 20 h en direct avec des experts (10 séances de 2 h et un bootcamp), des retours d’expérience, un projet en équipe, des labs pratiques, deux examens blancs corrigés et un groupe d’entraide animé chaque semaine.</p>'
+			. '<h3>Vous apprendrez</h3><ul>' . $apprentissages . '</ul>'
+			. '<h3>Avant de candidater</h3>'
+			. '<p>Passez le <a href="' . $test . '" target="_blank" rel="noopener">test de positionnement en ligne</a> (15 questions, environ 15 minutes) : il confirme le parcours adapté à votre profil. Vous visez les deux certifications ? Le Pack Excellence regroupe Cloud Foundations puis AI Foundations à ' . esc_html( $data['pack']['prix'] ) . ' FCFA au lieu de ' . esc_html( $data['pack']['au_lieu'] ) . ' FCFA, examens inclus.</p>'
+			. '<p><a href="' . $innovation . '">Découvrir tout le programme Cloud &amp; IA sur la page Innovation Center</a>.</p>';
 	}
 
 	/**

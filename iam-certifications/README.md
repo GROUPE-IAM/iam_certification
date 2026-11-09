@@ -220,6 +220,14 @@ grâce à la bibliothèque *Plugin Update Checker* (`lib/plugin-update-checker`,
 
 ## Journal des versions
 
+### 1.10.0
+- **Programme Cloud & IA de l'Innovation Center** (IAM × Aviro, certifications AWS), présent à deux endroits qui lisent la même source, `includes/data/cloud-ia.php` :
+  - bloc unique `[iam_cloud_ia]` pour la page Innovation Center (ancre `#formations-ia`) : présentation, 2 parcours, Pack Excellence, méthode, calendrier, centre Pearson VUE, inscription, FAQ. Contenu intégré, sans attribut ; une seule occurrence par page. Le bandeau « offre de lancement » et le texte d'inscription se mettent à jour seuls après leur date ;
+  - deux fiches certificat dans le catalogue, thématique « Cloud & IA » : Cloud Foundations (AWS Cloud Practitioner) et AI Foundations (AWS AI Practitioner). Option `iam_cert_seed_v110`.
+- Prix du site du programme + 50 000 FCFA : 460 000 et 510 000 FCFA examen inclus ; Pack Excellence 820 000 FCFA au lieu de 970 000.
+- Photos du Groupe IAM pour le bloc et les deux fiches (`assets/img/cloud-ia/`).
+- Les deux séminaires AWS de 3 jours sont renommés pour ne pas être confondus avec les parcours de 13 semaines (seulement si leur titre n'a pas été modifié à la main).
+
 ### 1.9.1
 - **Correctif page catalogue** : la barre de filtres était initialisée deux fois (la page et le bloc du shortcode portent tous deux `.iam-cert`), si bien qu'un clic sur une thématique s'annulait. Une seule initialisation désormais.
 - **Affichage par paquets** : 9 cartes sur mobile, 24 sur grand écran, puis un bouton « Afficher plus de formations (n) ». Le total et les compteurs portent toujours sur toutes les formations filtrées.
