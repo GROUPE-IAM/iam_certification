@@ -220,6 +220,10 @@ grâce à la bibliothèque *Plugin Update Checker* (`lib/plugin-update-checker`,
 
 ## Journal des versions
 
+### 1.10.1
+- Bloc `[iam_cloud_ia]` en pleine largeur : chaque section s'étend d'un bord à l'autre de l'écran, comme les sections de la page Innovation Center, avec le contenu centré sur 1320 px. Plus d'effet de « carte » dans la colonne du thème.
+- FAQ : le « ? » ne passe plus seul à la ligne.
+
 ### 1.10.0
 - **Programme Cloud & IA de l'Innovation Center** (IAM × Aviro, certifications AWS), présent à deux endroits qui lisent la même source, `includes/data/cloud-ia.php` :
   - bloc unique `[iam_cloud_ia]` pour la page Innovation Center (ancre `#formations-ia`) : présentation, 2 parcours, Pack Excellence, méthode, calendrier, centre Pearson VUE, inscription, FAQ. Contenu intégré, sans attribut ; une seule occurrence par page. Le bandeau « offre de lancement » et le texte d'inscription se mettent à jour seuls après leur date ;

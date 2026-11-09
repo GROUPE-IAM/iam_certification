@@ -1,5 +1,8 @@
 /**
  * IAM Certifications — bloc [iam_cloud_ia] (Innovation Center, formations IA).
+ * Pleine largeur : chaque section s'étend d'un bord à l'autre de l'écran
+ * (comme les sections de la page Innovation Center), le contenu reste centré
+ * sur --cia-max.
  * Charte Groupe IAM (vert, or, beige ; Playfair + Montserrat).
  * Le thème Univet impose couleurs de titres, marges de listes et « fill » des
  * SVG : les règles marquées !important sont des garde-fous contre lui.
@@ -19,17 +22,29 @@
 	--cia-rayon: 22px;
 	--cia-serif: "Playfair Display", Georgia, "Times New Roman", serif;
 	--cia-sans: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+	--cia-max: 1320px;
+	--cia-gout: 28px;
+	/* Marge latérale : le contenu ne dépasse jamais --cia-max, centré. */
+	--cia-cote: max(var(--cia-gout), calc((100vw - var(--cia-max)) / 2));
 
+	position: relative;
+	left: 50%;
 	display: grid;
-	gap: 28px;
-	margin: 0 auto;
-	max-width: 1240px;
+	gap: 0;
+	width: 100vw;
+	max-width: 100vw;
+	margin: 0 0 0 -50vw;
 	font-family: var(--cia-sans);
 	font-size: 16px;
 	line-height: 1.6;
 	color: var(--cia-encre);
 	scroll-margin-top: 110px;
 	box-sizing: border-box;
+}
+
+html:has(.iam-cia),
+body:has(.iam-cia) {
+	overflow-x: clip;
 }
 
 .iam-cia *,
@@ -176,14 +191,11 @@
 }
 
 .iam-cia .iam-cia-bloc {
-	padding: clamp(28px, 5vw, 56px);
-	border: 1px solid var(--cia-trait);
-	border-radius: var(--cia-rayon);
+	padding: clamp(64px, 8vw, 112px) var(--cia-cote);
 	background: var(--cia-carte);
 }
 
 .iam-cia .iam-cia-bloc--beige {
-	border-color: transparent;
 	background: var(--cia-beige);
 }
 
@@ -212,9 +224,8 @@
 	grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
 	gap: clamp(24px, 4vw, 48px);
 	align-items: center;
-	padding: clamp(28px, 5vw, 60px);
+	padding: clamp(72px, 9vw, 128px) var(--cia-cote);
 	overflow: hidden;
-	border-radius: calc(var(--cia-rayon) + 6px);
 	background:
 		radial-gradient(70% 90% at 100% 0, rgba(237, 169, 0, .22), transparent 60%),
 		radial-gradient(60% 80% at 0 100%, rgba(228, 255, 87, .10), transparent 60%),
@@ -905,13 +916,13 @@
 
 @media (max-width: 560px) {
 	.iam-cia {
-		gap: 18px;
+		--cia-gout: 18px;
 	}
 
 	.iam-cia .iam-cia-bloc,
 	.iam-cia .iam-cia-hero {
-		padding: 24px 18px;
-		border-radius: 18px;
+		padding-top: 56px;
+		padding-bottom: 56px;
 	}
 
 	.iam-cia .iam-cia-actions .iam-cia-btn {

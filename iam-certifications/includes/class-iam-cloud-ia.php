@@ -120,12 +120,12 @@ class IAM_Cert_Cloud_IA {
 				array( 'Démarrage', 'Séance de lancement le 14 décembre 2026.' ),
 			),
 			'faq'       => array(
-				array( 'Quel parcours choisir ?', 'Le test de positionnement vous oriente. Sans expérience du Cloud, commencez par Cloud Foundations ; si vous travaillez déjà avec des données ou du code, AI Foundations est accessible directement.' ),
-				array( 'Puis-je préparer les deux certifications ?', 'Oui, l’une après l’autre : Cloud Foundations d’abord, puis AI Foundations à la promotion suivante. Le Pack Excellence regroupe les deux à ' . $pack['prix'] . ' FCFA au lieu de ' . $pack['au_lieu'] . ' FCFA, examens inclus.' ),
-				array( 'Comment se déroule l’examen ?', 'Environ 65 questions en 90 minutes, score minimal de 700/1000, en fin de semaine 12. Au centre Pearson VUE d’IAM ou en ligne depuis chez vous (Pearson VUE OnVUE, surveillé par webcam), en français ou en anglais.' ),
-				array( 'Puis-je payer en plusieurs fois ?', 'Oui, en 2 fois par Orange Money ou Wave : 50 % à l’inscription pour réserver votre place, 50 % avant la semaine 4. Vous pouvez aussi payer en une fois, ou sur place à IAM.' ),
-				array( 'Combien de temps faut-il prévoir ?', 'Une séance de 2 h par semaine, plus 4 à 6 h de travail autonome. La présence attendue est d’au moins 80 % des séances.' ),
-				array( 'Et si je ne suis pas prêt en semaine 12 ?', 'Sous 75 % aux examens blancs, vous suivez un plan de remédiation et passez l’examen avec la promotion suivante.' ),
+				array( 'Quel parcours choisir ?', 'Le test de positionnement vous oriente. Sans expérience du Cloud, commencez par Cloud Foundations ; si vous travaillez déjà avec des données ou du code, AI Foundations est accessible directement.' ),
+				array( 'Puis-je préparer les deux certifications ?', 'Oui, l’une après l’autre : Cloud Foundations d’abord, puis AI Foundations à la promotion suivante. Le Pack Excellence regroupe les deux à ' . $pack['prix'] . ' FCFA au lieu de ' . $pack['au_lieu'] . ' FCFA, examens inclus.' ),
+				array( 'Comment se déroule l’examen ?', 'Environ 65 questions en 90 minutes, score minimal de 700/1000, en fin de semaine 12. Au centre Pearson VUE d’IAM ou en ligne depuis chez vous (Pearson VUE OnVUE, surveillé par webcam), en français ou en anglais.' ),
+				array( 'Puis-je payer en plusieurs fois ?', 'Oui, en 2 fois par Orange Money ou Wave : 50 % à l’inscription pour réserver votre place, 50 % avant la semaine 4. Vous pouvez aussi payer en une fois, ou sur place à IAM.' ),
+				array( 'Combien de temps faut-il prévoir ?', 'Une séance de 2 h par semaine, plus 4 à 6 h de travail autonome. La présence attendue est d’au moins 80 % des séances.' ),
+				array( 'Et si je ne suis pas prêt en semaine 12 ?', 'Sous 75 % aux examens blancs, vous suivez un plan de remédiation et passez l’examen avec la promotion suivante.' ),
 			),
 		);
 	}
