@@ -6,10 +6,9 @@
  * - le bloc [iam_cloud_ia] de la page Innovation Center (IAM_Cert_Cloud_IA) ;
  * - les deux fiches « certificat » du catalogue, créées par le seeder v1.10.
  *
- * Contenu repris de https://education-cloudia.aviro-it.com/. Prix : tarif de
- * cette page + 50 000 FCFA (demande du Groupe IAM, comme les certificats BBA) ;
- * l'examen AWS (60 000 FCFA) reste inchangé, la majoration porte sur la
- * formation. Pack : 770 000 + 50 000 → 820 000 FCFA, au lieu de 970 000.
+ * Contenu et prix repris de https://education-cloudia.aviro-it.com/, sans
+ * majoration (décision du Groupe IAM, v1.11 : la majoration de 50 000 FCFA
+ * appliquée en v1.10 est retirée pour ces deux parcours).
  *
  * @package IAM_Certifications
  */
@@ -42,10 +41,10 @@ return array(
 	'demarrage'        => '14 décembre 2026',
 
 	'pack'             => array(
-		'prix'      => '820 000',
-		'au_lieu'   => '970 000',
-		'economie'  => '150 000',
-		'deux_fois' => '2 × 410 000',
+		'prix'      => '770 000',
+		'au_lieu'   => '870 000',
+		'economie'  => '100 000',
+		'deux_fois' => '2 × 385 000',
 	),
 
 	'parcours'         => array(
@@ -69,10 +68,10 @@ return array(
 				'outils'       => array( 'AWS', 'AWS Academy', 'AWS Skill Builder' ),
 				'image'        => 'formations/cloud-foundations-aws-cloud-practitioner.jpg',
 				'image_alt'    => 'Une apprenante IAM travaille sur son ordinateur portable',
-				'prix'         => '460 000',
-				'deux_fois'    => '2 × 230 000 FCFA',
-				'detail'       => 'Formation 400 000 FCFA + examen AWS 60 000 FCFA',
-				'cout'         => '460 000 FCFA examen inclus (formation 400 000 + examen AWS 60 000), ou en 2 fois : 2 × 230 000 FCFA par Orange Money, Wave ou sur place.',
+				'prix'         => '410 000',
+				'deux_fois'    => '2 × 205 000 FCFA',
+				'detail'       => 'Formation 350 000 FCFA + examen AWS 60 000 FCFA',
+				'cout'         => '410 000 FCFA examen inclus (formation 350 000 + examen AWS 60 000), ou en 2 fois : 2 × 205 000 FCFA par Orange Money, Wave ou sur place.',
 				'test'         => 'test-positionnement.html#cloud',
 				'objectifs'    => "Expliquer les concepts du Cloud et l’infrastructure mondiale AWS\nChoisir les services de calcul, réseau, stockage et bases de données adaptés à un besoin\nSécuriser un compte AWS selon le modèle de responsabilité partagée\nDécrire une architecture hautement disponible selon le cadre Well-Architected\nEstimer et optimiser les coûts d’une architecture\nRéussir l’examen AWS Certified Cloud Practitioner (CLF-C02)",
 				'modules'      => array(
@@ -104,10 +103,10 @@ return array(
 				'outils'       => array( 'AWS', 'Amazon Bedrock', 'Amazon Q', 'AWS Skill Builder' ),
 				'image'        => 'formations/ai-foundations-aws-ai-practitioner.jpg',
 				'image_alt'    => 'Deux professionnels IAM devant un écran de code',
-				'prix'         => '510 000',
-				'deux_fois'    => '2 × 255 000 FCFA',
-				'detail'       => 'Formation 450 000 FCFA + examen AWS 60 000 FCFA',
-				'cout'         => '510 000 FCFA examen inclus (formation 450 000 + examen AWS 60 000), ou en 2 fois : 2 × 255 000 FCFA par Orange Money, Wave ou sur place.',
+				'prix'         => '460 000',
+				'deux_fois'    => '2 × 230 000 FCFA',
+				'detail'       => 'Formation 400 000 FCFA + examen AWS 60 000 FCFA',
+				'cout'         => '460 000 FCFA examen inclus (formation 400 000 + examen AWS 60 000), ou en 2 fois : 2 × 230 000 FCFA par Orange Money, Wave ou sur place.',
 				'test'         => 'test-positionnement.html#ai',
 				'objectifs'    => "Expliquer les fondamentaux de l’IA, du machine learning et du deep learning\nComprendre l’IA générative : modèles de fondation, tokens, embeddings\nConstruire un assistant avec Amazon Bedrock, le prompt engineering et le RAG\nPersonnaliser et évaluer un modèle ; utiliser Amazon Q sur des cas métiers\nAppliquer les principes d’IA responsable, de sécurité et de gouvernance\nRéussir l’examen AWS Certified AI Practitioner (AIF-C01)",
 				'modules'      => array(

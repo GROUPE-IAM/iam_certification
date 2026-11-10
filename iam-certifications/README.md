@@ -225,6 +225,7 @@ grâce à la bibliothèque *Plugin Update Checker* (`lib/plugin-update-checker`,
 - Migration `seed_v111` (option `iam_cert_seed_v111`), au premier passage d'un administrateur dans l'admin : les formations des anciens domaines sont rattachées au nouveau, les anciens termes supprimés ; les thématiques mises en avant (Formations → Page catalogue) suivent.
 - Anciennes adresses `/domaine-certification/<slug>/` redirigées (301) vers la nouvelle thématique.
 - Fichiers de données mis à jour pour les installations neuves.
+- **Programme Cloud & IA : retour aux prix de la page Aviro**, sans la majoration de 50 000 FCFA : Cloud Foundations 410 000 FCFA, AI Foundations 460 000 FCFA (examen inclus), Pack Excellence 770 000 FCFA au lieu de 870 000. Le bloc `[iam_cloud_ia]` suit seul ; sur les deux fiches, `seed_v111_prix` (option `iam_cert_seed_v111_prix`) corrige le tarif et la phrase du pack s'ils n'ont pas été modifiés à la main.
 
 ### 1.10.1
 - Bloc `[iam_cloud_ia]` en pleine largeur : chaque section s'étend d'un bord à l'autre de l'écran, comme les sections de la page Innovation Center, avec le contenu centré sur 1320 px. Plus d'effet de « carte » dans la colonne du thème.

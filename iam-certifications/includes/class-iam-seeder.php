@@ -26,6 +26,7 @@ class IAM_Cert_Seeder {
 	const OPT_V19     = 'iam_cert_seed_v19';
 	const OPT_V110    = 'iam_cert_seed_v110';
 	const OPT_V111    = 'iam_cert_seed_v111';
+	const OPT_V111P   = 'iam_cert_seed_v111_prix';
 	const OPT_FORM    = 'iam_cert_default_form_id';
 
 	/**
@@ -59,6 +60,7 @@ class IAM_Cert_Seeder {
 		$this->seed_v19();
 		$this->seed_v110();
 		$this->seed_v111();
+		$this->seed_v111_prix();
 		$this->seed_form();
 	}
 
@@ -559,6 +561,54 @@ class IAM_Cert_Seeder {
 		}
 
 		update_option( self::OPT_V111, 1 );
+	}
+
+	/**
+	 * v1.11 : les deux parcours Cloud & IA reviennent au prix de la page Aviro
+	 * (sans la majoration de 50 000 FCFA posée en v1.10). Le tarif de la fiche
+	 * et la phrase du Pack Excellence ne changent que s'ils sont encore ceux
+	 * de la v1.10 : un texte modifié à la main n'est jamais remplacé.
+	 *
+	 * @return void
+	 */
+	public function seed_v111_prix() {
+		if ( get_option( self::OPT_V111P ) ) {
+			return;
+		}
+
+		$data_file = IAM_CERT_PATH . 'includes/data/cloud-ia.php';
+		$data      = file_exists( $data_file ) ? include $data_file : array();
+		if ( ! is_array( $data ) || empty( $data['parcours'] ) ) {
+			return;
+		}
+
+		// Tarifs posés par la v1.10, par slug.
+		$anciens = array(
+			'cloud-foundations-aws-cloud-practitioner' => '460 000 FCFA examen inclus (formation 400 000 + examen AWS 60 000), ou en 2 fois : 2 × 230 000 FCFA par Orange Money, Wave ou sur place.',
+			'ai-foundations-aws-ai-practitioner'       => '510 000 FCFA examen inclus (formation 450 000 + examen AWS 60 000), ou en 2 fois : 2 × 255 000 FCFA par Orange Money, Wave ou sur place.',
+		);
+		$pack_avant = 'à 820 000 FCFA au lieu de 970 000 FCFA';
+		$pack_apres = 'à ' . $data['pack']['prix'] . ' FCFA au lieu de ' . $data['pack']['au_lieu'] . ' FCFA';
+
+		foreach ( $data['parcours'] as $p ) {
+			$post = get_page_by_path( $p['slug'], OBJECT, IAM_CERT_CPT );
+			if ( ! $post ) {
+				continue;
+			}
+			if ( isset( $anciens[ $p['slug'] ] ) && $anciens[ $p['slug'] ] === get_post_meta( $post->ID, '_iam_cout', true ) ) {
+				update_post_meta( $post->ID, '_iam_cout', $p['cout'] );
+			}
+			if ( false !== strpos( $post->post_content, $pack_avant ) ) {
+				wp_update_post(
+					array(
+						'ID'           => $post->ID,
+						'post_content' => str_replace( $pack_avant, $pack_apres, $post->post_content ),
+					)
+				);
+			}
+		}
+
+		update_option( self::OPT_V111P, 1 );
 	}
 
 	/**
