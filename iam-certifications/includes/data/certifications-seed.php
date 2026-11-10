@@ -14,7 +14,7 @@ return array(
 	array(
 		'slug'        => 'no-code-marketing-salestech',
 		'titre'       => 'No Code Marketing & SalesTech',
-		'domaine'     => 'Marketing Digital',
+		'domaine'     => 'Marketing & digital',
 		'hero'        => 'Construire des systèmes marketing et commerciaux complets sans écrire de code : landing pages, CRM sur mesure, portails clients, applications mobiles, prospection automatisée.',
 		'heures'      => '50',
 		'duree_texte' => '10 semaines',
@@ -70,7 +70,7 @@ return array(
 	array(
 		'slug'        => 'content-marketing-strategie-editoriale-ia',
 		'titre'       => 'Content Marketing & Stratégie éditoriale IA',
-		'domaine'     => 'Marketing Digital',
+		'domaine'     => 'Marketing & digital',
 		'hero'        => 'Bâtir une stratégie de contenu qui convertit, en combinant IA générative et valeur ajoutée humaine : SEO sémantique, production multi-format, personnalisation, conformité',
 		'heures'      => '55',
 		'duree_texte' => '11 semaines',
@@ -130,7 +130,7 @@ return array(
 	array(
 		'slug'        => 'marketing-automation-growth-hacking',
 		'titre'       => 'Marketing Automation & Growth Hacking',
-		'domaine'     => 'Marketing Digital',
+		'domaine'     => 'Marketing & digital',
 		'hero'        => 'Concevoir et piloter une machine d\'acquisition automatisée : tunnel AARRR, nurturing multicanal, expérimentation systématique, scaling piloté par la donnée. 35 heures encadrées.',
 		'heures'      => '35',
 		'duree_texte' => '9 semaines',
@@ -182,7 +182,7 @@ return array(
 	array(
 		'slug'        => 'social-media-marketing-social-selling',
 		'titre'       => 'Social Media Marketing & Social Selling',
-		'domaine'     => 'Marketing Digital',
+		'domaine'     => 'Marketing & digital',
 		'hero'        => 'Faire des réseaux sociaux un levier de notoriété ET de vente : stratégie de contenu IA-first, prospection sociale, publicité et social commerce, mesure du ROI.',
 		'heures'      => '35',
 		'duree_texte' => '8 semaines',
@@ -226,7 +226,7 @@ return array(
 	array(
 		'slug'        => 'crm-social-e-crm',
 		'titre'       => 'CRM Social & E-CRM',
-		'domaine'     => 'Data & Analyse',
+		'domaine'     => 'IA, Data & Cloud',
 		'hero'        => 'Maîtriser la relation client omnicanale moderne : données first-party, Social CRM, personnalisation prédictive, portails self-care, conformité RGPD.',
 		'heures'      => '60',
 		'duree_texte' => '12 semaines',
@@ -290,7 +290,7 @@ return array(
 	array(
 		'slug'        => 'consultant-fonctionnel-odoo-junior',
 		'titre'       => 'Consultant fonctionnel Odoo (junior)',
-		'domaine'     => 'ERP & Consulting',
+		'domaine'     => 'Informatique, bureautique & PAO',
 		'hero'        => 'Former des consultants opérationnels sur l\'ERP le plus déployé en Afrique de l\'Ouest : paramétrage des cycles commerciaux, logistiques, financiers (SYSCOHADA) et RH, avec la posture et la méthodologie du consultant.',
 		'heures'      => '30',
 		'duree_texte' => '10 semaines',
@@ -342,7 +342,7 @@ return array(
 	array(
 		'slug'        => 'adapt-ia-adopter-lia-en-entreprise',
 		'titre'       => 'ADAPT-IA — Adopter l’IA en entreprise',
-		'domaine'     => 'Intelligence Artificielle',
+		'domaine'     => 'IA, Data & Cloud',
 		'hero'        => 'Permettre à une organisation ou un professionnel d\'intégrer l\'IA de façon utile, souveraine et conforme : du prompting aux agents, en passant par l\'IA locale et le RAG sur documents internes.',
 		'heures'      => '40',
 		'duree_texte' => '12 semaines',
@@ -386,7 +386,7 @@ return array(
 	array(
 		'slug'        => 'knowledge-management-rh',
 		'titre'       => 'Knowledge Management pour les professionnels RH',
-		'domaine'     => 'Ressources Humaines',
+		'domaine'     => 'Ressources humaines & talents',
 		'hero'        => 'Faire des RH les architectes du savoir de l\'organisation : capitaliser les connaissances critiques avant qu\'elles ne partent, réduire le coût de l\'ignorance, et intégrer le Knowledge Management au cycle de vie du collaborateur (RH 4.0).',
 		'heures'      => '21',
 		'duree_texte' => '3 jours (format atelier)',

@@ -23,7 +23,7 @@ $public_ai    = array( 'Développeurs et profils data', 'Chefs de projet et mana
 
 $commun = array(
 	'type'        => 'certificat',
-	'domaine'     => 'Cloud & IA',
+	'domaine'     => 'IA, Data & Cloud',
 	'heures'      => '22',
 	'duree_texte' => '13 semaines',
 	'format'      => 'Hybride : séances en direct au Centre d’excellence (campus IAM, Mermoz) et travail en ligne sur les contenus officiels AWS',

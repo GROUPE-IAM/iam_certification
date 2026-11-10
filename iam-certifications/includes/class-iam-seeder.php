@@ -25,6 +25,7 @@ class IAM_Cert_Seeder {
 	const OPT_V172    = 'iam_cert_seed_v172';
 	const OPT_V19     = 'iam_cert_seed_v19';
 	const OPT_V110    = 'iam_cert_seed_v110';
+	const OPT_V111    = 'iam_cert_seed_v111';
 	const OPT_FORM    = 'iam_cert_default_form_id';
 
 	/**
@@ -57,6 +58,7 @@ class IAM_Cert_Seeder {
 		$this->seed_v172();
 		$this->seed_v19();
 		$this->seed_v110();
+		$this->seed_v111();
 		$this->seed_form();
 	}
 
@@ -415,6 +417,161 @@ class IAM_Cert_Seeder {
 		if ( $this->importer_visuels() ) {
 			update_option( self::OPT_V110, 1 );
 		}
+	}
+
+	/**
+	 * v1.11 : les thématiques du catalogue passent de 22 à 10
+	 * (includes/data/domaines-v111.php).
+	 *
+	 * Pour chaque nouveau domaine : le terme de base est celui qui porte déjà
+	 * ce nom ou ce slug, sinon il est créé ; il prend le nouveau nom, les
+	 * formations des anciens domaines y sont rattachées et les anciens termes
+	 * supprimés. Les anciennes adresses /domaine-certification/<slug>/ sont
+	 * redirigées (301) et les thématiques mises en avant dans
+	 * Formations → Page catalogue suivent.
+	 *
+	 * @return void
+	 */
+	public function seed_v111() {
+		if ( get_option( self::OPT_V111 ) ) {
+			return;
+		}
+
+		$data_file = IAM_CERT_PATH . 'includes/data/domaines-v111.php';
+		$map       = file_exists( $data_file ) ? include $data_file : array();
+		if ( ! is_array( $map ) || ! $map ) {
+			return;
+		}
+
+		$termes = get_terms(
+			array(
+				'taxonomy'   => IAM_CERT_TAX_DOMAINE,
+				'hide_empty' => false,
+			)
+		);
+		if ( is_wp_error( $termes ) ) {
+			return;
+		}
+
+		// Nom normalisé (ancien ou nouveau) => nouveau nom.
+		$cible = array();
+		foreach ( $map as $nouveau => $anciens ) {
+			$cible[ self::nom_normalise( $nouveau ) ] = $nouveau;
+			foreach ( $anciens as $ancien ) {
+				$cible[ self::nom_normalise( $ancien ) ] = $nouveau;
+			}
+		}
+
+		$groupes = array();
+		foreach ( $termes as $t ) {
+			$cle = self::nom_normalise( $t->name );
+			if ( isset( $cible[ $cle ] ) ) {
+				$groupes[ $cible[ $cle ] ][] = $t;
+			}
+		}
+
+		$slugs = array(); // Ancien slug => nouveau slug.
+		foreach ( $groupes as $nouveau => $liste ) {
+			$slug_cible = sanitize_title( $nouveau );
+			$base       = null;
+
+			foreach ( $liste as $t ) {
+				if ( self::nom_normalise( $t->name ) === self::nom_normalise( $nouveau ) ) {
+					$base = $t;
+					break;
+				}
+			}
+			if ( ! $base ) {
+				foreach ( $liste as $t ) {
+					if ( $t->slug === $slug_cible ) {
+						$base = $t;
+						break;
+					}
+				}
+			}
+			if ( ! $base ) {
+				$existant = get_term_by( 'slug', $slug_cible, IAM_CERT_TAX_DOMAINE );
+				if ( $existant ) {
+					$base = $existant;
+				} else {
+					$cree = wp_insert_term( $nouveau, IAM_CERT_TAX_DOMAINE, array( 'slug' => $slug_cible ) );
+					if ( is_wp_error( $cree ) ) {
+						continue;
+					}
+					$base = get_term( $cree['term_id'], IAM_CERT_TAX_DOMAINE );
+				}
+			}
+
+			if ( $base->name !== $nouveau || $base->slug !== $slug_cible ) {
+				$ancien_slug = $base->slug;
+				$maj         = wp_update_term(
+					$base->term_id,
+					IAM_CERT_TAX_DOMAINE,
+					array(
+						'name' => $nouveau,
+						'slug' => $slug_cible,
+					)
+				);
+				if ( is_wp_error( $maj ) ) {
+					// Slug déjà pris : on garde l'ancien, seul le nom change.
+					wp_update_term( $base->term_id, IAM_CERT_TAX_DOMAINE, array( 'name' => $nouveau ) );
+				}
+				$base = get_term( $base->term_id, IAM_CERT_TAX_DOMAINE );
+				if ( $ancien_slug !== $base->slug ) {
+					$slugs[ $ancien_slug ] = $base->slug;
+				}
+			}
+
+			foreach ( $liste as $t ) {
+				if ( (int) $t->term_id === (int) $base->term_id ) {
+					continue;
+				}
+				$objets = get_objects_in_term( (int) $t->term_id, IAM_CERT_TAX_DOMAINE );
+				foreach ( is_wp_error( $objets ) ? array() : (array) $objets as $id ) {
+					wp_set_object_terms( (int) $id, (int) $base->term_id, IAM_CERT_TAX_DOMAINE, true );
+					wp_remove_object_terms( (int) $id, (int) $t->term_id, IAM_CERT_TAX_DOMAINE );
+				}
+				$slugs[ $t->slug ] = $base->slug;
+				wp_delete_term( (int) $t->term_id, IAM_CERT_TAX_DOMAINE );
+			}
+		}
+
+		// Redirections des anciennes adresses de thématique (chaînes résolues).
+		$redir = array_merge( (array) get_option( 'iam_cert_domaines_redirections', array() ), $slugs );
+		foreach ( $redir as $ancien => $nouveau ) {
+			$tours = 0;
+			while ( isset( $redir[ $nouveau ] ) && $redir[ $nouveau ] !== $nouveau && $tours++ < 10 ) {
+				$nouveau = $redir[ $nouveau ];
+			}
+			$redir[ $ancien ] = $nouveau;
+		}
+		update_option( 'iam_cert_domaines_redirections', $redir, false );
+
+		// Thématiques mises en avant dans la barre de filtres.
+		$filtres = get_option( IAM_Cert_Filtres::OPTION );
+		if ( is_array( $filtres ) && ! empty( $filtres['themes'] ) ) {
+			$themes = array();
+			foreach ( (array) $filtres['themes'] as $slug ) {
+				$themes[] = isset( $redir[ $slug ] ) ? $redir[ $slug ] : $slug;
+			}
+			$filtres['themes'] = array_values( array_unique( $themes ) );
+			update_option( IAM_Cert_Filtres::OPTION, $filtres );
+		}
+
+		update_option( self::OPT_V111, 1 );
+	}
+
+	/**
+	 * Nom de domaine comparable : sans accents ni casse, apostrophes et
+	 * « × » unifiés, espaces réduits.
+	 *
+	 * @param string $nom Nom.
+	 * @return string
+	 */
+	private static function nom_normalise( $nom ) {
+		$nom = remove_accents( wp_specialchars_decode( (string) $nom, ENT_QUOTES ) );
+		$nom = str_replace( array( '’', '‘', '×' ), array( "'", "'", 'x' ), $nom );
+		return trim( preg_replace( '/\s+/', ' ', strtolower( $nom ) ) );
 	}
 
 	/**
