@@ -220,6 +220,10 @@ grâce à la bibliothèque *Plugin Update Checker* (`lib/plugin-update-checker`,
 
 ## Journal des versions
 
+### 1.11.1
+
+- Catalogue : choisir « Certificats » ou « Séminaires » ne propose plus que les thématiques de ce type (barre, fenêtre « + Thématiques » et compteurs). Les thématiques cochées absentes du nouveau type sont retirées ; les boutons de type ne sont plus grisés par une thématique cochée.
+
 ### 1.11.0
 - **10 thématiques au lieu de 22** (`includes/data/domaines-v111.php`) : IA, Data & Cloud ; Marketing & digital ; Communication & langues ; Ressources humaines & talents ; Management & leadership ; Gestion & Management (BBA) ; Finance, fiscalité & droit ; Gestion de projet & suivi-évaluation ; Logistique, achats & marchés publics ; Informatique, bureautique & PAO.
 - Migration `seed_v111` (option `iam_cert_seed_v111`), au premier passage d'un administrateur dans l'admin : les formations des anciens domaines sont rattachées au nouveau, les anciens termes supprimés ; les thématiques mises en avant (Formations → Page catalogue) suivent.

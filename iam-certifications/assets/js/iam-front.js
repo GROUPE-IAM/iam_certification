@@ -45,6 +45,12 @@
 		var totalModale = bar.querySelector('[data-filtre-total-modale]');
 		var motModale = bar.querySelector('[data-filtre-mot-modale]');
 		var puces = Array.prototype.slice.call(bar.querySelectorAll('.iam-filtre__theme[data-valeur]:not([data-valeur=""])'));
+		var options = Array.prototype.slice.call(bar.querySelectorAll('.iam-filtre__option[data-valeur]'));
+		var btnPlus = bar.querySelector('[data-filtre-ouvrir]');
+		// Nombre de thématiques montrées d'office dans la barre (réglage admin).
+		var nbEnVue = puces.filter(function (p) {
+			return p.hasAttribute('data-en-vue');
+		}).length;
 		var etat = { mode: '', theme: [], type: '', q: '' };
 		// Affichage par paquets : 9 cartes sur mobile, 24 sur grand écran.
 		var paquet = window.matchMedia && window.matchMedia('(max-width: 720px)').matches ? 9 : 24;
@@ -94,6 +100,56 @@
 				return valeur ? etat.theme.indexOf(valeur) > -1 : !etat.theme.length;
 			}
 			return etat[cle] === valeur;
+		}
+
+		// Thématiques d'un type, avec leur nombre de fiches ; null sans type.
+		function themesDuType(type) {
+			type = undefined === type ? etat.type : type;
+			if (!type) {
+				return null;
+			}
+			var n = {};
+			fiches.forEach(function (f) {
+				if (f.type === type && f.theme) {
+					n[f.theme] = (n[f.theme] || 0) + 1;
+				}
+			});
+			return n;
+		}
+
+		// Parmi les thématiques cochées, celles qui existent dans ce type.
+		function themesPour(type, themes) {
+			var duType = themesDuType(type);
+			return duType ? themes.filter(function (t) {
+				return duType[t] > 0;
+			}) : themes;
+		}
+
+		function enVueDuType(duType) {
+			if (!duType) {
+				return puces.filter(function (p) {
+					return p.hasAttribute('data-en-vue');
+				}).map(function (p) {
+					return p.getAttribute('data-valeur');
+				});
+			}
+			// Les thématiques choisies en admin d'abord, complétées par les plus fournies.
+			var choisies = puces.filter(function (p) {
+				return p.hasAttribute('data-en-vue') && duType[p.getAttribute('data-valeur')] > 0;
+			}).map(function (p) {
+				return p.getAttribute('data-valeur');
+			});
+			var reste = Object.keys(duType).filter(function (slug) {
+				return choisies.indexOf(slug) < 0;
+			}).sort(function (a, b) {
+				return duType[b] - duType[a];
+			});
+			return choisies.concat(reste).slice(0, Math.max(nbEnVue, choisies.length));
+		}
+
+		// Au changement de type, on retire les thématiques qui n'y existent pas.
+		function nettoyerThemes() {
+			etat.theme = themesPour(etat.type, etat.theme);
 		}
 
 		function placerCurseur() {
@@ -171,8 +227,14 @@
 			boutons.forEach(function (b) {
 				var cle = b.getAttribute('data-filtre');
 				var valeur = b.getAttribute('data-valeur');
+				var e = etat;
+				if ('type' === cle) {
+					// Changer de type retire les thématiques absentes de ce type :
+					// le compteur montre ce qu'on obtiendra vraiment.
+					e = { mode: etat.mode, theme: themesPour(valeur, etat.theme), type: etat.type, q: etat.q };
+				}
 				var n = fiches.filter(function (f) {
-					return correspond(f, etat, cle) && (!valeur || f[cle] === valeur);
+					return correspond(f, e, cle) && (!valeur || f[cle] === valeur);
 				}).length;
 				var badge = b.querySelector('[data-n]');
 				if (badge) {
@@ -185,18 +247,30 @@
 				b.disabled = !!valeur && n === 0 && !actif;
 			});
 
-			// Une thématique hors des 3 d'office n'apparaît dans la barre que cochée.
+			// Un type choisi (Certificats / Séminaires) ne propose que ses
+			// thématiques ; la barre montre alors les plus fournies de ce type.
+			var duType = themesDuType();
+			var enVue = enVueDuType(duType);
 			var horsBarre = 0;
 			puces.forEach(function (p) {
-				var visible = p.hasAttribute('data-en-vue') || etat.theme.indexOf(p.getAttribute('data-valeur')) > -1;
+				var slug = p.getAttribute('data-valeur');
+				var propre = !duType || duType[slug] > 0;
+				var dOffice = enVue.indexOf(slug) > -1;
+				var visible = propre && (dOffice || etat.theme.indexOf(slug) > -1);
 				p.hidden = !visible;
-				p.classList.toggle('is-ajoutee', !p.hasAttribute('data-en-vue') && visible);
-				if (!visible) {
+				p.classList.toggle('is-ajoutee', !dOffice && visible);
+				if (propre && !visible) {
 					horsBarre++;
 				}
 			});
+			options.forEach(function (o) {
+				o.hidden = !!duType && !(duType[o.getAttribute('data-valeur')] > 0);
+			});
 			if (autres) {
 				autres.textContent = horsBarre || '';
+			}
+			if (btnPlus && modale && modale.showModal) {
+				btnPlus.hidden = !horsBarre;
 			}
 
 			// Mode groupé : une section sans carte visible disparaît.
@@ -252,6 +326,9 @@
 			} else {
 				// Recliquer sur un choix actif le désactive.
 				etat[cle] = etat[cle] === valeur ? '' : valeur;
+				if ('type' === cle) {
+					nettoyerThemes();
+				}
 			}
 			limite = paquet;
 			appliquer(true);
@@ -317,6 +394,7 @@
 					etat[cle] = v;
 				}
 			});
+			nettoyerThemes();
 			etat.q = lu.get('q') || '';
 			if (champ) {
 				champ.value = etat.q;
@@ -343,9 +421,8 @@
 			puces.forEach(function (p) {
 				p.setAttribute('data-en-vue', '');
 			});
-			var plus = bar.querySelector('[data-filtre-ouvrir]');
-			if (plus) {
-				plus.hidden = true;
+			if (btnPlus) {
+				btnPlus.hidden = true;
 			}
 		}
 
