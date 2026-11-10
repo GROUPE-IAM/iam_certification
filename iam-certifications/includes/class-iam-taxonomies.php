@@ -22,6 +22,32 @@ class IAM_Cert_Taxonomies {
 	public function register() {
 		$this->register_domaine();
 		$this->register_outil();
+		add_action( 'template_redirect', array( $this, 'rediriger_ancien_domaine' ) );
+	}
+
+	/**
+	 * Anciennes thématiques fusionnées en v1.11 : l'adresse
+	 * /domaine-certification/<ancien-slug>/ renvoie (301) vers la nouvelle.
+	 *
+	 * @return void
+	 */
+	public function rediriger_ancien_domaine() {
+		if ( ! is_404() ) {
+			return;
+		}
+		$slug = get_query_var( IAM_CERT_TAX_DOMAINE );
+		if ( ! $slug || ! is_string( $slug ) ) {
+			return;
+		}
+		$redir = (array) get_option( 'iam_cert_domaines_redirections', array() );
+		if ( empty( $redir[ $slug ] ) ) {
+			return;
+		}
+		$lien = get_term_link( $redir[ $slug ], IAM_CERT_TAX_DOMAINE );
+		if ( ! is_wp_error( $lien ) ) {
+			wp_safe_redirect( $lien, 301 );
+			exit;
+		}
 	}
 
 	/**

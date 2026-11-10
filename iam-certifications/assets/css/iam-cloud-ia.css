@@ -1,0 +1,953 @@
+/**
+ * IAM Certifications — bloc [iam_cloud_ia] (Innovation Center, formations IA).
+ * Pleine largeur : chaque section s'étend d'un bord à l'autre de l'écran
+ * (comme les sections de la page Innovation Center), le contenu reste centré
+ * sur --cia-max.
+ * Charte Groupe IAM (vert, or, beige ; Playfair + Montserrat).
+ * Le thème Univet impose couleurs de titres, marges de listes et « fill » des
+ * SVG : les règles marquées !important sont des garde-fous contre lui.
+ */
+
+.iam-cia {
+	--cia-vert: #0B5D3B;
+	--cia-vert-fonce: #093f28;
+	--cia-nuit: #072b1c;
+	--cia-or: #EDA900;
+	--cia-lime: #E4FF57;
+	--cia-beige: #EDE8DE;
+	--cia-carte: #FCFAF7;
+	--cia-encre: #12352A;
+	--cia-doux: #5F6E67;
+	--cia-trait: #D6CEC0;
+	--cia-rayon: 22px;
+	--cia-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+	--cia-sans: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+	--cia-max: 1320px;
+	--cia-gout: 28px;
+	/* Marge latérale : le contenu ne dépasse jamais --cia-max, centré. */
+	--cia-cote: max(var(--cia-gout), calc((100vw - var(--cia-max)) / 2));
+
+	position: relative;
+	left: 50%;
+	display: grid;
+	gap: 0;
+	width: 100vw;
+	max-width: 100vw;
+	margin: 0 0 0 -50vw;
+	font-family: var(--cia-sans);
+	font-size: 16px;
+	line-height: 1.6;
+	color: var(--cia-encre);
+	scroll-margin-top: 110px;
+	box-sizing: border-box;
+}
+
+html:has(.iam-cia),
+body:has(.iam-cia) {
+	overflow-x: clip;
+}
+
+.iam-cia *,
+.iam-cia *::before,
+.iam-cia *::after {
+	box-sizing: border-box;
+}
+
+.iam-cia h2,
+.iam-cia h3,
+.iam-cia h4 {
+	margin: 0 !important;
+	padding: 0 !important;
+	font-family: var(--cia-serif) !important;
+	font-weight: 700 !important;
+	letter-spacing: 0 !important;
+	text-transform: none !important;
+	color: var(--cia-encre) !important;
+	line-height: 1.2 !important;
+}
+
+.iam-cia p {
+	margin: 0;
+}
+
+.iam-cia ul,
+.iam-cia ol {
+	margin: 0 !important;
+	padding: 0 !important;
+	list-style: none !important;
+}
+
+.iam-cia li {
+	margin: 0;
+}
+
+.iam-cia li::before,
+.iam-cia li::marker {
+	content: none !important;
+}
+
+.iam-cia img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	max-width: none;
+	object-fit: cover;
+	border-radius: 0;
+}
+
+.iam-cia svg.iam-cia-ico {
+	width: 1.15em;
+	height: 1.15em;
+	flex: none;
+	fill: none !important;
+	stroke: currentColor !important;
+}
+
+.iam-cia svg.iam-cia-ico * {
+	fill: none !important;
+}
+
+/* --------------------------------------------------------------------------
+ * Éléments communs
+ * ------------------------------------------------------------------------ */
+.iam-cia .iam-cia-etiquette,
+.iam-cia .iam-cia-mini {
+	font-size: .74rem;
+	font-weight: 700;
+	letter-spacing: .14em;
+	text-transform: uppercase;
+	color: var(--cia-vert);
+}
+
+.iam-cia .iam-cia-mini {
+	color: var(--cia-doux);
+	letter-spacing: .12em;
+}
+
+.iam-cia .iam-cia-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: .55em;
+	min-height: 50px;
+	padding: 12px 24px;
+	border: 2px solid transparent;
+	border-radius: 999px;
+	font-family: var(--cia-sans);
+	font-size: .95rem;
+	font-weight: 700;
+	line-height: 1.2;
+	text-align: center;
+	text-decoration: none !important;
+	transition: transform .2s ease, background-color .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.iam-cia .iam-cia-btn:hover {
+	transform: translateY(-2px);
+}
+
+.iam-cia .iam-cia-btn:focus-visible {
+	outline: 3px solid var(--cia-or);
+	outline-offset: 3px;
+}
+
+.iam-cia .iam-cia-btn--plein,
+.iam-cia .iam-cia-btn--plein:visited {
+	background: var(--cia-or);
+	color: var(--cia-nuit) !important;
+	box-shadow: 0 12px 26px -14px rgba(237, 169, 0, .9);
+}
+
+.iam-cia .iam-cia-btn--plein:hover {
+	background: #ffbd14;
+	color: var(--cia-nuit) !important;
+}
+
+.iam-cia .iam-cia-btn--ligne,
+.iam-cia .iam-cia-btn--ligne:visited {
+	border-color: currentColor;
+	background: transparent;
+	color: var(--cia-vert) !important;
+}
+
+.iam-cia .iam-cia-btn--ligne:hover {
+	background: var(--cia-vert);
+	border-color: var(--cia-vert);
+	color: #fff !important;
+}
+
+.iam-cia .iam-cia-btn--bloc {
+	width: 100%;
+}
+
+.iam-cia .iam-cia-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.iam-cia .iam-cia-actions--centre {
+	justify-content: center;
+}
+
+.iam-cia .iam-cia-bloc {
+	padding: clamp(64px, 8vw, 112px) var(--cia-cote);
+	background: var(--cia-carte);
+}
+
+.iam-cia .iam-cia-bloc--beige {
+	background: var(--cia-beige);
+}
+
+.iam-cia .iam-cia-entete {
+	display: grid;
+	gap: 10px;
+	max-width: 760px;
+	margin: 0 auto clamp(24px, 4vw, 40px);
+	text-align: center;
+}
+
+.iam-cia .iam-cia-entete h3 {
+	font-size: clamp(1.6rem, 3.2vw, 2.4rem) !important;
+}
+
+.iam-cia .iam-cia-entete > p:last-child:not(.iam-cia-etiquette) {
+	color: var(--cia-doux);
+}
+
+/* --------------------------------------------------------------------------
+ * Hero
+ * ------------------------------------------------------------------------ */
+.iam-cia .iam-cia-hero {
+	position: relative;
+	display: grid;
+	grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+	gap: clamp(24px, 4vw, 48px);
+	align-items: center;
+	padding: clamp(72px, 9vw, 128px) var(--cia-cote);
+	overflow: hidden;
+	background:
+		radial-gradient(70% 90% at 100% 0, rgba(237, 169, 0, .22), transparent 60%),
+		radial-gradient(60% 80% at 0 100%, rgba(228, 255, 87, .10), transparent 60%),
+		linear-gradient(135deg, var(--cia-vert) 0%, var(--cia-vert-fonce) 55%, var(--cia-nuit) 100%);
+	color: #fff;
+}
+
+.iam-cia .iam-cia-hero__texte {
+	display: grid;
+	gap: 18px;
+	align-content: start;
+}
+
+.iam-cia .iam-cia-surtitre {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px;
+	font-size: .78rem;
+	font-weight: 700;
+	letter-spacing: .14em;
+	text-transform: uppercase;
+	color: rgba(255, 255, 255, .8);
+}
+
+.iam-cia .iam-cia-pastille {
+	padding: 6px 12px;
+	border-radius: 999px;
+	background: var(--cia-lime);
+	color: var(--cia-nuit);
+	letter-spacing: .1em;
+}
+
+.iam-cia .iam-cia-accroche {
+	font-family: var(--cia-serif);
+	font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+	font-style: italic;
+	color: var(--cia-or);
+}
+
+.iam-cia .iam-cia-hero h2.iam-cia-titre {
+	font-size: clamp(2rem, 4.4vw, 3.4rem) !important;
+	line-height: 1.08 !important;
+	color: #fff !important;
+}
+
+.iam-cia .iam-cia-intro {
+	max-width: 60ch;
+	color: rgba(255, 255, 255, .86);
+}
+
+.iam-cia .iam-cia-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.iam-cia .iam-cia-tags li {
+	padding: 6px 14px;
+	border: 1px solid rgba(255, 255, 255, .28);
+	border-radius: 999px;
+	font-size: .82rem;
+	font-weight: 600;
+	color: #fff;
+}
+
+.iam-cia .iam-cia-tags li.is-offre {
+	border-color: var(--cia-or);
+	background: var(--cia-or);
+	color: var(--cia-nuit);
+}
+
+.iam-cia .iam-cia-hero .iam-cia-btn--ligne,
+.iam-cia .iam-cia-hero .iam-cia-btn--ligne:visited {
+	color: #fff !important;
+}
+
+.iam-cia .iam-cia-hero .iam-cia-btn--ligne:hover {
+	border-color: #fff;
+	background: #fff;
+	color: var(--cia-vert) !important;
+}
+
+.iam-cia .iam-cia-hero__visuel {
+	position: relative;
+	margin: 0;
+	aspect-ratio: 4 / 4.4;
+	overflow: hidden;
+	border-radius: var(--cia-rayon);
+	box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .6);
+}
+
+.iam-cia .iam-cia-hero__visuel figcaption {
+	position: absolute;
+	right: 12px;
+	bottom: 12px;
+	left: 12px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 14px;
+	border-radius: 14px;
+	background: rgba(7, 43, 28, .82);
+	backdrop-filter: blur(6px);
+	font-size: .8rem;
+	font-weight: 600;
+	color: #fff;
+}
+
+.iam-cia .iam-cia-hero__visuel figcaption svg {
+	color: var(--cia-or);
+}
+
+.iam-cia .iam-cia-chiffres {
+	grid-column: 1 / -1;
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 1px;
+	overflow: hidden;
+	border: 1px solid rgba(255, 255, 255, .16);
+	border-radius: 18px;
+	background: rgba(255, 255, 255, .16);
+}
+
+.iam-cia .iam-cia-chiffres li {
+	display: grid;
+	gap: 4px;
+	padding: 18px 20px;
+	background: rgba(7, 43, 28, .55);
+}
+
+.iam-cia .iam-cia-chiffres strong {
+	font-family: var(--cia-serif);
+	font-size: clamp(1.7rem, 3vw, 2.3rem);
+	line-height: 1;
+	color: var(--cia-lime);
+}
+
+.iam-cia .iam-cia-chiffres span {
+	font-size: .84rem;
+	color: rgba(255, 255, 255, .78);
+}
+
+/* --------------------------------------------------------------------------
+ * Parcours
+ * ------------------------------------------------------------------------ */
+.iam-cia .iam-cia-parcours {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 24px;
+}
+
+.iam-cia .iam-cia-carte {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	border: 1px solid var(--cia-trait);
+	border-radius: var(--cia-rayon);
+	background: #fff;
+	box-shadow: 0 24px 48px -36px rgba(9, 63, 40, .5);
+	transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.iam-cia .iam-cia-carte:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 30px 56px -34px rgba(9, 63, 40, .6);
+}
+
+.iam-cia .iam-cia-carte__img {
+	position: relative;
+	aspect-ratio: 16 / 8;
+	overflow: hidden;
+}
+
+.iam-cia .iam-cia-carte__num {
+	position: absolute;
+	top: 14px;
+	left: 14px;
+	padding: 6px 12px;
+	border-radius: 999px;
+	background: var(--cia-lime);
+	font-size: .72rem;
+	font-weight: 800;
+	letter-spacing: .12em;
+	text-transform: uppercase;
+	color: var(--cia-nuit);
+}
+
+.iam-cia .iam-cia-carte__corps {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	gap: 10px;
+	padding: clamp(20px, 3vw, 30px);
+}
+
+.iam-cia .iam-cia-carte h4 {
+	font-size: clamp(1.5rem, 2.4vw, 1.9rem) !important;
+	color: var(--cia-vert) !important;
+}
+
+.iam-cia .iam-cia-carte__certif {
+	margin-bottom: 8px;
+	font-size: .88rem;
+	font-weight: 600;
+	color: var(--cia-doux);
+}
+
+.iam-cia .iam-cia-carte__pour {
+	margin-bottom: 8px;
+	font-size: .93rem;
+}
+
+.iam-cia .iam-cia-liste {
+	display: grid;
+	gap: 8px;
+	margin-bottom: 10px !important;
+}
+
+.iam-cia .iam-cia-liste li {
+	display: flex;
+	gap: 10px;
+	font-size: .93rem;
+	line-height: 1.45;
+}
+
+.iam-cia .iam-cia-liste svg {
+	margin-top: .12em;
+	color: var(--cia-vert);
+}
+
+.iam-cia .iam-cia-infos {
+	display: grid;
+	gap: 10px;
+	margin: 0 0 6px;
+	padding: 14px 0 0;
+	border-top: 1px dashed var(--cia-trait);
+}
+
+.iam-cia .iam-cia-infos div {
+	display: grid;
+	grid-template-columns: 96px minmax(0, 1fr);
+	gap: 12px;
+	font-size: .88rem;
+	line-height: 1.5;
+}
+
+.iam-cia .iam-cia-infos dt {
+	font-weight: 700;
+	color: var(--cia-vert);
+}
+
+.iam-cia .iam-cia-infos dd {
+	margin: 0;
+	color: var(--cia-doux);
+}
+
+.iam-cia .iam-cia-prix {
+	margin-top: auto;
+	padding: 16px 18px;
+	border-radius: 16px;
+	background: var(--cia-beige);
+}
+
+.iam-cia .iam-cia-prix__montant {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 6px;
+	font-weight: 700;
+	color: var(--cia-vert);
+}
+
+.iam-cia .iam-cia-prix__montant strong {
+	font-family: var(--cia-serif);
+	font-size: 2rem;
+	line-height: 1;
+}
+
+.iam-cia .iam-cia-prix__montant span {
+	padding: 3px 10px;
+	border-radius: 999px;
+	background: var(--cia-vert);
+	font-size: .72rem;
+	letter-spacing: .06em;
+	text-transform: uppercase;
+	color: #fff;
+}
+
+.iam-cia .iam-cia-prix__detail {
+	margin-top: 6px;
+	font-size: .82rem;
+	color: var(--cia-doux);
+}
+
+.iam-cia .iam-cia-carte__actions {
+	display: grid;
+	gap: 10px;
+	margin-top: 6px;
+}
+
+.iam-cia .iam-cia-carte__actions .iam-cia-btn {
+	width: 100%;
+}
+
+/* Pack Excellence */
+.iam-cia .iam-cia-pack {
+	display: grid;
+	grid-template-columns: 180px minmax(0, 1fr) auto;
+	gap: 24px;
+	align-items: center;
+	overflow: hidden;
+	margin-top: 24px;
+	padding: clamp(22px, 3.5vw, 32px);
+	border-radius: var(--cia-rayon);
+	background:
+		radial-gradient(80% 140% at 100% 50%, rgba(237, 169, 0, .25), transparent 60%),
+		var(--cia-vert-fonce);
+	color: rgba(255, 255, 255, .85);
+}
+
+.iam-cia .iam-cia-pack__img {
+	height: auto;
+	aspect-ratio: 1;
+	border-radius: 16px;
+	object-position: center 25%;
+}
+
+.iam-cia .iam-cia-pack > div {
+	display: grid;
+	gap: 8px;
+}
+
+.iam-cia .iam-cia-pack .iam-cia-etiquette {
+	color: var(--cia-lime);
+}
+
+.iam-cia .iam-cia-pack h4 {
+	font-size: clamp(1.25rem, 2.2vw, 1.6rem) !important;
+	color: #fff !important;
+}
+
+.iam-cia .iam-cia-pack__prix {
+	display: grid;
+	text-align: right;
+	font-weight: 700;
+	color: #fff;
+}
+
+.iam-cia .iam-cia-pack__prix strong {
+	font-family: var(--cia-serif);
+	font-size: clamp(2rem, 4vw, 2.8rem);
+	line-height: 1;
+	color: var(--cia-or);
+}
+
+.iam-cia .iam-cia-pack__prix span {
+	font-size: .8rem;
+	font-weight: 500;
+	color: rgba(255, 255, 255, .7);
+}
+
+/* --------------------------------------------------------------------------
+ * Méthode, phases, Pearson VUE
+ * ------------------------------------------------------------------------ */
+.iam-cia .iam-cia-methode {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 16px;
+}
+
+.iam-cia .iam-cia-methode li {
+	display: grid;
+	align-content: start;
+	gap: 8px;
+	padding: 22px;
+	border-radius: 18px;
+	background: var(--cia-carte);
+}
+
+.iam-cia .iam-cia-methode__ico {
+	display: inline-grid;
+	place-items: center;
+	width: 46px;
+	height: 46px;
+	margin-bottom: 4px;
+	border-radius: 14px;
+	background: var(--cia-vert);
+	font-size: 1.15rem;
+	color: var(--cia-lime);
+}
+
+.iam-cia .iam-cia-methode h4 {
+	font-size: 1.2rem !important;
+}
+
+.iam-cia .iam-cia-methode p {
+	font-size: .9rem;
+	color: var(--cia-doux);
+}
+
+.iam-cia .iam-cia-phases {
+	position: relative;
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 16px;
+	margin-top: clamp(28px, 4vw, 44px) !important;
+}
+
+.iam-cia .iam-cia-phases::before {
+	content: "";
+	position: absolute;
+	top: 21px;
+	right: 12%;
+	left: 12%;
+	height: 2px;
+	background: repeating-linear-gradient(90deg, var(--cia-vert) 0 8px, transparent 8px 14px);
+	opacity: .4;
+}
+
+.iam-cia .iam-cia-phases li {
+	position: relative;
+	display: grid;
+	justify-items: center;
+	gap: 6px;
+	text-align: center;
+}
+
+.iam-cia .iam-cia-phases__num {
+	display: grid;
+	place-items: center;
+	width: 44px;
+	height: 44px;
+	margin-bottom: 6px;
+	border: 3px solid var(--cia-beige);
+	border-radius: 50%;
+	background: var(--cia-vert);
+	font-weight: 800;
+	color: #fff;
+}
+
+.iam-cia .iam-cia-phases h4 {
+	font-size: 1.1rem !important;
+}
+
+.iam-cia .iam-cia-phases p:not(.iam-cia-mini) {
+	font-size: .88rem;
+	color: var(--cia-doux);
+}
+
+.iam-cia .iam-cia-pearson {
+	display: grid;
+	grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+	overflow: hidden;
+	margin-top: clamp(28px, 4vw, 44px);
+	border-radius: 18px;
+	background: var(--cia-carte);
+}
+
+.iam-cia .iam-cia-pearson img {
+	min-height: 220px;
+}
+
+.iam-cia .iam-cia-pearson > div {
+	display: grid;
+	align-content: center;
+	gap: 10px;
+	padding: clamp(22px, 3.5vw, 36px);
+}
+
+.iam-cia .iam-cia-pearson h4 {
+	font-size: clamp(1.3rem, 2.2vw, 1.7rem) !important;
+}
+
+.iam-cia .iam-cia-pearson p:not(.iam-cia-etiquette) {
+	font-size: .93rem;
+	color: var(--cia-doux);
+}
+
+/* --------------------------------------------------------------------------
+ * Inscription
+ * ------------------------------------------------------------------------ */
+.iam-cia .iam-cia-bloc--vert {
+	scroll-margin-top: 110px;
+	border-color: transparent;
+	background:
+		radial-gradient(70% 120% at 0 0, rgba(228, 255, 87, .12), transparent 60%),
+		var(--cia-vert);
+	color: #fff;
+}
+
+.iam-cia .iam-cia-bloc--vert .iam-cia-etiquette {
+	color: var(--cia-lime);
+}
+
+.iam-cia .iam-cia-bloc--vert h3,
+.iam-cia .iam-cia-bloc--vert h4 {
+	color: #fff !important;
+}
+
+.iam-cia .iam-cia-bloc--vert .iam-cia-entete > p:last-child {
+	color: rgba(255, 255, 255, .8);
+}
+
+.iam-cia .iam-cia-etapes {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 14px;
+	margin-bottom: 28px !important;
+}
+
+.iam-cia .iam-cia-etapes li {
+	display: grid;
+	align-content: start;
+	gap: 8px;
+	padding: 20px;
+	border: 1px solid rgba(255, 255, 255, .18);
+	border-radius: 18px;
+	background: rgba(7, 43, 28, .35);
+}
+
+.iam-cia .iam-cia-etapes span {
+	font-family: var(--cia-serif);
+	font-size: 1.9rem;
+	font-weight: 700;
+	line-height: 1;
+	color: var(--cia-or);
+}
+
+.iam-cia .iam-cia-etapes h4 {
+	font-size: 1.1rem !important;
+}
+
+.iam-cia .iam-cia-etapes p {
+	font-size: .88rem;
+	color: rgba(255, 255, 255, .78);
+}
+
+.iam-cia .iam-cia-bloc--vert .iam-cia-btn--ligne,
+.iam-cia .iam-cia-bloc--vert .iam-cia-btn--ligne:visited {
+	color: #fff !important;
+}
+
+.iam-cia .iam-cia-bloc--vert .iam-cia-btn--ligne:hover {
+	border-color: #fff;
+	background: #fff;
+	color: var(--cia-vert) !important;
+}
+
+.iam-cia .iam-cia-note {
+	max-width: 720px;
+	margin: 22px auto 0;
+	font-size: .88rem;
+	text-align: center;
+	color: rgba(255, 255, 255, .78);
+}
+
+.iam-cia .iam-cia-note a {
+	font-weight: 700;
+	color: var(--cia-lime) !important;
+	text-decoration: underline !important;
+}
+
+/* --------------------------------------------------------------------------
+ * FAQ
+ * ------------------------------------------------------------------------ */
+.iam-cia .iam-cia-faq__liste {
+	display: grid;
+	gap: 10px;
+	max-width: 860px;
+	margin: 0 auto;
+}
+
+.iam-cia .iam-cia-faq details {
+	border: 1px solid var(--cia-trait);
+	border-radius: 16px;
+	background: #fff;
+	transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.iam-cia .iam-cia-faq details[open] {
+	border-color: var(--cia-vert);
+	box-shadow: 0 16px 34px -26px rgba(9, 63, 40, .6);
+}
+
+.iam-cia .iam-cia-faq summary {
+	position: relative;
+	padding: 18px 56px 18px 22px;
+	cursor: pointer;
+	list-style: none;
+	font-weight: 700;
+	color: var(--cia-encre);
+}
+
+.iam-cia .iam-cia-faq summary::-webkit-details-marker {
+	display: none;
+}
+
+.iam-cia .iam-cia-faq summary::after {
+	content: "+";
+	position: absolute;
+	top: 50%;
+	right: 18px;
+	display: grid;
+	place-items: center;
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	background: var(--cia-beige);
+	font-size: 1.1rem;
+	line-height: 1;
+	color: var(--cia-vert);
+	transform: translateY(-50%);
+	transition: transform .2s ease, background-color .2s ease, color .2s ease;
+}
+
+.iam-cia .iam-cia-faq details[open] summary::after {
+	background: var(--cia-vert);
+	color: #fff;
+	transform: translateY(-50%) rotate(45deg);
+}
+
+.iam-cia .iam-cia-faq summary:focus-visible {
+	outline: 3px solid var(--cia-or);
+	outline-offset: 2px;
+	border-radius: 16px;
+}
+
+.iam-cia .iam-cia-faq details p {
+	padding: 0 22px 20px;
+	font-size: .93rem;
+	color: var(--cia-doux);
+}
+
+.iam-cia .iam-cia-mentions {
+	margin-top: 26px;
+	font-size: .74rem;
+	text-align: center;
+	color: var(--cia-doux);
+}
+
+/* --------------------------------------------------------------------------
+ * Responsive
+ * ------------------------------------------------------------------------ */
+@media (max-width: 1024px) {
+	.iam-cia .iam-cia-methode {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.iam-cia .iam-cia-phases,
+	.iam-cia .iam-cia-etapes {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		row-gap: 24px;
+	}
+
+	.iam-cia .iam-cia-phases::before {
+		display: none;
+	}
+}
+
+@media (max-width: 860px) {
+	.iam-cia .iam-cia-hero,
+	.iam-cia .iam-cia-parcours,
+	.iam-cia .iam-cia-pearson {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.iam-cia .iam-cia-hero__visuel {
+		aspect-ratio: 16 / 10;
+	}
+
+	.iam-cia .iam-cia-chiffres {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.iam-cia .iam-cia-pack {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.iam-cia .iam-cia-pack__img {
+		aspect-ratio: 16 / 9;
+	}
+
+	.iam-cia .iam-cia-pack__prix {
+		text-align: left;
+	}
+}
+
+@media (max-width: 560px) {
+	.iam-cia {
+		--cia-gout: 18px;
+	}
+
+	.iam-cia .iam-cia-bloc,
+	.iam-cia .iam-cia-hero {
+		padding-top: 56px;
+		padding-bottom: 56px;
+	}
+
+	.iam-cia .iam-cia-actions .iam-cia-btn {
+		width: 100%;
+	}
+
+	.iam-cia .iam-cia-methode,
+	.iam-cia .iam-cia-phases,
+	.iam-cia .iam-cia-etapes {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.iam-cia .iam-cia-infos div {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 2px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.iam-cia * {
+		transition: none !important;
+	}
+
+	.iam-cia .iam-cia-btn:hover,
+	.iam-cia .iam-cia-carte:hover {
+		transform: none;
+	}
+}
